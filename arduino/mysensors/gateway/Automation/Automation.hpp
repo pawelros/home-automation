@@ -22,27 +22,74 @@ void setOutput(const uint8_t& sensorId, const uint8_t& cmd = Relay::FLIP) {
   send(sensor.message.set(state));
 }
 
-void bathroomClick() {
-  setOutput(BATHROOM_LED_ID);
-  setOutput(BATHROOM_LIGHT_ID);
+void kuchniaClick() {
+  setOutput(KUCHNIA_OSWIETLENIE_TUBY);
+  setOutput(KUCHNIA_OSWIETLENIE_WYSPA);
 }
-void bathroomLongClick() {
-  setOutput(BATHROOM_LED_ID, Relay::OFF);
-  setOutput(BATHROOM_LED_ID, Relay::OFF);
-  setOutput(BATHROOM_FAN_1_ID, Relay::OFF);
-  setOutput(BATHROOM_FAN_2_ID, Relay::OFF);
+void kuchniaLongClick() {
+  setOutput(KUCHNIA_OSWIETLENIE_WYSPA, Relay::OFF);
+  setOutput(KUCHNIA_OSWIETLENIE_TUBY, Relay::OFF);
 }
-void bathroomDoubleClick() {
-  setOutput(BATHROOM_LED_ID);
-  setOutput(BATHROOM_LIGHT_ID);
-  setOutput(BATHROOM_FAN_1_ID);
-  setOutput(BATHROOM_FAN_2_ID);
+void kuchniaDoubleClick() {
+  setOutput(KUCHNIA_OSWIETLENIE_WYSPA, Relay::ON);
+  setOutput(KUCHNIA_OSWIETLENIE_TUBY, Relay::OFF);
+}
+
+void sypialniaClick() {
+  setOutput(SYPIALNIA_OSWIETLENIE);
+}
+
+void biuroClick() {
+  setOutput(BIURO_OSWIETLENIE_L1);
+}
+void biuroLongClick() {
+  setOutput(BIURO_OSWIETLENIE_L1, Relay::OFF);
+  setOutput(BIURO_OSWIETLENIE_L2, Relay::OFF);
+}
+void biuroDoubleClick() {
+  setOutput(BIURO_OSWIETLENIE_L2);
+}
+
+void lazienkaDolClick() {
+  setOutput(LAZIENKA_DOL_OSWIETLENIE);
+  setOutput(LAZIENKA_DOL_OSWIETLENIE_LUSTRA);
+}
+void lazienkaDolLongClick() {
+  setOutput(LAZIENKA_DOL_OSWIETLENIE, Relay::OFF);
+  setOutput(LAZIENKA_DOL_OSWIETLENIE_LUSTRA, Relay::OFF);
+}
+void lazienkaDolDoubleClick() {
+  setOutput(LAZIENKA_DOL_OSWIETLENIE, Relay::OFF);
+  setOutput(LAZIENKA_DOL_OSWIETLENIE_LUSTRA, Relay::OFF);
+}
+
+void salonClick() {
+  setOutput(SALON_ZYRANDOL_L1);
+  setOutput(SALON_ZYRANDOL_L2);
+}
+
+void przedpokojClick() {
+  setOutput(PRZEDPOKOJ_OSWIETLENIE);
 }
 
 void setupButtons() {
   // Setup the button.
 
-  bathroom.attachClick(bathroomClick);
-  bathroom.attachLongPressStop(bathroomLongClick);
-  bathroom.attachDoubleClick(bathroomDoubleClick);
+  kuchnia.attachClick(kuchniaClick);
+  kuchnia.attachLongPressStop(kuchniaLongClick);
+  kuchnia.attachDoubleClick(kuchniaDoubleClick);
+
+  sypialnia.attachClick(sypialniaClick);
+
+  biuro.attachClick(biuroClick);
+  biuro.attachLongPressStop(biuroLongClick);
+  biuro.attachDoubleClick(biuroDoubleClick);
+
+  lazienkaDol.attachClick(lazienkaDolClick);
+  lazienkaDol.attachLongPressStop(lazienkaDolLongClick);
+  lazienkaDol.attachDoubleClick(lazienkaDolDoubleClick);
+
+  salon.attachClick(salonClick);
+
+  przedpokoj.attachClick(przedpokojClick);
 }
