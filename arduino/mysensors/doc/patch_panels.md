@@ -8,6 +8,8 @@
 | -     | 6       | - |
 | -     | 7       | - |
 | -     | 8       | **-5V** |
+| zielony | 13 | Arduino piny 24-30 |
+| zielony | 15 | Arduino piny 30-36 |
 
 1. Przedpokój
 2. Dziecięcy

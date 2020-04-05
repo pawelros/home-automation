@@ -51,16 +51,11 @@ void biuroDoubleClick() {
 }
 
 void lazienkaDolClick() {
-  setOutput(LAZIENKA_DOL_OSWIETLENIE);
   setOutput(LAZIENKA_DOL_OSWIETLENIE_LUSTRA);
 }
-void lazienkaDolLongClick() {
-  setOutput(LAZIENKA_DOL_OSWIETLENIE, Relay::OFF);
-  setOutput(LAZIENKA_DOL_OSWIETLENIE_LUSTRA, Relay::OFF);
-}
-void lazienkaDolDoubleClick() {
-  setOutput(LAZIENKA_DOL_OSWIETLENIE, Relay::OFF);
-  setOutput(LAZIENKA_DOL_OSWIETLENIE_LUSTRA, Relay::OFF);
+
+void lazienkaGoraClick() {
+  setOutput(LAZIENKA_GORA_OSWIETLENIE);
 }
 
 void salonClick() {
@@ -86,8 +81,7 @@ void setupButtons() {
   biuro.attachDoubleClick(biuroDoubleClick);
 
   lazienkaDol.attachClick(lazienkaDolClick);
-  lazienkaDol.attachLongPressStop(lazienkaDolLongClick);
-  lazienkaDol.attachDoubleClick(lazienkaDolDoubleClick);
+  lazienkaGora.attachClick(lazienkaGoraClick);
 
   salon.attachClick(salonClick);
 

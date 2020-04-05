@@ -25,9 +25,8 @@ const uint8_t PODDASZE_OSWIETLENIE            = 78;
 const uint8_t SYPIALNIA_OSWIETLENIE           = 71;
 const uint8_t BIURO_OSWIETLENIE_L1            = 68;
 const uint8_t BIURO_OSWIETLENIE_L2            = 67;
-const uint8_t LAZIENKA_DOL_OGRZEWANIE_LUSTRA  = 65;
 const uint8_t LAZIENKA_DOL_OSWIETLENIE_LUSTRA = 62;
-const uint8_t LAZIENKA_DOL_OSWIETLENIE        = 61;
+const uint8_t LAZIENKA_GORA_OSWIETLENIE       = 59;
 const uint8_t SALON_OSWIETLENIE_SZYNA_1_L1    = 41;
 const uint8_t SALON_OSWIETLENIE_SZYNA_1_L2    = 40;
 const uint8_t SALON_OSWIETLENIE_SZYNA_2_L1    = 24;
@@ -46,9 +45,8 @@ std::vector<CustomSensor> customSensors = std::vector<CustomSensor>() = {
   { CustomSensor(SYPIALNIA_OSWIETLENIE,           "Sypialnia oswietlenie",               27) },
   { CustomSensor(BIURO_OSWIETLENIE_L1,            "Biuro oswietlenie poziom 1",          28) },
   { CustomSensor(BIURO_OSWIETLENIE_L2,            "Biuro oswietlenie poziom 2",          29) },
-  { CustomSensor(LAZIENKA_DOL_OGRZEWANIE_LUSTRA,  "Lazienka dol ogrzewanie lustra",      30) },
+  { CustomSensor(LAZIENKA_GORA_OSWIETLENIE,       "Lazienka gora oswietlenie",           30) },
   { CustomSensor(LAZIENKA_DOL_OSWIETLENIE_LUSTRA, "Lazienka dol oswietlenie lustra",     31) },
-  { CustomSensor(LAZIENKA_DOL_OSWIETLENIE,        "Lazienka dol oswietlenie",            32) },
   { CustomSensor(SALON_OSWIETLENIE_SZYNA_1_L1,    "Szalon oswietlenie szyna 1 poziom 1", 33) },
   { CustomSensor(SALON_OSWIETLENIE_SZYNA_1_L2,    "Szalon oswietlenie szyna 1 poziom 2", 34) },
   { CustomSensor(SALON_OSWIETLENIE_SZYNA_2_L1,    "Szalon oswietlenie szyna 2 poziom 1", 35) },
@@ -68,3 +66,4 @@ OneButton biuro(A3, true);
 OneButton lazienkaDol(A4, true);
 OneButton salon(A5, true);
 OneButton przedpokoj(A6, true);
+OneButton lazienkaGora(A7, true);
