@@ -60,6 +60,7 @@ void loop() {
   sypialnia.tick();
   biuro.tick();
   lazienkaDol.tick();
+  lazienkaGora.tick();
   salon.tick();
   przedpokoj.tick();
 }
