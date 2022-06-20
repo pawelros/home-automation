@@ -42,6 +42,7 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: compiled-binaries
+        path: release/
     - name: ls -la
       run: ls -la
     - name: List Usb Devices in HA VM
