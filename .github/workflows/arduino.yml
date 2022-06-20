@@ -24,6 +24,8 @@ jobs:
       - name: Add Arduino Libs
         run: |
           arduino-cli lib install ArduinoSTL
+          arduino-cli lib install MySensors
+          arduino-cli lib install OneButton
       - name: Compile sketch
         run: arduino-cli compile --fqbn ${{ ENV.FQBN }} ${{ ENV.SKETCH }}
         working-directory: arduino/mysensors/gateway
