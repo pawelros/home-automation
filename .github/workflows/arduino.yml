@@ -40,6 +40,8 @@ jobs:
     concurrency: arduino
     needs: build
     steps:
+    - name: Install Arduino CLI
+      uses: arduino/setup-arduino-cli@v1
     - uses: actions/download-artifact@v3
       with:
         name: compiled-binaries
