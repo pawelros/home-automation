@@ -42,6 +42,8 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: compiled-binaries
+    - name: ls -la
+      run: ls -la
     - name: List Usb Devices in HA VM
       run: |
         ssh root@${{ ENV.NODE_IP }} 'pvesh create /nodes/pve/qemu/102/monitor --command "info usbhost"'
