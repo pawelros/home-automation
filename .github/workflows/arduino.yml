@@ -5,10 +5,12 @@ on:
     branches:
       - master
 
+env:
+  NODE_IP: 192.168.1.197
 
 jobs:
   build:
     runs-on: self-hosted
     steps:
     - name: List Usb Devices
-      run: pvesh create /nodes/pve/qemu/102/monitor --command "info usbhost"
+      run: ssh root@${{ ENV.NODE_IP }} pvesh create /nodes/pve/qemu/102/monitor --command "info usbhost"
