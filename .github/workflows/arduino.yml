@@ -13,4 +13,4 @@ jobs:
     runs-on: self-hosted
     steps:
     - name: List Usb Devices
-      run: ssh root@${{ ENV.NODE_IP }} pvesh create /nodes/pve/qemu/102/monitor --command "info usbhost"
+      run: ssh root@${{ ENV.NODE_IP }} 'pvesh create /nodes/pve/qemu/102/monitor --command "info usbhost"'
