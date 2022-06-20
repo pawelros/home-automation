@@ -53,6 +53,8 @@ jobs:
     - name: Upload Sketch to pve node
       run: |
         scp -r arduino/mysensors/gateway root@${{ ENV.NODE_IP }}:/root/release
+    - name: Upload Sketch to Arduino
+      run: |
         ssh root@${{ ENV.NODE_IP }} cd /root/release && /usr/local/bin/arduino-cli upload . --input-dir release/ --fqbn ${{ ENV.FQBN }} --port ${{ ENV.PORT }} --verify
     - name: Reconnect Arduino to HA VM
       run: |
