@@ -10,5 +10,5 @@ jobs:
   build:
     runs-on: self-hosted
     steps:
-    - name: List Board
-      run: arduino-cli board list
+    - name: List Usb Devices
+      run: pvesh create /nodes/pve/qemu/102/monitor --command "info usbhost"
