@@ -1,0 +1,14 @@
+name: Arduino
+
+on:
+  push:
+    branches:
+      - master
+
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+    - name: List Board
+      run: arduino-cli board list
