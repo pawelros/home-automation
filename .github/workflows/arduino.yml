@@ -32,21 +32,19 @@ jobs:
         working-directory: arduino/mysensors/gateway
       - uses: actions/upload-artifact@v3
         with:
-          name: compiled-binaries
-          path: arduino/mysensors/gateway/release/
+          name: gateway_release_${{ github.run_id }}
+          path: arduino/mysensors/gateway/
   deployment:
     runs-on: self-hosted
     environment: arduino
     concurrency: arduino
     needs: build
     steps:
-    - uses: actions/checkout@v3
     - name: Install Arduino CLI
       uses: arduino/setup-arduino-cli@v1
     - uses: actions/download-artifact@v3
       with:
-        name: compiled-binaries
-        path: gateway/
+        name: gateway_release_${{ github.run_id }}
     - name: ls -la
       run: ls -la
     - name: List Usb Devices in HA VM
@@ -57,7 +55,7 @@ jobs:
         ssh root@${{ ENV.NODE_IP }} 'pvesh create /nodes/pve/qemu/102/monitor --command "device_del arduino"'
     - name: Upload Sketch
       run: |
-        arduino-cli upload . --input-dir gateway/ --fqbn ${{ ENV.FQBN }} --verify
+        arduino-cli upload . --input-dir release/ --fqbn ${{ ENV.FQBN }} --verify
         working-directory: arduino/mysensors/gateway
     - name: Reconnect Arduino to HA VM
       run: |
