@@ -20,10 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install Arduino CLI
-        run: |
-          curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh
-          arduino-cli version
-          arduino-cli core install arduino:avr
+        uses: arduino/setup-arduino-cli@v1
       - name: Install Arduino CLI Boards
         run: |
           arduino-cli core install arduino:avr
