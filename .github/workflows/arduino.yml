@@ -33,7 +33,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: compiled-binaries
-          path: release/
+          path: arduino/mysensors/gateway/release/
   deployment:
     runs-on: self-hosted
     environment: arduino
