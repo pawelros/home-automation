@@ -58,6 +58,7 @@ jobs:
     - name: Upload Sketch
       run: |
         arduino-cli upload . --input-dir gateway/ --fqbn ${{ ENV.FQBN }} --verify
+        working-directory: arduino/mysensors/gateway
     - name: Reconnect Arduino to HA VM
       run: |
         ssh root@${{ ENV.NODE_IP }} 'pvesh create /nodes/pve/qemu/102/monitor --command "device_add usb-host,vendorid=${{ ENV.VENDOR_ID }},productid=${{ ENV.PRODUCT_ID }},id=${{ ENV.DEVICE_ID }}"'
