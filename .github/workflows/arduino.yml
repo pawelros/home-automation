@@ -21,8 +21,11 @@ jobs:
       - uses: actions/checkout@v3
       - name: Install Arduino CLI
         run: |
-          curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | BINDIR=~/local/bin sh
+          curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh
           arduino-cli version
+          arduino-cli core install arduino:avr
+      - name: Install Arduino CLI Boards
+        run: |
           arduino-cli core install arduino:avr
       - name: Compile sketch
         run: arduino-cli compile --fqbn ${{ ENV.FQBN }} ${{ ENV.SKETCH }}
