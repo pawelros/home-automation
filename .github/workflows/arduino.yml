@@ -28,13 +28,20 @@ jobs:
           arduino-cli lib install MySensors@2.3.2
           arduino-cli lib install OneButton@1.4.0
       - name: Compile sketch
-        run: arduino-cli compile --fqbn ${{ ENV.FQBN }} ${{ ENV.SKETCH }}
+        run: arduino-cli compile --fqbn ${{ ENV.FQBN }} ${{ ENV.SKETCH }} --build-path release/
         working-directory: arduino/mysensors/gateway
+      - uses: actions/upload-artifact@v3
+        with:
+          name: compiled-binaries
+          path: release/
   deployment:
     runs-on: self-hosted
     environment: arduino
     needs: build
     steps:
+    - uses: actions/download-artifact@v3
+      with:
+        name: compiled-binaries
     - name: List Usb Devices in HA VM
       run: |
         ssh root@${{ ENV.NODE_IP }} 'pvesh create /nodes/pve/qemu/102/monitor --command "info usbhost"'
