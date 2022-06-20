@@ -41,8 +41,6 @@ jobs:
     concurrency: arduino
     needs: build
     steps:
-    - name: Install Arduino CLI
-      uses: arduino/setup-arduino-cli@v1
     - uses: actions/download-artifact@v3
       with:
         name: gateway_release_${{ github.run_id }}
@@ -54,9 +52,10 @@ jobs:
     - name: Disconnect Arduino from HA VM
       run: |
         ssh root@${{ ENV.NODE_IP }} 'pvesh create /nodes/pve/qemu/102/monitor --command "device_del arduino"'
-    - name: Upload Sketch
+    - name: Upload Sketch to pve node
       run: |
-        arduino-cli upload . --input-dir release/ --fqbn ${{ ENV.FQBN }} --port ${{ ENV.PORT }} --verify
+        scp ./ root@${{ ENV.NODE_IP }}:/release
+        ssh root@${{ ENV.NODE_IP }} cd /release && arduino-cli upload . --input-dir release/ --fqbn ${{ ENV.FQBN }} --port ${{ ENV.PORT }} --verify
         working-directory: arduino/mysensors/gateway
     - name: Reconnect Arduino to HA VM
       run: |
