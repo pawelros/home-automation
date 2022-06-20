@@ -54,7 +54,7 @@ jobs:
         ssh root@${{ ENV.NODE_IP }} 'pvesh create /nodes/pve/qemu/102/monitor --command "device_del arduino"'
     - name: Upload Sketch to pve node
       run: |
-        scp ./ root@${{ ENV.NODE_IP }}:/release
+        scp -r ./ root@${{ ENV.NODE_IP }}:/release
         ssh root@${{ ENV.NODE_IP }} cd /release && arduino-cli upload . --input-dir release/ --fqbn ${{ ENV.FQBN }} --port ${{ ENV.PORT }} --verify
         working-directory: arduino/mysensors/gateway
     - name: Reconnect Arduino to HA VM
