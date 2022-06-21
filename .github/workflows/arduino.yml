@@ -25,7 +25,7 @@ jobs:
       - name: Add Arduino Libs
         run: |
           arduino-cli core install arduino:avr@1.8.2         
-          arduino-cli lib install ArduinoSTL
+          arduino-cli lib install ArduinoSTL@1.1.0
           arduino-cli lib install MySensors@2.3.2
           arduino-cli lib install OneButton@1.4.0
       - name: Compile sketch
