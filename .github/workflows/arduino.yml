@@ -46,10 +46,10 @@ jobs:
         name: gateway_release_${{ github.sha }}
     - name: List Usb Devices in HA VM
       run: |
-        ssh root@${{ ENV.NODE_IP }} 'pvesh create /nodes/pve/qemu/102/monitor --command "info usbhost"' -v
+        ssh -v root@${{ ENV.NODE_IP }} 'pvesh create /nodes/pve/qemu/102/monitor --command "info usbhost"'
     - name: Disconnect Arduino from HA VM
       run: |
-        ssh root@${{ ENV.NODE_IP }} 'pvesh create /nodes/pve/qemu/102/monitor --command "device_del ${{ ENV.DEVICE_ID }}"' -v
+        ssh -v root@${{ ENV.NODE_IP }} 'pvesh create /nodes/pve/qemu/102/monitor --command "device_del ${{ ENV.DEVICE_ID }}"'
     - name: List Arduino Boards in pve node
       run: |
         ssh root@${{ ENV.NODE_IP }} 'arduino-cli board list'
