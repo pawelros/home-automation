@@ -35,28 +35,23 @@ const uint8_t STASIU_OSWIETLENIE_L2           = 12;
 
 // Vector contaning child ID, description, output pin
 std::vector<CustomSensor> customSensors = std::vector<CustomSensor>() = {
-  { CustomSensor(KUCHNIA_OSWIETLENIE_TUBY,        "Kuchnia oswietlenie tuby",            1) },
-  { CustomSensor(KUCHNIA_OSWIETLENIE_WYSPA,       "Kuchnia oswietlenie wyspa",           2) },
-  { CustomSensor(JADALNIA_OSWIETLENIE,            "Jadalnia oswietlenie",                3) },
-  { CustomSensor(SALON_ZYRANDOL,                  "Salon zyrandol poziom 1",             4) },
+  { CustomSensor(KUCHNIA_OSWIETLENIE_TUBY,        "Kuchnia oswietlenie tuby",            18) },
+  { CustomSensor(KUCHNIA_OSWIETLENIE_WYSPA,       "Kuchnia oswietlenie wyspa",           19) },
+  { CustomSensor(JADALNIA_OSWIETLENIE,            "Jadalnia oswietlenie",                20) },
+  { CustomSensor(SALON_ZYRANDOL,                  "Salon zyrandol poziom 1",             21) },
   { CustomSensor(BIURO_OSWIETLENIE_L1,            "Biuro oswietlenie poziom 1",          22) },
-  { CustomSensor(BIURO_OSWIETLENIE_L2,            "Biuro oswietlenie poziom 2",          6) },
-  { CustomSensor(PRZEDPOKOJ_OSWIETLENIE,          "Przedpokoj oswietlenie",              7) },
-  { CustomSensor(BALKON_OSWIETLENIE,              "Balkon oswietlenie",                  8) },
-  { CustomSensor(PODDASZE_OSWIETLENIE,            "Poddasze oswietlenie",                9) },
-  { CustomSensor(SYPIALNIA_OSWIETLENIE,           "Sypialnia oswietlenie",               10) },
-  { CustomSensor(STASIU_OSWIETLENIE_L1,           "Stasiu oswietlenie poziom 1",         11) },
-  { CustomSensor(STASIU_OSWIETLENIE_L2,           "Stasiu oswietlenie poziom 2",         12) }
+  { CustomSensor(BIURO_OSWIETLENIE_L2,            "Biuro oswietlenie poziom 2",          23) },
+  { CustomSensor(PRZEDPOKOJ_OSWIETLENIE,          "Przedpokoj oswietlenie",              24) },
+  { CustomSensor(BALKON_OSWIETLENIE,              "Balkon oswietlenie",                  25) },
+  { CustomSensor(PODDASZE_OSWIETLENIE,            "Poddasze oswietlenie",                26) },
+  { CustomSensor(SYPIALNIA_OSWIETLENIE,           "Sypialnia oswietlenie",               27) },
+  { CustomSensor(STASIU_OSWIETLENIE_L1,           "Stasiu oswietlenie poziom 1",         28) },
+  { CustomSensor(STASIU_OSWIETLENIE_L2,           "Stasiu oswietlenie poziom 2",         29) }
 };
 
 // Pushbuttons declaration
 // Remember that names should be consistent with main loop in gateway.ino
-OneButton kuchnia(26, true);
-OneButton jadalnia(26, true);
-OneButton salon(27, true);
-OneButton biuro(28, true);
-OneButton przedpokoj(29, true);
-OneButton balkon(30, true);
-OneButton poddasze(31, true);
-OneButton sypialnia(32, true);
-OneButton stasiu(33, true);
+// OneButton balkon(30, true);
+// OneButton poddasze(31, true);
+// OneButton sypialnia(32, true);
+// OneButton stasiu(33, true);
