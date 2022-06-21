@@ -26,65 +26,45 @@ void kuchniaClick() {
   setOutput(KUCHNIA_OSWIETLENIE_TUBY);
   setOutput(KUCHNIA_OSWIETLENIE_WYSPA);
 }
-
 void kuchniaLongClick() {
   setOutput(KUCHNIA_OSWIETLENIE_WYSPA, Relay::OFF);
   setOutput(KUCHNIA_OSWIETLENIE_TUBY, Relay::OFF);
 }
-
 void kuchniaDoubleClick() {
   setOutput(KUCHNIA_OSWIETLENIE_WYSPA, Relay::ON);
   setOutput(KUCHNIA_OSWIETLENIE_TUBY, Relay::OFF);
-}
-
-void jadalniaClick() {
-  setOutput(JADALNIA_OSWIETLENIE);
-}
-
-void salonClick() {
-  setOutput(SALON_ZYRANDOL);
-}
-
-void biuroClick() {
-  setOutput(BIURO_OSWIETLENIE_L1);
-}
-
-void biuroLongClick() {
-  setOutput(BIURO_OSWIETLENIE_L1, Relay::OFF);
-  setOutput(BIURO_OSWIETLENIE_L2, Relay::OFF);
-}
-
-void biuroDoubleClick() {
-  setOutput(BIURO_OSWIETLENIE_L2);
-}
-
-void przedpokojClick() {
-  setOutput(PRZEDPOKOJ_OSWIETLENIE);
-}
-
-void balkonClick() {
-  setOutput(BALKON_OSWIETLENIE);
-}
-
-void poddaszeClick() {
-  setOutput(PODDASZE_OSWIETLENIE);
 }
 
 void sypialniaClick() {
   setOutput(SYPIALNIA_OSWIETLENIE);
 }
 
-void stasiuClick() {
-  setOutput(STASIU_OSWIETLENIE_L1);
+void biuroClick() {
+  setOutput(BIURO_OSWIETLENIE_L1);
+}
+void biuroLongClick() {
+  setOutput(BIURO_OSWIETLENIE_L1, Relay::OFF);
+  setOutput(BIURO_OSWIETLENIE_L2, Relay::OFF);
+}
+void biuroDoubleClick() {
+  setOutput(BIURO_OSWIETLENIE_L2);
 }
 
-void stasiuLongClick() {
-  setOutput(STASIU_OSWIETLENIE_L1, Relay::OFF);
-  setOutput(STASIU_OSWIETLENIE_L2, Relay::OFF);
+void lazienkaDolClick() {
+  setOutput(LAZIENKA_DOL_OSWIETLENIE_LUSTRA);
 }
 
-void stasiuDoubleClick() {
-  setOutput(STASIU_OSWIETLENIE_L2);
+void lazienkaGoraClick() {
+  setOutput(LAZIENKA_GORA_OSWIETLENIE);
+}
+
+void salonClick() {
+  setOutput(SALON_ZYRANDOL_L1);
+  setOutput(SALON_ZYRANDOL_L2);
+}
+
+void przedpokojClick() {
+  setOutput(PRZEDPOKOJ_OSWIETLENIE);
 }
 
 void setupButtons() {
@@ -94,23 +74,16 @@ void setupButtons() {
   kuchnia.attachLongPressStop(kuchniaLongClick);
   kuchnia.attachDoubleClick(kuchniaDoubleClick);
 
-  jadalnia.attachClick(jadalniaClick);
-
-  salon.attachClick(salonClick);
+  sypialnia.attachClick(sypialniaClick);
 
   biuro.attachClick(biuroClick);
   biuro.attachLongPressStop(biuroLongClick);
   biuro.attachDoubleClick(biuroDoubleClick);
 
+  lazienkaDol.attachClick(lazienkaDolClick);
+  lazienkaGora.attachClick(lazienkaGoraClick);
+
+  salon.attachClick(salonClick);
+
   przedpokoj.attachClick(przedpokojClick);
-
-  balkon.attachClick(balkonClick);
-
-  poddasze.attachClick(poddaszeClick);
-
-  sypialnia.attachClick(sypialniaClick);
-
-  stasiu.attachClick(stasiuClick);
-  stasiu.attachLongPressStop(stasiuLongClick);
-  stasiu.attachDoubleClick(stasiuDoubleClick);
 }
