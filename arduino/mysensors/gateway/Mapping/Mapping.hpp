@@ -51,12 +51,12 @@ std::vector<CustomSensor> customSensors = std::vector<CustomSensor>() = {
 
 // Pushbuttons declaration
 // Remember that names should be consistent with main loop in gateway.ino
-OneButton kuchnia(A25, true);
-OneButton jadalnia(A26, true);
-OneButton salon(A27, true);
-OneButton biuro(A28, true);
-OneButton przedpokoj(A29, true);
-OneButton balkon(A30, true);
-OneButton poddasze(A31, true);
-OneButton sypialnia(A32, true);
-OneButton stasiu(A33, true);
+OneButton kuchnia('A25', true);
+OneButton jadalnia('A26', true);
+OneButton salon('A27', true);
+OneButton biuro('A28', true);
+OneButton przedpokoj('A29', true);
+OneButton balkon('A30', true);
+OneButton poddasze('A31', true);
+OneButton sypialnia('A32', true);
+OneButton stasiu('A33', true);
