@@ -13,8 +13,9 @@
 #include "../CustomSensor/CustomSensor.hpp"
 
 namespace Relay {
-  const uint8_t OFF  = 0;
-  const uint8_t ON   = 1;
+  // inverse on/off logic
+  const uint8_t OFF  = 1;
+  const uint8_t ON   = 0;
   const uint8_t FLIP = 2;
 }
 
