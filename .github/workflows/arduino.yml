@@ -46,26 +46,26 @@ jobs:
         name: gateway_release_${{ github.sha }}
     - name: List Usb Devices in HA VM
       run: |
-        ssh root@${{ ENV.NODE_IP }} 'pvesh create /nodes/pve/qemu/102/monitor --command "info usbhost"'
+        ssh root@${{ ENV.NODE_IP }} 'pvesh create /nodes/pve/qemu/102/monitor --command "info usbhost"' -v
     - name: Disconnect Arduino from HA VM
       run: |
-        ssh root@${{ ENV.NODE_IP }} 'pvesh create /nodes/pve/qemu/102/monitor --command "device_del ${{ ENV.DEVICE_ID }}"'
+        ssh root@${{ ENV.NODE_IP }} 'pvesh create /nodes/pve/qemu/102/monitor --command "device_del ${{ ENV.DEVICE_ID }}"' -v
     - name: List Arduino Boards in pve node
       run: |
         ssh root@${{ ENV.NODE_IP }} 'arduino-cli board list'
     - name: Upload Sketch to pve node
       run: |
-        scp -r arduino/mysensors/gateway root@${{ ENV.NODE_IP }}:/root/release
+        scp -r arduino/mysensors/gateway root@${{ ENV.NODE_IP }}:/root/release -v
     - name: Upload Sketch to Arduino
       run: |
         ssh root@${{ ENV.NODE_IP }} 'cd /root/release && /usr/local/bin/arduino-cli upload . --input-dir release/ --fqbn ${{ ENV.FQBN }} --port ${{ ENV.PORT }} --verify' -v
     - name: Reconnect Arduino to HA VM
       run: |
-        ssh root@${{ ENV.NODE_IP }} 'pvesh create /nodes/pve/qemu/102/monitor --command "device_add usb-host,vendorid=${{ ENV.VENDOR_ID }},productid=${{ ENV.PRODUCT_ID }},id=${{ ENV.DEVICE_ID }}"'
+        ssh root@${{ ENV.NODE_IP }} 'pvesh create /nodes/pve/qemu/102/monitor --command "device_add usb-host,vendorid=${{ ENV.VENDOR_ID }},productid=${{ ENV.PRODUCT_ID }},id=${{ ENV.DEVICE_ID }}"' -v
     - name: List Usb Devices in HA VM (again)
       run: |
         ssh root@${{ ENV.NODE_IP }} 'pvesh create /nodes/pve/qemu/102/monitor --command "info usbhost"'
     - name: Cleanup
       if: always()
       run: |
-        ssh root@${{ ENV.NODE_IP }} 'mv /root/release /root/release_old'
+        ssh root@${{ ENV.NODE_IP }} 'rm -rf /root/release_old && mv /root/release /root/release_old'
