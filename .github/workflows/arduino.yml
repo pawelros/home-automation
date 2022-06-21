@@ -8,12 +8,12 @@ on:
 
 env:
   NODE_IP: 192.168.1.197
-  DEVICE_ID: arduino
-  PRODUCT_ID: 0x0042
-  VENDOR_ID: 0x2341
+  DEVICE_ID: usb1
+  PRODUCT_ID: '0x0042'
+  VENDOR_ID: '0x2341'
   FQBN: arduino:avr:mega
   SKETCH: gateway
-  PORT: /dev/ttyACM1
+  PORT: /dev/ttyACM0
 
 jobs:
   build:
