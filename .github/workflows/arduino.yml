@@ -68,4 +68,4 @@ jobs:
     - name: Cleanup
       if: always()
       run: |
-        ssh root@${{ ENV.NODE_IP }} 'mv -rf /root/release /root/release_old'
+        ssh root@${{ ENV.NODE_IP }} 'mv /root/release /root/release_old'
