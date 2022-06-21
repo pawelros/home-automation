@@ -71,11 +71,11 @@ void receive(const MyMessage &message) {
   // We only expect one type of message from controller. But we better check anyway.
   if (message.type==V_LIGHT) {
     CustomSensor sensor = CustomSensor::getSensorById(message.sensor, customSensors);
-    const bool value = message.getBool();
+    const bool value = !message.getBool();
     // Store state in eeprom
-    saveState(sensor.id, !value);
+    saveState(sensor.id, value);
     // Change relay state
-    digitalWrite(sensor.pin, !value);
+    digitalWrite(sensor.pin, value);
     // Send ACK
     send(sensor.message.set(!value));
   }
