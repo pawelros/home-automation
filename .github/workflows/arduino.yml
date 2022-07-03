@@ -57,6 +57,7 @@ jobs:
       run: |
         ssh root@${{ ENV.NODE_IP }} 'arduino-cli board list'
     - name: Upload Sketch to pve node
+      timeout-minutes : 1
       run: |
         scp -r arduino/mysensors/gateway root@${{ ENV.NODE_IP }}:/root/release
     - name: Upload Sketch to Arduino
