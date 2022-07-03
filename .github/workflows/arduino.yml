@@ -7,6 +7,7 @@ on:
       - master
     paths:
       - 'arduino/mysensors/gateway/**'
+      - '.github/workflows/arduino.yml'
 
 env:
   NODE_IP: 192.168.1.197
