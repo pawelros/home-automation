@@ -20,8 +20,8 @@ namespace Relay {
 }
 
 // Child ID declaration of relays
-const uint8_t KUCHNIA_OSWIETLENIE_TUBY        = 1;
-const uint8_t KUCHNIA_OSWIETLENIE_WYSPA       = 2;
+const uint8_t KUCHNIA_OSWIETLENIE_WYSPA       = 1;
+const uint8_t KUCHNIA_OSWIETLENIE_TUBY        = 2;
 const uint8_t JADALNIA_OSWIETLENIE            = 3;
 const uint8_t SALON_ZYRANDOL                  = 4;
 const uint8_t BIURO_OSWIETLENIE_L1            = 5;
