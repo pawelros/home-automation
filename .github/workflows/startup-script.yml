@@ -1,0 +1,21 @@
+name: Startup Script
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths:
+      - 'scripts/startup.sh'
+
+env:
+  NODE_IP: 192.168.1.197
+
+jobs:
+  deployment:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v3
+    - name: Upload Script to pve node
+      run: |
+        scp scripts/startup.sh root@${{ ENV.NODE_IP }}:/home/rosiv/startup.sh
