@@ -16,7 +16,7 @@ env:
   VENDOR_ID: '0x2341'
   FQBN: arduino:avr:mega
   SKETCH: gateway
-  PORT: /dev/ttyACM0
+  PORT: /dev/ttyACM1
 
 jobs:
   build:
