@@ -57,10 +57,10 @@ jobs:
       run: |
         ssh root@${{ ENV.NODE_IP }} 'arduino-cli board list'
     - name: Upload Sketch to pve node
-      timeout-minutes : 1
       run: |
         scp -r arduino/mysensors/gateway root@${{ ENV.NODE_IP }}:/root/release
     - name: Upload Sketch to Arduino
+      timeout-minutes : 1
       run: |
         ssh root@${{ ENV.NODE_IP }} 'cd /root/release && /usr/local/bin/arduino-cli upload . --input-dir release/ --fqbn ${{ ENV.FQBN }} --port ${{ ENV.PORT }} --verify' -v
     - name: Reconnect Arduino to HA VM
