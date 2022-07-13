@@ -87,12 +87,8 @@ void stasiuDoubleClick() {
   setOutput(STASIU_OSWIETLENIE_L2);
 }
 
-void testClick() {
-  setOutput(TEST_INPUT);
-}
-
-void test2Click() {
-  setOutput(TEST_INPUT2);
+void przedpokoj_drzwiClick() {
+  setOutput(PRZEDPOKOJ_OSWIETLENIE);
 }
 
 void setupButtons() {
