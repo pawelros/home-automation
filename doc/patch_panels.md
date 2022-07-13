@@ -1,4 +1,5 @@
-![alt text][pinout]
+![RJ45 Pinout](pinout.gif "RJ45 Pinout")
+
 
 | Kolor | Gniazdo | Opis | Numer koloru | Optoizolator |
 | ----- | ------- | ---- | ---- | ---- |
