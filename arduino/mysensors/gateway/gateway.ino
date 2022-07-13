@@ -55,6 +55,7 @@ void presentation()
 }
 
 void loop() {
+  test.tick();
   // Keep sensing buttons
   // kuchnia.tick();
   // jadalnia.tick();

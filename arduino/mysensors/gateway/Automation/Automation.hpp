@@ -87,9 +87,13 @@ void stasiuDoubleClick() {
   setOutput(STASIU_OSWIETLENIE_L2);
 }
 
+void testClick() {
+  setOutput(TEST_INPUT);
+}
+
 void setupButtons() {
   // Setup the button.
-
+  test.attachClick(testClick);
   // kuchnia.attachClick(kuchniaClick);
   // kuchnia.attachLongPressStop(kuchniaLongClick);
   // kuchnia.attachDoubleClick(kuchniaDoubleClick);
