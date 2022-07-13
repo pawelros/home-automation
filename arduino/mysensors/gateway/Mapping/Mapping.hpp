@@ -49,7 +49,7 @@ std::vector<CustomSensor> customSensors = std::vector<CustomSensor>() = {
   { CustomSensor(PODDASZE_OSWIETLENIE,            "Poddasze oswietlenie",                26) },
   { CustomSensor(SYPIALNIA_OSWIETLENIE,           "Sypialnia oswietlenie",               27) },
   { CustomSensor(STASIU_OSWIETLENIE_L1,           "Stasiu oswietlenie poziom 1",         28) },
-  { CustomSensor(TEST_INPUT,                      "TEST INPUT",         NULL) },
+  { CustomSensor(TEST_INPUT,                      "TEST INPUT",         30) },
   { CustomSensor(STASIU_OSWIETLENIE_L2,           "Stasiu oswietlenie poziom 2",         29) }
 };
 
