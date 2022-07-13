@@ -91,9 +91,14 @@ void testClick() {
   setOutput(TEST_INPUT);
 }
 
+void test2Click() {
+  setOutput(TEST_INPUT2);
+}
+
 void setupButtons() {
   // Setup the button.
   test.attachClick(testClick);
+  test2.attachClick(test2Click);
   // kuchnia.attachClick(kuchniaClick);
   // kuchnia.attachLongPressStop(kuchniaLongClick);
   // kuchnia.attachDoubleClick(kuchniaDoubleClick);
