@@ -1,7 +1,7 @@
 | Kolor | Gniazdo | Opis |
 | ----- | ------- | ---- |
 | Czarny    | 1  | ESP 32 przedpokój (zasilanie)
-| Niebieski | 1  | Przedpokój |
+| Niebieski | 1  | Przedpokój wł obok drzwi wejściowych|
 | Niebieski | 2  | Dziecięcy światło |
 | Niebieski | 3  | Biuro światło |
 | Niebieski | 4  | Salon światło 1 |
