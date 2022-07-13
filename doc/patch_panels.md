@@ -1,3 +1,5 @@
+![alt text][pinout]
+
 | Kolor | Gniazdo | Opis | Numer koloru | Optoizolator |
 | ----- | ------- | ---- | ---- | ---- |
 | Czarny    | 1  | ESP 32 przedpokój (zasilanie)| - | - |
