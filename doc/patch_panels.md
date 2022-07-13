@@ -1,8 +1,13 @@
-| Kolor | Gniazdo | Opis |
-| ----- | ------- | ---- |
-| Czarny    | 1  | ESP 32 przedpokój (zasilanie)
-| Niebieski | 1  | Przedpokój wł obok drzwi wejściowych|
-| Niebieski | 2  | Dziecięcy światło |
+| Kolor | Gniazdo | Opis | Numer koloru | Optoizolator |
+| ----- | ------- | ---- | ---- | ---- |
+| Czarny    | 1  | ESP 32 przedpokój (zasilanie)| - | - |
+| Niebieski | 1  | Przedpokój wł obok drzwi wejściowych | 5 | | 1 |
+| Niebieski | 2  | Dziecięcy światło | 5 | 2 |
+| Niebieski | 2  | Dziecięcy okno otwórz | 6 | 9 |
+| Niebieski | 2  | Dziecięcy okno zamknij | 3 | 10 |
+| Niebieski | 2  | Dziecięcy właz otwórz | 1 | 12 |
+| Niebieski | 2  | Dziecięcy właz zamknij | 2 | 11 |
+
 | Niebieski | 3  | Biuro światło |
 | Niebieski | 4  | Salon światło 1 |
 | Niebieski | 5  | Sypialnia światło wł. przy łóżku |
