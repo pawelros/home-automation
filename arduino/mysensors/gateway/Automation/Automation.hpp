@@ -93,8 +93,7 @@ void przedpokoj_drzwiClick() {
 
 void setupButtons() {
   // Setup the button.
-  test.attachClick(testClick);
-  test2.attachClick(test2Click);
+  przedpokoj_drzwi.attachClick(przedpokoj_drzwiClick);
   // kuchnia.attachClick(kuchniaClick);
   // kuchnia.attachLongPressStop(kuchniaLongClick);
   // kuchnia.attachDoubleClick(kuchniaDoubleClick);
