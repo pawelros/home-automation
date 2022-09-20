@@ -32,7 +32,7 @@ jobs:
           arduino-cli lib install MySensors@2.3.2
           arduino-cli lib install OneButton@1.4.0
       - name: Compile sketch
-        run: pwd && arduino-cli compile --fqbn ${{ ENV.FQBN }} ${{ ENV.SKETCH }} --build-path release/
+        run: pwd && ls -la && arduino-cli compile --fqbn ${{ ENV.FQBN }} ${{ ENV.SKETCH }} --build-path release/
         working-directory: arduino/mysensors/gateway
       - uses: actions/upload-artifact@v3
         with:
