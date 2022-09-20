@@ -15,7 +15,6 @@ env:
   PRODUCT_ID: '0x0042'
   VENDOR_ID: '0x2341'
   FQBN: arduino:avr:mega
-  SKETCH: gateway
   PORT: /dev/ttyACM0
 
 jobs:
@@ -32,7 +31,7 @@ jobs:
           arduino-cli lib install MySensors@2.3.2
           arduino-cli lib install OneButton@1.4.0
       - name: Compile sketch
-        run: pwd && ls -la && arduino-cli compile --fqbn ${{ ENV.FQBN }} ${{ ENV.SKETCH }} --build-path release/
+        run: pwd && ls -la && arduino-cli compile --fqbn ${{ ENV.FQBN }} --build-path release/
         working-directory: arduino/mysensors/gateway
       - uses: actions/upload-artifact@v3
         with:
