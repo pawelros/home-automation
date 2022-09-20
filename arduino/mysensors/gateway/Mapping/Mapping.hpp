@@ -32,9 +32,9 @@ const uint8_t PODDASZE_OSWIETLENIE            = 9;
 const uint8_t SYPIALNIA_OSWIETLENIE           = 10;
 const uint8_t STASIU_OSWIETLENIE_L1           = 11;
 const uint8_t STASIU_OSWIETLENIE_L2           = 12;
-
-const uint8_t TEST_INPUT           = 50;
-const uint8_t TEST_INPUT2           = 51;
+const uint8_t PIEC                            = 13;
+const uint8_t WENTYLATOR_LAZIENKA_WC          = 14;
+const uint8_t WENTYLATOR_LAZIENKA_PRYSZNIC    = 15;
 
 
 // Vector contaning child ID, description, output pin
@@ -50,7 +50,10 @@ std::vector<CustomSensor> customSensors = std::vector<CustomSensor>() = {
   { CustomSensor(PODDASZE_OSWIETLENIE,            "Poddasze oswietlenie",                26) },
   { CustomSensor(SYPIALNIA_OSWIETLENIE,           "Sypialnia oswietlenie",               27) },
   { CustomSensor(STASIU_OSWIETLENIE_L1,           "Stasiu oswietlenie poziom 1",         28) },
-  { CustomSensor(STASIU_OSWIETLENIE_L2,           "Stasiu oswietlenie poziom 2",         29) }
+  { CustomSensor(STASIU_OSWIETLENIE_L2,           "Stasiu oswietlenie poziom 2",         29) },
+  { CustomSensor(PIEC,                            "Piec gazowy, ogrzewanie",             30) },
+  { CustomSensor(WENTYLATOR_LAZIENKA_WC,          "Wentylator łazienka WC",              31) },
+  { CustomSensor(WENTYLATOR_LAZIENKA_PRYSZNIC,    "Wentylator łazienka Prysznic",        32) }
 };
 
 // Pushbuttons declaration
