@@ -37,6 +37,8 @@ const uint8_t LAZIENKA_DOL_SW_LUSTRO          = 14;
 const uint8_t WENTYLATOR_LAZIENKA_WC          = 17;
 const uint8_t WENTYLATOR_LAZIENKA_PRYSZNIC    = 18;
 const uint8_t PIEC                            = 19;
+const uint8_t LAZIENKA_DOL_OGRZ_LUSTRO        = 20;
+
 
 
 // Vector contaning child ID, description, output pin
@@ -57,7 +59,8 @@ std::vector<CustomSensor> customSensors = std::vector<CustomSensor>() = {
   { CustomSensor(LAZIENKA_DOL_SW_LUSTRO,          "Łazienka dół światło lustro",         31) },
   { CustomSensor(WENTYLATOR_LAZIENKA_WC,          "Wentylator łazienka WC",              34) },
   { CustomSensor(WENTYLATOR_LAZIENKA_PRYSZNIC,    "Wentylator łazienka Prysznic",        35) },
-  { CustomSensor(PIEC,                            "Piec gazowy ogrzewanie",              36) }
+  { CustomSensor(PIEC,                            "Piec gazowy ogrzewanie",              36) },
+  { CustomSensor(LAZIENKA_DOL_OGRZ_LUSTRO,        "Łazienka dół ogrzewanie lustro",      37) }
 };
 
 // Pushbuttons declaration
