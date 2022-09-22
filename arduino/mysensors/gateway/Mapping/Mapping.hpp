@@ -34,6 +34,7 @@ const uint8_t STASIU_OSWIETLENIE_L1           = 11;
 const uint8_t STASIU_OSWIETLENIE_L2           = 12;
 const uint8_t LAZIENKA_DOL_OSWIETL            = 13;
 const uint8_t LAZIENKA_DOL_SW_LUSTRO          = 14;
+const uint8_t LAZIENKA_GORA_SW                = 15;
 const uint8_t WENTYLATOR_LAZIENKA_WC          = 17;
 const uint8_t WENTYLATOR_LAZIENKA_PRYSZNIC    = 18;
 const uint8_t PIEC                            = 19;
@@ -57,6 +58,7 @@ std::vector<CustomSensor> customSensors = std::vector<CustomSensor>() = {
   { CustomSensor(STASIU_OSWIETLENIE_L2,           "Stasiu oswietlenie poziom 2",         29) },
   { CustomSensor(LAZIENKA_DOL_OSWIETL,            "Łazienka dół oświetlenie",            30) },
   { CustomSensor(LAZIENKA_DOL_SW_LUSTRO,          "Łazienka dół światło lustro",         31) },
+  { CustomSensor(LAZIENKA_GORA_SW,                "Łazienka góra światło",               32) },
   { CustomSensor(WENTYLATOR_LAZIENKA_WC,          "Wentylator łazienka WC",              34) },
   { CustomSensor(WENTYLATOR_LAZIENKA_PRYSZNIC,    "Wentylator łazienka Prysznic",        35) },
   { CustomSensor(PIEC,                            "Piec gazowy ogrzewanie",              36) },
