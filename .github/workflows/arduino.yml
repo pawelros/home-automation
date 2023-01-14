@@ -61,7 +61,7 @@ jobs:
     - name: Upload Sketch to Arduino
       timeout-minutes : 1
       run: |
-        ssh root@${{ ENV.NODE_IP }} 'cd /root/release && /usr/local/bin/arduino-cli upload . --input-dir release/ --fqbn ${{ ENV.FQBN }} --port ${{ ENV.PORT }} --verify' -v
+        ssh root@${{ ENV.NODE_IP }} 'cd /root/release && /root/bin/arduino-cli upload . --input-dir release/ --fqbn ${{ ENV.FQBN }} --port ${{ ENV.PORT }} --verify' -v
     - name: Reconnect Arduino to HA VM
       if: always()
       run: |
