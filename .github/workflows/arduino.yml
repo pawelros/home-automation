@@ -48,10 +48,10 @@ jobs:
         name: gateway_release_${{ github.sha }}
     - name: List Usb Devices in HA VM
       run: |
-        ssh root@${{ ENV.NODE_IP }} 'pvesh create /nodes/pve/qemu/102/monitor --command "info usbhost"'
+        ssh root@${{ ENV.NODE_IP }} 'pvesh create /nodes/proxmox/qemu/102/monitor --command "info usbhost"'
     - name: Disconnect Arduino from HA VM
       run: |
-        ssh root@${{ ENV.NODE_IP }} 'pvesh create /nodes/pve/qemu/102/monitor --command "device_del ${{ ENV.DEVICE_ID }}"'
+        ssh root@${{ ENV.NODE_IP }} 'pvesh create /nodes/proxmox/qemu/102/monitor --command "device_del ${{ ENV.DEVICE_ID }}"'
     - name: List Arduino Boards in pve node
       run: |
         ssh root@${{ ENV.NODE_IP }} 'arduino-cli board list'
@@ -65,11 +65,11 @@ jobs:
     - name: Reconnect Arduino to HA VM
       if: always()
       run: |
-        ssh root@${{ ENV.NODE_IP }} 'pvesh create /nodes/pve/qemu/102/monitor --command "device_add usb-host,vendorid=${{ ENV.VENDOR_ID }},productid=${{ ENV.PRODUCT_ID }},id=${{ ENV.DEVICE_ID }}"'
+        ssh root@${{ ENV.NODE_IP }} 'pvesh create /nodes/proxmox/qemu/102/monitor --command "device_add usb-host,vendorid=${{ ENV.VENDOR_ID }},productid=${{ ENV.PRODUCT_ID }},id=${{ ENV.DEVICE_ID }}"'
     - name: List Usb Devices in HA VM (again)
       if: always()
       run: |
-        ssh root@${{ ENV.NODE_IP }} 'pvesh create /nodes/pve/qemu/102/monitor --command "info usbhost"'
+        ssh root@${{ ENV.NODE_IP }} 'pvesh create /nodes/proxmox/qemu/102/monitor --command "info usbhost"'
     - name: Cleanup
       if: always()
       run: |
