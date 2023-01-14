@@ -10,7 +10,7 @@ on:
       - '.github/workflows/arduino.yml'
 
 env:
-  NODE_IP: 192.168.1.197
+  NODE_IP: 192.168.1.179
   DEVICE_ID: usb1
   PRODUCT_ID: '0x0042'
   VENDOR_ID: '0x2341'
@@ -26,7 +26,7 @@ jobs:
         uses: arduino/setup-arduino-cli@v1
       - name: Add Arduino Libs
         run: |
-          arduino-cli core install arduino:avr@1.8.2         
+          arduino-cli core install arduino:avr@1.8.2
           #arduino-cli lib install ArduinoSTL@1.1.0
           arduino-cli lib install MySensors@2.3.2
           arduino-cli lib install OneButton@1.4.0
