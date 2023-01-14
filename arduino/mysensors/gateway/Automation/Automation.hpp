@@ -108,7 +108,7 @@ void setupButtons() {
 
   // przedpokoj.attachClick(przedpokojClick);
 
-  balkon.attachClick(balkonClick);
+  //balkon.attachClick(balkonClick);
 
   poddasze.attachClick(poddaszeClick);
 

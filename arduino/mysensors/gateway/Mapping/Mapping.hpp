@@ -73,5 +73,5 @@ OneButton biuro(A3, true);
 OneButton salon(A4, true);
 OneButton sypialnia(A5, true);
 OneButton jadalnia(A6, true);
-OneButton salon(A7, true)
-OneButton kuchnia(A8, true);
+OneButton kuchnia(A7, true);
+OneButton poddasze(A8, true);
