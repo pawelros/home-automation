@@ -12,11 +12,11 @@
 
 // Define a lower baud rate for Arduino's running on 8 MHz (Arduino Pro Mini 3.3V & SenseBender)
 #if F_CPU == 16000000L
-#define MY_BAUD_RATE 115200
+#define MY_BAUD_RATE 115200 // 3840
 #endif
 
 // Remember to add library to Arduino path
-#include <ArduinoSTL.h>
+//#include <ArduinoSTL.h>
 #include <MySensors.h>
 #include "./CustomSensor/CustomSensor.hpp"
 #include "./Mapping/Mapping.hpp"
@@ -44,7 +44,7 @@ void setup() {
 void presentation()
 {
   // Send the sketch version information to the gateway and Controller
-  sendSketchInfo("Gateway", "1.0");
+  sendSketchInfo("Gateway", "1.2");
 
   // Send actual states
   for (CustomSensor sensor : customSensors) {

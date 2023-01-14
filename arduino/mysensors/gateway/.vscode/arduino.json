@@ -1,0 +1,6 @@
+{
+    "sketch": "gateway.ino",
+    "configuration": "cpu=atmega2560",
+    "board": "arduino:avr:mega",
+    "port": "/dev/tty.usbmodem211201"
+}

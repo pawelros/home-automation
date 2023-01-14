@@ -43,32 +43,35 @@ const uint8_t LAZIENKA_DOL_OGRZ_LUSTRO        = 20;
 
 
 // Vector contaning child ID, description, output pin
-std::vector<CustomSensor> customSensors = std::vector<CustomSensor>() = {
-  { CustomSensor(KUCHNIA_OSWIETLENIE_TUBY,        "Kuchnia oswietlenie tuby",            18) },
-  { CustomSensor(KUCHNIA_OSWIETLENIE_WYSPA,       "Kuchnia oswietlenie wyspa",           19) },
-  { CustomSensor(JADALNIA_OSWIETLENIE,            "Jadalnia oswietlenie",                20) },
-  { CustomSensor(SALON_ZYRANDOL,                  "Salon zyrandol poziom 1",             21) },
-  { CustomSensor(BIURO_OSWIETLENIE_L1,            "Biuro oswietlenie poziom 1",          22) },
-  { CustomSensor(BIURO_OSWIETLENIE_L2,            "Biuro oswietlenie poziom 2",          23) },
-  { CustomSensor(PRZEDPOKOJ_OSWIETLENIE,          "Przedpokoj oswietlenie",              24) },
-  { CustomSensor(BALKON_OSWIETLENIE,              "Balkon oswietlenie",                  25) },
-  { CustomSensor(PODDASZE_OSWIETLENIE,            "Poddasze oswietlenie",                26) },
-  { CustomSensor(SYPIALNIA_OSWIETLENIE,           "Sypialnia oswietlenie",               27) },
-  { CustomSensor(STASIU_OSWIETLENIE_L1,           "Stasiu oswietlenie poziom 1",         28) },
-  { CustomSensor(STASIU_OSWIETLENIE_L2,           "Stasiu oswietlenie poziom 2",         29) },
-  { CustomSensor(LAZIENKA_DOL_OSWIETL,            "Łazienka dół oświetlenie",            30) },
-  { CustomSensor(LAZIENKA_DOL_SW_LUSTRO,          "Łazienka dół światło lustro",         31) },
-  { CustomSensor(LAZIENKA_GORA_SW,                "Łazienka góra światło",               32) },
-  { CustomSensor(WENTYLATOR_LAZIENKA_WC,          "Wentylator łazienka WC",              34) },
-  { CustomSensor(WENTYLATOR_LAZIENKA_PRYSZNIC,    "Wentylator łazienka Prysznic",        35) },
-  { CustomSensor(PIEC,                            "Piec gazowy ogrzewanie",              36) },
-  { CustomSensor(LAZIENKA_DOL_OGRZ_LUSTRO,        "Łazienka dół ogrzewanie lustro",      37) }
+CustomSensor customSensors[] = {
+  CustomSensor(KUCHNIA_OSWIETLENIE_TUBY,        "Kuchnia oswietlenie tuby",            18) ,
+  CustomSensor(KUCHNIA_OSWIETLENIE_WYSPA,       "Kuchnia oswietlenie wyspa",           19) ,
+  CustomSensor(JADALNIA_OSWIETLENIE,            "Jadalnia oswietlenie",                20) ,
+  CustomSensor(SALON_ZYRANDOL,                  "Salon zyrandol poziom 1",             21) ,
+  CustomSensor(BIURO_OSWIETLENIE_L1,            "Biuro oswietlenie poziom 1",          22) ,
+  CustomSensor(BIURO_OSWIETLENIE_L2,            "Biuro oswietlenie poziom 2",          23) ,
+  CustomSensor(PRZEDPOKOJ_OSWIETLENIE,          "Przedpokoj oswietlenie",              24) ,
+  CustomSensor(BALKON_OSWIETLENIE,              "Balkon oswietlenie",                  25) ,
+  CustomSensor(PODDASZE_OSWIETLENIE,            "Poddasze oswietlenie",                26) ,
+  CustomSensor(SYPIALNIA_OSWIETLENIE,           "Sypialnia oswietlenie",               27) ,
+  CustomSensor(STASIU_OSWIETLENIE_L1,           "Stasiu oswietlenie poziom 1",         28) ,
+  CustomSensor(STASIU_OSWIETLENIE_L2,           "Stasiu oswietlenie poziom 2",         29) ,
+  CustomSensor(LAZIENKA_DOL_OSWIETL,            "Łazienka dół oświetlenie",            30) ,
+  CustomSensor(LAZIENKA_DOL_SW_LUSTRO,          "Łazienka dół światło lustro",         31) ,
+  CustomSensor(LAZIENKA_GORA_SW,                "Łazienka góra światło",               32) ,
+  CustomSensor(WENTYLATOR_LAZIENKA_WC,          "Wentylator łazienka WC",              34) ,
+  CustomSensor(WENTYLATOR_LAZIENKA_PRYSZNIC,    "Wentylator łazienka Prysznic",        35) ,
+  CustomSensor(PIEC,                            "Piec gazowy ogrzewanie",              36) ,
+  CustomSensor(LAZIENKA_DOL_OGRZ_LUSTRO,        "Łazienka dół ogrzewanie lustro",      37)
 };
 
 // Pushbuttons declaration
 // Remember that names should be consistent with main loop in gateway.ino
 OneButton przedpokoj_drzwi(A1, true);
-// OneButton balkon(30, true);
-// OneButton poddasze(31, true);
-// OneButton sypialnia(32, true);
-// OneButton stasiu(33, true);
+OneButton stasiu(A2, true);
+OneButton biuro(A3, true);
+OneButton salon(A4, true);
+OneButton sypialnia(A5, true);
+OneButton jadalnia(A6, true);
+OneButton salon(A7, true)
+OneButton kuchnia(A8, true);

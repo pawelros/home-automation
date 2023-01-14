@@ -10,7 +10,6 @@
 
 #pragma once
 
-#include <ArduinoSTL.h>
 #include <MySensors.h>
 
 
@@ -23,8 +22,9 @@ public:
     message = MyMessage(id, V_LIGHT);
   }
 
-  static CustomSensor getSensorById(const uint8_t& sensorId, const std::vector<CustomSensor>& sensors) {
-    for (const CustomSensor sensor : sensors) {
+template <size_t N>
+  static CustomSensor getSensorById(const uint8_t& sensorId, const CustomSensor (&sensors)[N]) {
+    for (CustomSensor sensor : sensors) {
       if (sensor.id == sensorId) return sensor;
     }
 

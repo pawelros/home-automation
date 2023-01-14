@@ -94,27 +94,27 @@ void przedpokoj_drzwiClick() {
 void setupButtons() {
   // Setup the button.
   przedpokoj_drzwi.attachClick(przedpokoj_drzwiClick);
-  // kuchnia.attachClick(kuchniaClick);
-  // kuchnia.attachLongPressStop(kuchniaLongClick);
-  // kuchnia.attachDoubleClick(kuchniaDoubleClick);
+  kuchnia.attachClick(kuchniaClick);
+  kuchnia.attachLongPressStop(kuchniaLongClick);
+  kuchnia.attachDoubleClick(kuchniaDoubleClick);
 
-  // jadalnia.attachClick(jadalniaClick);
+  jadalnia.attachClick(jadalniaClick);
 
-  // salon.attachClick(salonClick);
+  salon.attachClick(salonClick);
 
-  // biuro.attachClick(biuroClick);
-  // biuro.attachLongPressStop(biuroLongClick);
-  // biuro.attachDoubleClick(biuroDoubleClick);
+  biuro.attachClick(biuroClick);
+  biuro.attachLongPressStop(biuroLongClick);
+  biuro.attachDoubleClick(biuroDoubleClick);
 
   // przedpokoj.attachClick(przedpokojClick);
 
-  // balkon.attachClick(balkonClick);
+  balkon.attachClick(balkonClick);
 
-  // poddasze.attachClick(poddaszeClick);
+  poddasze.attachClick(poddaszeClick);
 
-  // sypialnia.attachClick(sypialniaClick);
+  sypialnia.attachClick(sypialniaClick);
 
-  // stasiu.attachClick(stasiuClick);
-  // stasiu.attachLongPressStop(stasiuLongClick);
-  // stasiu.attachDoubleClick(stasiuDoubleClick);
+  stasiu.attachClick(stasiuClick);
+  stasiu.attachLongPressStop(stasiuLongClick);
+  stasiu.attachDoubleClick(stasiuDoubleClick);
 }
