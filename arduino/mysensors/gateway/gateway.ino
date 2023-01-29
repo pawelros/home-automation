@@ -50,7 +50,14 @@ void presentation()
   for (CustomSensor sensor : customSensors) {
     const uint8_t id = sensor.id;
     present(id, S_LIGHT, sensor.description);
-    send(sensor.message.set(!loadState(id)));
+    uint8_t state = loadState(id);
+
+    // inversed state
+    if(id == STASIU_OSWIETLENIE_L1){
+      state = !state;
+    }
+
+    send(sensor.message.set(!state));
   }
 }
 

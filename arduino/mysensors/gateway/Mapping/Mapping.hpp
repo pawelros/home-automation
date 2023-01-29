@@ -68,10 +68,11 @@ CustomSensor customSensors[] = {
 // Pushbuttons declaration
 // Remember that names should be consistent with main loop in gateway.ino
 OneButton przedpokoj_drzwi(A1, true);
-OneButton stasiu(A2, true);
+
 OneButton biuro(A3, true);
 OneButton salon(A4, true);
 OneButton sypialnia(A5, true);
 OneButton jadalnia(A6, true);
 OneButton kuchnia(A7, true);
 OneButton poddasze(A8, true);
+OneButton stasiu(A9, true);
