@@ -17,7 +17,7 @@ void setOutput(const uint8_t& sensorId, const uint8_t& cmd = Relay::FLIP) {
   const uint8_t state = (cmd == Relay::FLIP) ? !loadState(sensor.id) : cmd;
 
   saveState(sensor.id, state);
-  digitalWrite(sensor.pin, state);
+  digitalWrite(sensor.pin, !state);
 
   send(sensor.message.set(state));
 }
@@ -28,13 +28,13 @@ void kuchniaClick() {
 }
 
 void kuchniaLongClick() {
-  setOutput(KUCHNIA_OSWIETLENIE_WYSPA, Relay::OFF);
-  setOutput(KUCHNIA_OSWIETLENIE_TUBY, Relay::OFF);
+  setOutput(KUCHNIA_OSWIETLENIE_WYSPA, 0);
+  setOutput(KUCHNIA_OSWIETLENIE_TUBY, 0);
 }
 
 void kuchniaDoubleClick() {
-  setOutput(KUCHNIA_OSWIETLENIE_WYSPA, Relay::ON);
-  setOutput(KUCHNIA_OSWIETLENIE_TUBY, Relay::OFF);
+  setOutput(KUCHNIA_OSWIETLENIE_WYSPA, 1);
+  setOutput(KUCHNIA_OSWIETLENIE_TUBY, 0);
 }
 
 void jadalniaClick() {
@@ -50,8 +50,8 @@ void biuroClick() {
 }
 
 void biuroLongClick() {
-  setOutput(BIURO_OSWIETLENIE_L1, Relay::OFF);
-  setOutput(BIURO_OSWIETLENIE_L2, Relay::OFF);
+  setOutput(BIURO_OSWIETLENIE_L1, 0);
+  setOutput(BIURO_OSWIETLENIE_L2, 0);
 }
 
 void biuroDoubleClick() {
@@ -79,8 +79,8 @@ void stasiuClick() {
 }
 
 void stasiuLongClick() {
-  setOutput(STASIU_OSWIETLENIE_L1, Relay::OFF);
-  setOutput(STASIU_OSWIETLENIE_L2, Relay::OFF);
+  setOutput(STASIU_OSWIETLENIE_L1, 0);
+  setOutput(STASIU_OSWIETLENIE_L2, 0);
 }
 
 void stasiuDoubleClick() {

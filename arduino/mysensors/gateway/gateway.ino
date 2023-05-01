@@ -30,10 +30,10 @@ void before() {
     uint8_t currentState = loadState(sensor.id);
     // Check whether EEPROM cell was used before
     if (currentState == 0xFF) {
-      currentState = Relay::OFF;
+      currentState = Relay::ON;
       saveState(sensor.id, currentState);
     }
-    digitalWrite(pin, currentState);
+    digitalWrite(pin, !currentState);
   }
 }
 
@@ -52,12 +52,7 @@ void presentation()
     present(id, S_LIGHT, sensor.description);
     uint8_t state = loadState(id);
 
-    // inversed state
-    if(id == STASIU_OSWIETLENIE_L1){
-      state = !state;
-    }
-
-    send(sensor.message.set(!state));
+    send(sensor.message.set(state));
   }
 }
 
@@ -79,12 +74,12 @@ void receive(const MyMessage &message) {
   // We only expect one type of message from controller. But we better check anyway.
   if (message.type==V_LIGHT) {
     CustomSensor sensor = CustomSensor::getSensorById(message.sensor, customSensors);
-    const bool value = !message.getBool();
+    const bool value = message.getBool();
     // Store state in eeprom
     saveState(sensor.id, value);
     // Change relay state
-    digitalWrite(sensor.pin, value);
+    digitalWrite(sensor.pin, !value);
     // Send ACK
-    send(sensor.message.set(!value));
+    send(sensor.message.set(value));
   }
 }
