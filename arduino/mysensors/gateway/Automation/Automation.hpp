@@ -22,6 +22,10 @@ void setOutput(const uint8_t& sensorId, const uint8_t& cmd = Relay::FLIP) {
   send(sensor.message.set(state));
 }
 
+void balkonClick() {
+  setOutput(BALKON_OSWIETLENIE);
+}
+
 void kuchniaClick() {
   setOutput(KUCHNIA_OSWIETLENIE_TUBY);
   setOutput(KUCHNIA_OSWIETLENIE_WYSPA);
@@ -62,10 +66,6 @@ void przedpokojClick() {
   setOutput(PRZEDPOKOJ_OSWIETLENIE);
 }
 
-void balkonClick() {
-  setOutput(BALKON_OSWIETLENIE);
-}
-
 void poddaszeClick() {
   setOutput(PODDASZE_OSWIETLENIE);
 }
@@ -93,6 +93,9 @@ void przedpokoj_drzwiClick() {
 
 void setupButtons() {
   // Setup the button.
+
+  balkon.attachClick(balkonClick);
+
   przedpokoj_drzwi.attachClick(przedpokoj_drzwiClick);
   kuchnia.attachClick(kuchniaClick);
   kuchnia.attachLongPressStop(kuchniaLongClick);
@@ -105,10 +108,6 @@ void setupButtons() {
   biuro.attachClick(biuroClick);
   biuro.attachLongPressStop(biuroLongClick);
   biuro.attachDoubleClick(biuroDoubleClick);
-
-  // przedpokoj.attachClick(przedpokojClick);
-
-  //balkon.attachClick(balkonClick);
 
   poddasze.attachClick(poddaszeClick);
 
