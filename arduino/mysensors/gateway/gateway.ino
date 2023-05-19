@@ -64,7 +64,7 @@ void loop() {
    salon.tick();
    biuro.tick();
   // przedpokoj.tick();
-  // balkon.tick();
+   balkon.tick();
    poddasze.tick();
    sypialnia.tick();
    stasiu.tick();
