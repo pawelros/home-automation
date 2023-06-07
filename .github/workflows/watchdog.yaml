@@ -24,4 +24,4 @@ jobs:
       shell: bash
       run: |
         STATUS=$(ssh root@${{ ENV.PROXMOX_IP }} 'qm status ${{ ENV.HOME_ASSISTANT_VM_ID }}')
-        ssh root@${{ ENV.PROXMOX_IP }} 'qm start ${{ HOME_ASSISTANT_VM_ID }}'
+        ssh root@${{ ENV.PROXMOX_IP }} 'qm start ${{ ENV.HOME_ASSISTANT_VM_ID }}'
