@@ -19,6 +19,7 @@ jobs:
       run: |
         STATUS=$(ssh root@${{ ENV.PROXMOX_IP }} 'qm status ${{ ENV.HOME_ASSISTANT_VM_ID }}')
         echo status=$STATUS >> $GITHUB_OUTPUT
+        echo $STATUS
     - name: Start Home Assistant VM
       if: steps.check.outputs.status == format('status{0} stopped', ':')
       shell: bash
