@@ -10,8 +10,9 @@ env:
   HOME_ASSISTANT_VM_ID: 102
 
 jobs:
-  runs-on: self-hosted
   watchdog:
+    runs-on: self-hosted
+    steps:
     - name: Check Home Assistant VM status
       id: check
       shell: bash
