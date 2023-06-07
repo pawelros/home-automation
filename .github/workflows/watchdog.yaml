@@ -1,0 +1,25 @@
+name: Watchdog
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "* * * * *"
+
+env:
+  PROXMOX_IP: 192.168.1.179
+  HOME_ASSISTANT_VM_ID: 102
+
+jobs:
+  watchdog:
+    - name: Check Home Assistant VM status
+      id: check
+      shell: bash
+      run: |
+        STATUS=$(ssh root@${{ ENV.PROXMOX_IP }} 'qm status ${{ ENV.HOME_ASSISTANT_VM_ID }}')
+        echo status=$STATUS >> $GITHUB_OUTPUT
+    - name: Start Home Assistant VM
+      if: steps.check.outputs.status == 'status: stopped'
+      shell: bash
+      run: |
+        STATUS=$(ssh root@${{ ENV.PROXMOX_IP }} 'qm status ${{ ENV.HOME_ASSISTANT_VM_ID }}')
+        ssh root@${{ ENV.PROXMOX_IP }} 'qm start ${{ HOME_ASSISTANT_VM_ID }}'
