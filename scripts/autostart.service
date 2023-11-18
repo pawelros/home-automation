@@ -1,0 +1,10 @@
+[Unit]
+ Description=Autostart script
+ After=multi-user.target
+
+ [Service]
+ Type=idle
+ ExecStart=/bin/bash /home/pawel/autostart.sh > /home/pawel/autostart.log 2>&1
+
+ [Install]
+ WantedBy=multi-user.target
