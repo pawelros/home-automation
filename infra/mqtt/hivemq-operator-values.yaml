@@ -1,0 +1,130 @@
+# HiveMQ Platform Operator Helm Chart default values
+# See documentation for more information: https://docs.hivemq.com/hivemq-platform-operator/configuration.html#install-operator-with-helm
+
+# Container image configuration
+image:
+  repository: docker.io/hivemq
+  name: hivemq-platform-operator
+  tag: 1.5.2
+  initImageName: hivemq-platform-operator-init
+  pullPolicy: IfNotPresent
+  pullSecretName: ""
+
+# Resources, limits and requests are set to equal values.
+# Note: Increase resources depending on how many HiveMQ Platforms the Operator manages.
+resources:
+  cpu: 4096m
+  memory: 8Gi
+  # Set to specify the ephemeral-storage needed for managing local ephemeral storage in the Operator pod.
+  # ephemeralStorage: 1Gi
+
+# Configures the log level, possible values are: "TRACE", "DEBUG", "INFO", "WARN", "ERROR"
+logLevel: INFO
+
+# Configures the Operator ports for http/s. These ports provide access to metrics and other services.
+http:
+  port: 8080
+https:
+  port: 8443
+
+# Configures the Java JVM runtime options for the process.
+javaOpts: "-XX:+UnlockExperimentalVMOptions -XX:InitialRAMPercentage=75 -XX:MaxRAMPercentage=75"
+
+# Selector name that is used to watch HiveMQ Platforms with a matching selector.
+selector: nil
+
+# Configures whether Kubernetes RBAC permissions for the Operator should be created.
+rbac:
+  create: true
+
+# Configures the ServiceAccount for the Operator.
+serviceAccount:
+  # Specifies whether a ServiceAccount should be created for the Operator.
+  create: true
+  # The ServiceAccount name that is used. Defaults to "hivemq-<release name>" if not set.
+  name: ""
+
+# Configures the ServiceAccount and RBAC permissions (Role, RoleBinding) the Operator creates for the HiveMQ Platform Pods.
+hivemqPlatformServiceAccount:
+  # Specifies whether a ServiceAccount should be created for all HiveMQ Platforms.
+  create: true
+  # Specifies whether the ServiceAccount for all HiveMQ Platforms should be validated.
+  validate: true
+  # The ServiceAccount name that is used for all HiveMQ Platforms.
+  # This overrides the default name "hivemq-platform-pod-<platform-name>" the Operator creates.
+  # The ServiceAccount can also be overridden in the HiveMQ Platform Helm chart (see nodes.serviceAccountName) for each specific HiveMQ Platform.
+  name: ""
+  permissions:
+    # Specifies whether the RBAC permissions for the ServiceAccount should be created for all HiveMQ Platforms.
+    create: true
+    # Specifies whether the RBAC permissions for the ServiceAccount for all HiveMQ Platforms should be validated.
+    validate: true
+
+# Configures how the Operator reconciles the HiveMQ Platform StatefulSet.
+hivemqPlatformStatefulSet:
+  # Specifies whether a change of the StatefulSet template metadata should trigger a rolling restart.
+  # If this is disabled the rollout of updated annotations and labels to the HiveMQ Platform Pods will be delayed until the next rolling restart occurs.
+  rollingRestartOnTemplateMetadataChange: false
+
+# Configures how the Operator Pod should be scheduled on the Kubernetes cluster nodes.
+podScheduling:
+  # Configures the affinity for the Operator Pod.
+  affinity:
+  # podAffinity:
+  #    requiredDuringSchedulingIgnoredDuringExecution:
+  #      - labelSelector:
+  #          matchExpressions:
+  #            - key: app
+  #              operator: In
+  #              values:
+  #                - my-app
+  #        topologyKey: "kubernetes.io/hostname"
+
+  # Configures the tolerations for the Operator Pod.
+  tolerations:
+  #  - key: "example-key"
+  #    operator: "Exists"
+  #    effect: "NoSchedule"
+
+# TLS configuration for the Operator to access the Kubernetes API.
+tls:
+  # Name of the Secret that contains keystore and truststore.
+  secretName: nil
+  # The keystore password. Can also be set as "keystore.password" in the Secret.
+  keystorePassword: nil
+  # The truststore password. Can also be set as "truststore.password" in the Secret.
+  truststorePassword: nil
+
+# Holds pod-level security attributes and common container settings.
+# When enabled, this defaults to non-root user with user ID (UID) "185" and group ID (GID) "0".
+# However, if required, user ID, group ID and filesystem group values can be overwritten.
+# For group ID is always recommended to use group "0". Example:
+#   podSecurityContext:
+#     enabled: true
+#     runAsNonRoot: true
+#     runAsUser: 185
+#     runAsGroup: 0
+#     fsGroup: 186
+podSecurityContext:
+  enabled: false
+  runAsNonRoot: true
+
+# Specifies environment variables to be added to the Operator container.
+# Environment variables can be defined as a list of either key-value pairs or
+# using valueFrom to reference a Secret or ConfigMap.
+env: []
+  # - name: <ENV_VAR_NAME1>
+  #   value: <value>
+  # - name: <ENV_VAR_NAME2>
+  #   valueFrom:
+  #     secretKeyRef:
+  #       name: mysecret
+  #       key: mysecretkey
+  #       optional: false
+  #  - name: <ENV_VAR_NAME3>
+  #    valueFrom:
+  #      configMapKeyRef:
+  #        name: myconfigmap
+  #        key: myconfigmapkey
+  #        optional: true
+
