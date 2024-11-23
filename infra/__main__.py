@@ -21,7 +21,7 @@ ns = kubernetes.core.v1.Namespace(
 )
 
 ebusd = Ebusd(ns)
-ubuntu = Ubuntu(ns)
+#ubuntu = Ubuntu(ns)
 #certManager = CertManager()
 #emqx = EmqxOperator(certManager)
 #hivemq = HiveMqOperator()
