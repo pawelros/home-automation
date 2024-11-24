@@ -7,6 +7,7 @@ from cert_manager.cert_manager import CertManager
 #from mqtt.emqx import EmqxOperator
 #from mqtt.hivemq import HiveMqOperator
 from mqtt.mosquitto import Mosquitto
+from kube_metrics_server.metrics_server import MetricsServer
 
 config = pulumi.Config()
 
@@ -26,4 +27,5 @@ ebusd = Ebusd(ns)
 #emqx = EmqxOperator(certManager)
 #hivemq = HiveMqOperator()
 mosquitto = Mosquitto(ns)
+metrics_server = MetricsServer()
 
