@@ -1,14 +1,15 @@
 apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
-  name: nginx
+  namespace: home-automation
+  name: zigbee2mqtt
   labels:
-    app: nginx-ingress-gateway
+    app: zigbee2mqtt-ingress-gateway
 spec:
   hosts:
-  - "nginx.local"
+  - "*"
   gateways:
-  - nginx-ingress-gateway
+  - zigbee2mqtt-ingress-gateway
   http:
   - match:
     - uri:
@@ -16,5 +17,5 @@ spec:
     route:
     - destination:
         port:
-          number: 80
-        host: nginx
+          number: 8099
+        host: zigbee2mqtt-lb

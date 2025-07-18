@@ -44,6 +44,34 @@ class Istio(pulumi.ComponentResource):
             opts=pulumi.ResourceOptions(parent=self, depends_on=[istio_base]),
         )
 
+        kiali_operator = Release(
+            "kiali-operator",
+            ReleaseArgs(
+                chart="kiali-operator",
+                namespace="istio-system",
+                atomic=True,
+                timeout=120,
+                repository_opts=RepositoryOptsArgs(
+                    repo="https://kiali.org/helm-charts",
+                ),
+                values={
+                    "cr": {
+                        "create": True,
+                        "namespace": "istio-system",
+                        "spec": {
+                            "auth": {
+                                "strategy": "anonymous",
+                            },
+                            "deployment": {
+                                "cluster_wide_access": True,
+                            },
+                        },
+                    }
+                },
+            ),
+            opts=pulumi.ResourceOptions(parent=self),
+        )
+
         gateway = Release(
             "gateway",
             ReleaseArgs(
@@ -112,33 +140,33 @@ class Istio(pulumi.ComponentResource):
         )
 
         gateway = kubernetes.yaml.ConfigFile(
-            "nginx-ingress-gateway",
-            file="./istio/nginx-ingress-gateway.yaml"
+            "zigbee2mqtt-ingress-gateway",
+            file="./istio/zigbee2mqtt-ingress-gateway.yaml",
         )
 
         virtual_service = kubernetes.yaml.ConfigFile(
-            "nginx-virtual-service",
-            file="./istio/nginx-virtual-service.yaml"
+            "zigbee2mqtt-virtual-service",
+            file="./istio/zigbee2mqtt-virtual-service.yaml",
         )
 
         load_balancer_service = kubernetes.core.v1.Service(
-            "nginx-lb",
+            "zigbee2mqtt-lb",
             opts=pulumi.ResourceOptions(parent=self),
             metadata=kubernetes.meta.v1.ObjectMetaArgs(
-                name="nginx-lb",
-                namespace="default",
+                name="zigbee2mqtt-lb",
+                namespace="home-automation",
             ),
             spec=kubernetes.core.v1.ServiceSpecArgs(
                 ports=[
                     kubernetes.core.v1.ServicePortArgs(
                         name="http",
-                        port=80,
+                        port=8099,
                         protocol="TCP",
-                        target_port=80,
+                        target_port=8099,
                     ),
                 ],
                 selector={
-                    "app": "nginx-ingress-gateway",
+                    "app": "zigbee2mqtt-ingress-gateway",
                 },
                 type="LoadBalancer",
                 external_traffic_policy="Local",

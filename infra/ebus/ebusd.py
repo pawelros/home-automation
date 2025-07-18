@@ -39,11 +39,16 @@ class Ebusd(pulumi.ComponentResource):
                                     "-d",
                                     "192.168.1.185:9999",
                                     "--latency=20",
+                                    "--httpport=8000",
+                                    "--htmlpath=/var/ebusd/html"
                                 ],
                                 ports=[
                                     kubernetes.core.v1.ContainerPortArgs(
                                         container_port=8888,
-                                    )
+                                    ),
+                                    kubernetes.core.v1.ContainerPortArgs(
+                                        container_port=8000,
+                                    ),
                                 ],
                             )
                         ],

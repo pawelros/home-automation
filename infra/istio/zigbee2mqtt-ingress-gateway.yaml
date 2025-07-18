@@ -1,9 +1,10 @@
 apiVersion: networking.istio.io/v1
 kind: Gateway
 metadata:
-  name: nginx-ingress-gateway
+  namespace: home-automation
+  name: zigbee2mqtt-ingress-gateway
   labels:
-    app: nginx-ingress-gateway
+    app: zigbee2mqtt-ingress-gateway
 spec:
   # The selector matches the ingress gateway pod labels.
   # If you installed Istio using Helm following the standard documentation, this would be "istio=ingress"
@@ -11,7 +12,7 @@ spec:
     istio: ingressgateway
   servers:
   - port:
-      number: 80
+      number: 8099
       name: http
       protocol: HTTP
     hosts:
