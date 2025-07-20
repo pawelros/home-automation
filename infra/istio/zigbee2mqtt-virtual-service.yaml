@@ -17,5 +17,5 @@ spec:
     route:
     - destination:
         port:
-          number: 8099
+          number: 8080
         host: zigbee2mqtt-lb

@@ -139,6 +139,32 @@ class Istio(pulumi.ComponentResource):
             ),
         )
 
+        nginx_service = kubernetes.core.v1.Service(
+            "nginx-service",
+            opts=pulumi.ResourceOptions(parent=self),
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(
+                name="nginx-service",
+                namespace="default",
+                labels={
+                    "app": "nginx",
+                },
+            ),
+            spec=kubernetes.core.v1.ServiceSpecArgs(
+                ports=[
+                    kubernetes.core.v1.ServicePortArgs(
+                        name="http",
+                        port=80,
+                        target_port=80,
+                        protocol="TCP",
+                    ),
+                ],
+                selector={
+                    "app": "nginx",
+                },
+                type="ClusterIP",
+            ),
+        )
+
         gateway = kubernetes.yaml.ConfigFile(
             "zigbee2mqtt-ingress-gateway",
             file="./istio/zigbee2mqtt-ingress-gateway.yaml",
@@ -160,13 +186,13 @@ class Istio(pulumi.ComponentResource):
                 ports=[
                     kubernetes.core.v1.ServicePortArgs(
                         name="http",
-                        port=8099,
+                        port=8080,
                         protocol="TCP",
-                        target_port=8099,
+                        target_port=8080,
                     ),
                 ],
                 selector={
-                    "app": "zigbee2mqtt-ingress-gateway",
+                    "app": "zigbee2mqtt",
                 },
                 type="LoadBalancer",
                 external_traffic_policy="Local",

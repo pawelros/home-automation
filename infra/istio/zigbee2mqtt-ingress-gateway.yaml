@@ -7,12 +7,12 @@ metadata:
     app: zigbee2mqtt-ingress-gateway
 spec:
   # The selector matches the ingress gateway pod labels.
-  # If you installed Istio using Helm following the standard documentation, this would be "istio=ingress"
+  # Match the actual gateway pod labels
   selector:
-    istio: ingressgateway
+    app: gateway-444bb83f
   servers:
   - port:
-      number: 8099
+      number: 80
       name: http
       protocol: HTTP
     hosts:
