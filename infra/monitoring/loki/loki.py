@@ -33,6 +33,7 @@ class Loki(pulumi.ComponentResource):
                 ),
                 values={
                     "deploymentMode": "SimpleScalable",
+                    "fullnameOverride": "loki",
                     "backend": {
                         "replicas": 2,
                         "persistence": {

@@ -37,7 +37,7 @@ ns = kubernetes.core.v1.Namespace(
 
 pv = Pv(ns)
 istio = Istio()
-ebusd = Ebusd(ns)
+# ebusd = Ebusd(ns)
 # ubuntu = Ubuntu(ns)
 # certManager = CertManager()
 # emqx = EmqxOperator(certManager)
