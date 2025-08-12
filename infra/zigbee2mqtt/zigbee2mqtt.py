@@ -40,7 +40,7 @@ class Zigbee2Mqtt(pulumi.ComponentResource):
             spec=k8s.core.v1.ServiceSpecArgs(
                 ports=[
                     k8s.core.v1.ServicePortArgs(
-                        port=8099,
+                        port=8080,
                         target_port="http",
                     )
                 ],
