@@ -12,10 +12,12 @@ from istio.istio import Istio
 from mqtt.mosquitto import Mosquitto
 from kube_metrics_server.metrics_server import MetricsServer
 from zigbee2mqtt.zigbee2mqtt import Zigbee2Mqtt
+from longhorn.longhorn import Longhorn
 
 config = pulumi.Config()
 
 metal_lb = MetalLb()
+longhorn = Longhorn()
 
 # Create a namespace (user supplies the name of the namespace)
 ns = kubernetes.core.v1.Namespace(
