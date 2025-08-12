@@ -1,0 +1,19 @@
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  namespace: home-automation
+  name: zigbee2mqtt-ingress-gateway
+  labels:
+    app: zigbee2mqtt-ingress-gateway
+spec:
+  # The selector matches the ingress gateway pod labels.
+  # Match the actual gateway pod labels
+  selector:
+    app: gateway-444bb83f
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
