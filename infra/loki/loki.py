@@ -4,7 +4,7 @@ from pulumi_kubernetes.helm.v3 import Release, ReleaseArgs, RepositoryOptsArgs
 
 
 class Loki(pulumi.ComponentResource):
-    def __init__(self, opts=None):
+    def __init__(self, minio=None, opts=None):
         super().__init__(
             "loki",
             "loki",
@@ -27,7 +27,7 @@ class Loki(pulumi.ComponentResource):
                 namespace=ns.metadata.name,
                 create_namespace=False,
                 atomic=True,
-                timeout=300,
+                timeout=600,
                 repository_opts=RepositoryOptsArgs(
                     repo="https://grafana.github.io/helm-charts",
                 ),
@@ -82,13 +82,26 @@ class Loki(pulumi.ComponentResource):
                     },
                     "loki": {
                         "storage": {
-                            "type": "filesystem",
+                            "type": "s3",
+                            "bucketNames": {
+                                "chunks": "loki-chunks",
+                                "ruler": "loki-ruler", 
+                                "admin": "loki-admin",
+                            },
+                            "s3": {
+                                "endpoint": "http://minio.minio.svc.cluster.local:9000",
+                                "region": "us-east-1",
+                                "accessKeyId": "minio",
+                                "secretAccessKey": "minio123",
+                                "s3ForcePathStyle": True,
+                                "insecure": True,
+                            },
                         },
                         "auth_enabled": False,
                         "commonConfig": {
                             "replication_factor": 1,
                         },
-                        "limits_config": {
+                        "limitsConfig": {
                             "retention_period": "1y",
                             "enforce_metric_name": False,
                             "reject_old_samples": True,
@@ -98,10 +111,29 @@ class Loki(pulumi.ComponentResource):
                         },
                         "compactor": {
                             "retention_enabled": True,
+                            "delete_request_store": "s3",
                         },
-                        "storage_config": {
-                            "filesystem": {
-                                "directory": "/var/loki/chunks",
+                        "schemaConfig": {
+                            "configs": [
+                                {
+                                    "from": "2024-01-01",
+                                    "store": "tsdb",
+                                    "object_store": "s3",
+                                    "schema": "v13",
+                                    "index": {
+                                        "prefix": "loki_index_",
+                                        "period": "24h",
+                                    },
+                                }
+                            ]
+                        },
+                        "storageConfig": {
+                            "tsdb_shipper": {
+                                "active_index_directory": "/var/loki/tsdb-index",
+                                "cache_location": "/var/loki/tsdb-cache",
+                            },
+                            "delete_store": {
+                                "store": "s3",
                             },
                         },
                     },
@@ -148,7 +180,7 @@ class Loki(pulumi.ComponentResource):
                     },
                 },
             ),
-            opts=pulumi.ResourceOptions(parent=self, depends_on=[ns]),
+            opts=pulumi.ResourceOptions(parent=self, depends_on=[ns] + ([minio] if minio else [])),
         )
 
         # Export Loki gateway URL

@@ -15,6 +15,7 @@ from zigbee2mqtt.zigbee2mqtt import Zigbee2Mqtt
 from longhorn.longhorn import Longhorn
 from grafana.grafana import Grafana
 from loki.loki import Loki
+from minio.minio import MinIO
 
 config = pulumi.Config()
 
@@ -40,5 +41,6 @@ ebusd = Ebusd(ns)
 mosquitto = Mosquitto(ns)
 metrics_server = MetricsServer()
 zigbee2mqtt = Zigbee2Mqtt(ns, pv)
+minio = MinIO()
 grafana = Grafana(ns)
-loki = Loki()
+loki = Loki(minio)
