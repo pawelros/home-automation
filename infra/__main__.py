@@ -13,9 +13,13 @@ from mqtt.mosquitto import Mosquitto
 from kube_metrics_server.metrics_server import MetricsServer
 from zigbee2mqtt.zigbee2mqtt import Zigbee2Mqtt
 from longhorn.longhorn import Longhorn
-from grafana.grafana import Grafana
-from loki.loki import Loki
+from monitoring.grafana.grafana import Grafana
+from monitoring.loki.loki import Loki
+from monitoring.promtail.promtail import Promtail
+from monitoring.prometheus.prometheus_operator import PrometheusOperator
+from monitoring.mimir.mimir import Mimir
 from minio.minio import MinIO
+
 
 config = pulumi.Config()
 
@@ -42,5 +46,8 @@ mosquitto = Mosquitto(ns)
 metrics_server = MetricsServer()
 zigbee2mqtt = Zigbee2Mqtt(ns, pv)
 minio = MinIO()
+prometheus_operator = PrometheusOperator()
+mimir = Mimir(minio)
 grafana = Grafana(ns)
 loki = Loki(minio)
+promtail = Promtail(loki)

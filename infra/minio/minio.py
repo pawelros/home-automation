@@ -84,6 +84,11 @@ class MinIO(pulumi.ComponentResource):
                             "policy": "none",
                             "purge": False,
                         },
+                        {
+                            "name": "mimir-blocks",
+                            "policy": "none",
+                            "purge": False,
+                        },
                     ],
                 },
             ),

@@ -62,6 +62,13 @@ class Grafana(pulumi.ComponentResource):
                                     "url": "http://loki-gateway.loki.svc.cluster.local",
                                     "access": "proxy",
                                     "isDefault": False,
+                                },
+                                {
+                                    "name": "Mimir",
+                                    "type": "prometheus",
+                                    "url": "http://mimir-nginx.mimir.svc.cluster.local/prometheus",
+                                    "access": "proxy",
+                                    "isDefault": False,
                                 }
                             ],
                         }
