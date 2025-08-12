@@ -55,6 +55,13 @@ class Grafana(pulumi.ComponentResource):
                                     "url": "http://prometheus-server:80",
                                     "access": "proxy",
                                     "isDefault": True,
+                                },
+                                {
+                                    "name": "Loki",
+                                    "type": "loki",
+                                    "url": "http://loki-gateway.loki.svc.cluster.local",
+                                    "access": "proxy",
+                                    "isDefault": False,
                                 }
                             ],
                         }

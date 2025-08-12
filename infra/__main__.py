@@ -14,6 +14,7 @@ from kube_metrics_server.metrics_server import MetricsServer
 from zigbee2mqtt.zigbee2mqtt import Zigbee2Mqtt
 from longhorn.longhorn import Longhorn
 from grafana.grafana import Grafana
+from loki.loki import Loki
 
 config = pulumi.Config()
 
@@ -40,3 +41,4 @@ mosquitto = Mosquitto(ns)
 metrics_server = MetricsServer()
 zigbee2mqtt = Zigbee2Mqtt(ns, pv)
 grafana = Grafana(ns)
+loki = Loki()
