@@ -34,14 +34,6 @@ class Mimir(pulumi.ComponentResource):
                 ),
                 values={
                     "fullnameOverride": "mimir",
-                    "global": {
-                        "extraEnv": [
-                            {
-                                "name": "JAEGER_AGENT_HOST",
-                                "value": "",
-                            }
-                        ],
-                    },
                     "mimir": {
                         "storage": {
                             "backend": "s3",
@@ -56,36 +48,6 @@ class Mimir(pulumi.ComponentResource):
                         },
                         "limits": {
                             "compactor_blocks_retention_period": "1y",
-                        },
-                        "ingester": {
-                            "ring": {
-                                "min_ready_duration": "15s",
-                                "heartbeat_period": "5s",
-                                "heartbeat_timeout": "1m",
-                                "replication_factor": 3,
-                                "tokens_file_path": "",
-                                "unregister_on_shutdown": True,
-                            },
-                        },
-                        "distributor": {
-                            "ring": {
-                                "heartbeat_period": "5s",
-                                "heartbeat_timeout": "2m",
-                            },
-                        },
-                        "query_range": {
-                            "align_queries_with_step": False,
-                        },
-                        "limits": {
-                            "max_global_series_per_user": 0,
-                            "max_global_series_per_metric": 0,
-                            "ingestion_rate": 0,
-                            "ingestion_burst_size": 0,
-                        },
-                        "memberlist": {
-                            "abort_if_cluster_join_fails": False,
-                            "bind_port": 7946,
-                            "join_members": ["mimir-gossip-ring.mimir.svc.cluster.local.:7946"],
                         },
                     },
                     "compactor": {
@@ -102,7 +64,7 @@ class Mimir(pulumi.ComponentResource):
                         },
                     },
                     "distributor": {
-                        "replicas": 2,
+                        "replicas": 1,
                         "resources": {
                             "requests": {
                                 "cpu": "100m",
@@ -115,7 +77,7 @@ class Mimir(pulumi.ComponentResource):
                         },
                     },
                     "ingester": {
-                        "replicas": 3,
+                        "replicas": 1,
                         "resources": {
                             "requests": {
                                 "cpu": "200m",
@@ -129,13 +91,9 @@ class Mimir(pulumi.ComponentResource):
                         "zoneAwareReplication": {
                             "enabled": False,
                         },
-                        "ring": {
-                            "replication_factor": 1,
-                            "min_ready_duration": "15s",
-                        },
                     },
                     "querier": {
-                        "replicas": 2,
+                        "replicas": 1,
                         "resources": {
                             "requests": {
                                 "cpu": "100m",
