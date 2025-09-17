@@ -27,7 +27,7 @@ class Grafana(pulumi.ComponentResource):
                 namespace=ns.metadata.name,
                 create_namespace=False,
                 atomic=True,
-                timeout=300,
+                timeout=60,
                 repository_opts=RepositoryOptsArgs(
                     repo="https://grafana.github.io/helm-charts",
                 ),
@@ -50,9 +50,9 @@ class Grafana(pulumi.ComponentResource):
                             "apiVersion": 1,
                             "datasources": [
                                 {
-                                    "name": "Prometheus",
+                                    "name": "Mimir",
                                     "type": "prometheus",
-                                    "url": "http://prometheus-server:80",
+                                    "url": "http://mimir-nginx.mimir.svc.cluster.local/prometheus",
                                     "access": "proxy",
                                     "isDefault": True,
                                 },
@@ -60,13 +60,6 @@ class Grafana(pulumi.ComponentResource):
                                     "name": "Loki",
                                     "type": "loki",
                                     "url": "http://loki-gateway.loki.svc.cluster.local",
-                                    "access": "proxy",
-                                    "isDefault": False,
-                                },
-                                {
-                                    "name": "Mimir",
-                                    "type": "prometheus",
-                                    "url": "http://mimir-nginx.mimir.svc.cluster.local/prometheus",
                                     "access": "proxy",
                                     "isDefault": False,
                                 }
@@ -96,12 +89,12 @@ class Grafana(pulumi.ComponentResource):
                             "kubernetes-cluster-monitoring": {
                                 "gnetId": 315,
                                 "revision": 3,
-                                "datasource": "Prometheus",
+                                "datasource": "Mimir",
                             },
                             "node-exporter": {
                                 "gnetId": 1860,
                                 "revision": 37,
-                                "datasource": "Prometheus",
+                                "datasource": "Mimir",
                             },
                         }
                     },

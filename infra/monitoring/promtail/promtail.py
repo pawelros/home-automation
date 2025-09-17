@@ -19,7 +19,7 @@ class Promtail(pulumi.ComponentResource):
                 namespace="loki",  # Deploy in same namespace as Loki
                 create_namespace=False,
                 atomic=True,
-                timeout=300,
+                timeout=60,
                 repository_opts=RepositoryOptsArgs(
                     repo="https://grafana.github.io/helm-charts",
                 ),

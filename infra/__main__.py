@@ -15,9 +15,9 @@ from zigbee2mqtt.zigbee2mqtt import Zigbee2Mqtt
 from longhorn.longhorn import Longhorn
 from monitoring.grafana.grafana import Grafana
 from monitoring.loki.loki import Loki
-from monitoring.promtail.promtail import Promtail
-from monitoring.prometheus.prometheus_operator import PrometheusOperator
+# from monitoring.prometheus.prometheus_operator import PrometheusOperator
 from monitoring.mimir.mimir import Mimir
+from monitoring.k8s_monitoring.k8s_monitoring import K8sMonitoring
 from minio.minio import MinIO
 
 
@@ -46,8 +46,13 @@ mosquitto = Mosquitto(ns)
 metrics_server = MetricsServer()
 zigbee2mqtt = Zigbee2Mqtt(ns, pv)
 minio = MinIO()
-prometheus_operator = PrometheusOperator()
+# prometheus_operator = PrometheusOperator()  # Removed - not needed with K8s Monitoring
 mimir = Mimir(minio)
-grafana = Grafana(ns)
 loki = Loki(minio)
-promtail = Promtail(loki)
+grafana = Grafana(ns)
+
+# Configure Kubernetes Monitoring to send logs to Loki and metrics to Mimir
+k8s_monitoring = K8sMonitoring(
+    loki_url="http://loki-gateway.loki.svc.cluster.local",
+    mimir_url="http://mimir-nginx.mimir.svc.cluster.local"
+)

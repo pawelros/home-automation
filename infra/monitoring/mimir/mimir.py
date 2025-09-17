@@ -28,27 +28,71 @@ class Mimir(pulumi.ComponentResource):
                 namespace=ns.metadata.name,
                 create_namespace=False,
                 atomic=True,
-                timeout=600,
+                timeout=120,
                 repository_opts=RepositoryOptsArgs(
                     repo="https://grafana.github.io/helm-charts",
                 ),
                 values={
                     "fullnameOverride": "mimir",
+                    
+                    # Disable internal MinIO since we use external MinIO
+                    "minio": {
+                        "enabled": False,
+                    },
+                    # Mimir configuration
                     "mimir": {
-                        "storage": {
-                            "backend": "s3",
-                            "s3": {
-                                "endpoint": "minio.minio.svc.cluster.local:9000",
-                                "region": "us-east-1",
-                                "access_key_id": "minio",
-                                "secret_access_key": "minio123",
-                                "insecure": True,
-                                "bucket_name": "mimir-blocks",
+                        "structuredConfig": {
+                            "common": {
+                                "storage": {
+                                    "backend": "s3",
+                                    "s3": {
+                                        "endpoint": "minio.minio.svc.cluster.local:9000",
+                                        "region": "us-east-1",
+                                        "access_key_id": "minio",
+                                        "secret_access_key": "minio123",
+                                        "insecure": True,
+                                        "bucket_name": "mimir-blocks",
+                                    },
+                                },
+                            },
+                            "limits": {
+                                "compactor_blocks_retention_period": "1y",
                             },
                         },
-                        "limits": {
-                            "compactor_blocks_retention_period": "1y",
-                        },
+                    },
+                    
+                    # Global storage configuration (alternative approach)
+                    "global": {
+                        "extraEnv": [
+                            {
+                                "name": "MIMIR_COMMON_STORAGE_BACKEND",
+                                "value": "s3",
+                            },
+                            {
+                                "name": "MIMIR_COMMON_STORAGE_S3_ENDPOINT",
+                                "value": "minio.minio.svc.cluster.local:9000",
+                            },
+                            {
+                                "name": "MIMIR_COMMON_STORAGE_S3_REGION",
+                                "value": "us-east-1",
+                            },
+                            {
+                                "name": "MIMIR_COMMON_STORAGE_S3_ACCESS_KEY_ID",
+                                "value": "minio",
+                            },
+                            {
+                                "name": "MIMIR_COMMON_STORAGE_S3_SECRET_ACCESS_KEY",
+                                "value": "minio123",
+                            },
+                            {
+                                "name": "MIMIR_COMMON_STORAGE_S3_BUCKET_NAME",
+                                "value": "mimir-blocks",
+                            },
+                            {
+                                "name": "MIMIR_COMMON_STORAGE_S3_INSECURE",
+                                "value": "true",
+                            },
+                        ],
                     },
                     "compactor": {
                         "replicas": 1,
