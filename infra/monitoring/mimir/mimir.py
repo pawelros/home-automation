@@ -121,7 +121,7 @@ class Mimir(pulumi.ComponentResource):
                         },
                     },
                     "ingester": {
-                        "replicas": 1,
+                        "replicas": 3,
                         "resources": {
                             "requests": {
                                 "cpu": "200m",
