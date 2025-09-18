@@ -19,6 +19,7 @@ from monitoring.loki.loki import Loki
 from monitoring.mimir.mimir import Mimir
 from monitoring.k8s_monitoring.k8s_monitoring import K8sMonitoring
 from minio.minio import MinIO
+from arr_stack.arr_stack import ArrStack
 
 
 config = pulumi.Config()
@@ -56,3 +57,16 @@ k8s_monitoring = K8sMonitoring(
     loki_url="http://loki-gateway.loki.svc.cluster.local",
     mimir_url="http://mimir-nginx.mimir.svc.cluster.local"
 )
+
+# Deploy ARR Stack with Jellyfin
+arr_stack = ArrStack(
+    loki_url="http://loki-gateway.loki.svc.cluster.local", 
+    mimir_url="http://mimir-nginx.mimir.svc.cluster.local"
+)
+
+# Export ARR Stack URLs
+pulumi.export("jellyfin_url", arr_stack.jellyfin_url)
+pulumi.export("prowlarr_url", arr_stack.prowlarr_url)
+pulumi.export("flaresolverr_internal_url", arr_stack.flaresolverr_url)
+pulumi.export("jellyseerr_url", arr_stack.jellyseerr_url)
+pulumi.export("sonarr_url", arr_stack.sonarr_url)

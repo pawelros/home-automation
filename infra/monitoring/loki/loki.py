@@ -138,6 +138,21 @@ class Loki(pulumi.ComponentResource):
                             },
                         },
                     },
+                    # Configure chunks-cache (memcached) to use only 0.5GB instead of default 8GB
+                    "chunksCache": {
+                        "enabled": True,
+                        "allocatedMemory": 512,  # 0.5GB in MB
+                        "resources": {
+                            "requests": {
+                                "cpu": "50m",
+                                "memory": "619Mi",  # floor((512 * 12 + 5) / 10) = 619Mi (20% headroom + 5Mi)
+                            },
+                            "limits": {
+                                "cpu": "200m", 
+                                "memory": "619Mi",  # Same limit to ensure predictable memory usage
+                            },
+                        },
+                    },
                     "monitoring": {
                         "dashboards": {
                             "enabled": True,
@@ -156,7 +171,7 @@ class Loki(pulumi.ComponentResource):
                         },
                     },
                     "test": {
-                        "enabled": False,
+                        "enabled": True,
                     },
                     "gateway": {
                         "enabled": True,
