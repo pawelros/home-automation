@@ -6,6 +6,7 @@ from .prowlarr import Prowlarr
 from .flaresolverr import FlareSolverr
 from .jellyseerr import Jellyseerr
 from .sonarr import Sonarr
+from .qbittorrent import QBittorrent
 
 
 class ArrStack(pulumi.ComponentResource):
@@ -56,6 +57,12 @@ class ArrStack(pulumi.ComponentResource):
             opts=pulumi.ResourceOptions(parent=self)
         )
 
+        # Deploy qBittorrent
+        qbittorrent = QBittorrent(
+            namespace=arr_stack_ns,
+            opts=pulumi.ResourceOptions(parent=self)
+        )
+
         # Store references
         self.namespace = arr_stack_ns
         self.jellyfin = jellyfin
@@ -63,6 +70,7 @@ class ArrStack(pulumi.ComponentResource):
         self.flaresolverr = flaresolverr
         self.jellyseerr = jellyseerr
         self.sonarr = sonarr
+        self.qbittorrent = qbittorrent
 
         # Export useful information
         self.jellyfin_url = jellyfin.web_url
@@ -70,3 +78,4 @@ class ArrStack(pulumi.ComponentResource):
         self.flaresolverr_url = flaresolverr.internal_url
         self.jellyseerr_url = jellyseerr.web_url
         self.sonarr_url = sonarr.web_url
+        self.qbittorrent_url = qbittorrent.web_url
