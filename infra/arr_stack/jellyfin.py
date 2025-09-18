@@ -23,18 +23,20 @@ class Jellyfin(pulumi.ComponentResource):
                 ),
                 namespace=namespace.metadata.name,
                 values={
+                    # Override the release name to get predictable service names
+                    "fullnameOverride": "jellyfin",
+                    
                     # Service configuration
                     "service": {
                         "type": "LoadBalancer",
                         "port": 80,
-                        "targetPort": 8096,  # Jellyfin container still runs on 8096
-                        "loadBalancerIP": "192.168.1.40",  # Static IP for media server
                         "annotations": {
-                            "metallb.universe.tf/allow-shared-ip": "jellyfin"
+                            "metallb.universe.tf/allow-shared-ip": "jellyfin",
+                            "metallb.universe.tf/loadBalancerIPs": "192.168.1.40"
                         }
                     },
                     
-                    # Persistence for configuration and cache
+                    # Persistence for configuration, cache, and media
                     "persistence": {
                         "config": {
                             "enabled": True,
@@ -48,38 +50,41 @@ class Jellyfin(pulumi.ComponentResource):
                             "size": "20Gi",
                             "accessMode": "ReadWriteOnce"
                         },
-                        "media": {
+                        "data": {
                             "enabled": True,
-                            "existingClaim": "",  # Will need to be configured with actual media PVC
-                            "subPath": ""
+                            "existingClaim": "arr-media-shared-ssd",  # Use migrated SSD PVC
+                            "storageClass": "longhorn-ssd",
+                            "size": "110Gi"
                         }
                     },
                     
-                    # Resource limits
+                    # Resource limits - Increased for better transcoding performance
                     "resources": {
                         "limits": {
-                            "cpu": "2000m",
-                            "memory": "4Gi"
+                            "cpu": "4000m",  # Increased from 2000m for transcoding
+                            "memory": "6Gi"  # Increased from 4Gi
                         },
                         "requests": {
-                            "cpu": "500m", 
-                            "memory": "1Gi"
+                            "cpu": "1000m",  # Increased from 500m
+                            "memory": "2Gi"  # Increased from 1Gi
                         }
                     },
                     
                     # Timezone
                     "timezone": "UTC",
                     
-                    # Security context - allow container to run as root for s6-supervise
+                    # Security context - allow container to run as root for s6-supervise and GPU access
                     "podSecurityContext": {
                         "runAsUser": 0,  # Run as root to fix s6-supervise permissions
                         "runAsGroup": 0,
-                        "fsGroup": 1000  # Keep fsGroup for volume permissions
+                        "fsGroup": 1000,  # Keep fsGroup for volume permissions
+                        "supplementalGroups": [44, 109]  # video (44) and render (109) groups for GPU access
                     },
                     "securityContext": {
-                        "allowPrivilegeEscalation": False,
+                        "allowPrivilegeEscalation": True,  # Required when privileged is True
                         "readOnlyRootFilesystem": False,
-                        "runAsNonRoot": False  # Allow root for s6-supervise
+                        "runAsNonRoot": False,  # Allow root for s6-supervise
+                        "privileged": True  # Required for GPU access
                     },
                     
                     # Environment variables
@@ -95,8 +100,38 @@ class Jellyfin(pulumi.ComponentResource):
                         {
                             "name": "PGID", 
                             "value": "1000"
+                        },
+                        {
+                            "name": "JELLYFIN_FFMPEG_VAAPI_DEVICE",
+                            "value": "/dev/dri/renderD128"
+                        },
+                        {
+                            "name": "JELLYFIN_FFMPEG_HWACCEL",
+                            "value": "vaapi"
                         }
                     ],
+                    
+                    # GPU device access for hardware acceleration
+                    "extraVolumes": [
+                        {
+                            "name": "dri-devices",
+                            "hostPath": {
+                                "path": "/dev/dri",
+                                "type": "Directory"
+                            }
+                        }
+                    ],
+                    "extraVolumeMounts": [
+                        {
+                            "name": "dri-devices",
+                            "mountPath": "/dev/dri"
+                        }
+                    ],
+                    
+                    # Node affinity to ensure pod runs on k8s-node-1 where SSD is located
+                    "nodeSelector": {
+                        "kubernetes.io/hostname": "k8s-node-1"
+                    },
                     
                     # Ingress configuration (disabled by default, using LoadBalancer)
                     "ingress": {

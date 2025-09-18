@@ -74,9 +74,7 @@ class QBittorrent(pulumi.ComponentResource):
                         },
                         "downloads": {
                             "enabled": True,
-                            "storageClass": "longhorn", 
-                            "size": "10Gi",  # Reduced download storage to fit available space
-                            "accessMode": "ReadWriteOnce",
+                            "existingClaim": "qbittorrent-downloads-ssd",  # Use migrated SSD PVC
                             "mountPath": "/downloads"
                         }
                     },
@@ -112,6 +110,11 @@ class QBittorrent(pulumi.ComponentResource):
                         "readiness": {
                             "enabled": False  # Disable to avoid chart conflicts
                         }
+                    },
+                    
+                    # Node affinity to ensure pod runs on k8s-node-1 where SSD is located
+                    "nodeSelector": {
+                        "kubernetes.io/hostname": "k8s-node-1"
                     },
                     
                     # Ingress configuration (disabled, using LoadBalancer)

@@ -68,16 +68,12 @@ class Sonarr(pulumi.ComponentResource):
                         },
                         "media": {
                             "enabled": True,
-                            "storageClass": "longhorn", 
-                            "size": "20Gi",  # Large volume for TV shows
-                            "accessMode": "ReadWriteOnce",
-                            "mountPath": "/media"
+                            "existingClaim": "arr-media-shared-ssd",  # Use migrated SSD PVC
+                            "mountPath": "/media"  # Mount entire shared media, Sonarr will use /media/tv
                         },
                         "downloads": {
                             "enabled": True,
-                            "storageClass": "longhorn",
-                            "size": "10Gi",  # Temporary download storage
-                            "accessMode": "ReadWriteOnce", 
+                            "existingClaim": "qbittorrent-downloads-ssd",  # Use migrated SSD PVC
                             "mountPath": "/downloads"
                         }
                     },
@@ -113,6 +109,11 @@ class Sonarr(pulumi.ComponentResource):
                         "readiness": {
                             "enabled": False  # Disable to avoid chart conflicts
                         }
+                    },
+                    
+                    # Node affinity to ensure pod runs on k8s-node-1 where SSD is located
+                    "nodeSelector": {
+                        "kubernetes.io/hostname": "k8s-node-1"
                     },
                     
                     # Ingress configuration (disabled, using LoadBalancer)
