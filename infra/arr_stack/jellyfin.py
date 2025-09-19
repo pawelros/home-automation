@@ -88,28 +88,13 @@ class Jellyfin(pulumi.ComponentResource):
                     },
                     
                     # Environment variables
-                    "extraEnv": [
-                        {
-                            "name": "JELLYFIN_PublishedServerUrl",
-                            "value": "http://192.168.1.40"
-                        },
-                        {
-                            "name": "PUID",
-                            "value": "1000"
-                        },
-                        {
-                            "name": "PGID", 
-                            "value": "1000"
-                        },
-                        {
-                            "name": "JELLYFIN_FFMPEG_VAAPI_DEVICE",
-                            "value": "/dev/dri/renderD128"
-                        },
-                        {
-                            "name": "JELLYFIN_FFMPEG_HWACCEL",
-                            "value": "vaapi"
-                        }
-                    ],
+                    "env": {
+                        "JELLYFIN_PublishedServerUrl": "http://192.168.1.40",
+                        "PUID": "1000",
+                        "PGID": "1000",
+                        "JELLYFIN_FFMPEG_VAAPI_DEVICE": "/dev/dri/renderD128",
+                        "JELLYFIN_FFMPEG_HWACCEL": "vaapi"
+                    },
                     
                     # GPU device access for hardware acceleration
                     "extraVolumes": [

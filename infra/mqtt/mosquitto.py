@@ -43,8 +43,12 @@ class Mosquitto(pulumi.ComponentResource):
                                 command=["mosquitto"],
                                 args=[
                                     "-c",
-                                    "/mosquitto-no-auth.conf",
+                                    "/mosquitto/config/mosquitto.conf",
                                 ],
+                                volume_mounts=[kubernetes.core.v1.VolumeMountArgs(
+                                    name="config",
+                                    mount_path="/mosquitto/config",
+                                )],
                                 ports=[
                                     kubernetes.core.v1.ContainerPortArgs(
                                         container_port=1883,
@@ -77,9 +81,33 @@ class Mosquitto(pulumi.ComponentResource):
                                 ],
                             ),
                         ),
+                        volumes=[kubernetes.core.v1.VolumeArgs(
+                            name="config",
+                            config_map=kubernetes.core.v1.ConfigMapVolumeSourceArgs(
+                                name="primary-config",
+                            ),
+                        )]
                     ),
                 ),
             ),
+        )
+
+        primary_config_map = kubernetes.core.v1.ConfigMap(
+            "mosquitto-primary-config",
+            opts=pulumi.ResourceOptions(parent=self),
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(
+                name="primary-config",
+                namespace=ns,
+            ),
+            data={
+                "mosquitto.conf": """
+listener 1883
+allow_anonymous true
+persistence false
+log_dest stdout
+log_type all
+""",
+            },
         )
 
         load_balancer_service = kubernetes.core.v1.Service(
@@ -120,14 +148,17 @@ class Mosquitto(pulumi.ComponentResource):
             namespace=ns,
             ),
             data={
-            "mosquitto.conf": """
-            listener 1883
-            allow_anonymous true
+                "mosquitto.conf": """
+listener 1883
+allow_anonymous true
+persistence false
+log_dest stdout
+log_type all
 
-            connection broker0
-            address mosquitto-primary.home-automation
-            topic # both 0 
-            """,
+connection broker0
+address mosquitto-primary.home-automation.svc.cluster.local:1883
+topic # both 0
+""",
             },
         )
 
@@ -213,24 +244,6 @@ class Mosquitto(pulumi.ComponentResource):
                         security_context=kubernetes.core.v1.PodSecurityContextArgs(
                             run_as_user=1883,
                             run_as_group=1883,
-                        ),
-                        affinity=kubernetes.core.v1.AffinityArgs(
-                            pod_anti_affinity=kubernetes.core.v1.PodAntiAffinityArgs(
-                                required_during_scheduling_ignored_during_execution=[
-                                    kubernetes.core.v1.PodAffinityTermArgs(
-                                        label_selector=kubernetes.meta.v1.LabelSelectorArgs(
-                                            match_expressions=[
-                                                kubernetes.meta.v1.LabelSelectorRequirementArgs(
-                                                    key="app",
-                                                    operator="In",
-                                                    values=["mosquitto"],
-                                                ),
-                                            ],
-                                        ),
-                                        topology_key="kubernetes.io/hostname",
-                                    ),
-                                ],
-                            ),
                         ),
                         volumes=[kubernetes.core.v1.VolumeArgs(
                             name="config",
