@@ -59,8 +59,8 @@ class QBittorrent(pulumi.ComponentResource):
                     # Environment variables
                     "env": {
                         "TZ": "UTC",
-                        "PUID": "568",  # LinuxServer.io will handle user switching
-                        "PGID": "568",
+                        "PUID": "0",  # Run as root to handle NFS permissions
+                        "PGID": "0",  # Run as root group
                         "WEBUI_PORT": "8080"
                     },
                     
@@ -91,12 +91,10 @@ class QBittorrent(pulumi.ComponentResource):
                         }
                     },
                     
-                    # Security context - force volume ownership with fsGroupChangePolicy
+                    # Security context - run as root for NFS compatibility
                     "securityContext": {
                         "runAsUser": 0,  # LinuxServer.io containers need root for s6-overlay
                         "runAsGroup": 0,
-                        "fsGroup": 568,  # Volume group ownership for PUID/PGID
-                        "fsGroupChangePolicy": "Always",  # Force ownership change on every mount
                         "runAsNonRoot": False,
                         "allowPrivilegeEscalation": False,
                         "readOnlyRootFilesystem": False

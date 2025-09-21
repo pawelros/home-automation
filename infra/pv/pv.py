@@ -106,3 +106,77 @@ class Pv(pulumi.ComponentResource):
             ),
             opts=pulumi.ResourceOptions(parent=self),
         )
+
+        # NFS Persistent Volumes for TrueNAS storage
+        self.pv_media_nfs = k8s.core.v1.PersistentVolume(
+            "pv-media-nfs",
+            metadata=k8s.meta.v1.ObjectMetaArgs(
+                name="pv-media-nfs",
+            ),
+            spec=k8s.core.v1.PersistentVolumeSpecArgs(
+                storage_class_name="nfs-media",
+                capacity={"storage": "1Ti"},
+                volume_mode="Filesystem",
+                persistent_volume_reclaim_policy="Retain",
+                access_modes=["ReadWriteMany"],
+                nfs=k8s.core.v1.NFSVolumeSourceArgs(
+                    server="192.168.1.127",
+                    path="/mnt/SSD/media",
+                ),
+            ),
+            opts=pulumi.ResourceOptions(parent=self),
+        )
+
+        self.pv_downloads_nfs = k8s.core.v1.PersistentVolume(
+            "pv-downloads-nfs",
+            metadata=k8s.meta.v1.ObjectMetaArgs(
+                name="pv-downloads-nfs",
+            ),
+            spec=k8s.core.v1.PersistentVolumeSpecArgs(
+                storage_class_name="nfs-downloads",
+                capacity={"storage": "500Gi"},
+                volume_mode="Filesystem",
+                persistent_volume_reclaim_policy="Retain",
+                access_modes=["ReadWriteMany"],
+                nfs=k8s.core.v1.NFSVolumeSourceArgs(
+                    server="192.168.1.127",
+                    path="/mnt/SSD/downloads",
+                ),
+            ),
+            opts=pulumi.ResourceOptions(parent=self),
+        )
+
+        # Create PVCs that use the NFS persistent volumes
+        self.pvc_media_nfs = k8s.core.v1.PersistentVolumeClaim(
+            "arr-media-shared-ssd",
+            metadata=k8s.meta.v1.ObjectMetaArgs(
+                name="arr-media-shared-ssd",
+                namespace="arr-stack",  # Must be in arr-stack namespace
+            ),
+            spec=k8s.core.v1.PersistentVolumeClaimSpecArgs(
+                storage_class_name="nfs-media",
+                volume_name=self.pv_media_nfs.metadata["name"],
+                access_modes=["ReadWriteMany"],
+                resources=k8s.core.v1.ResourceRequirementsArgs(
+                    requests={"storage": "1Ti"}
+                ),
+            ),
+            opts=pulumi.ResourceOptions(parent=self),
+        )
+
+        self.pvc_downloads_nfs = k8s.core.v1.PersistentVolumeClaim(
+            "qbittorrent-downloads-ssd",
+            metadata=k8s.meta.v1.ObjectMetaArgs(
+                name="qbittorrent-downloads-ssd",
+                namespace="arr-stack",  # Must be in arr-stack namespace
+            ),
+            spec=k8s.core.v1.PersistentVolumeClaimSpecArgs(
+                storage_class_name="nfs-downloads",
+                volume_name=self.pv_downloads_nfs.metadata["name"],
+                access_modes=["ReadWriteMany"],
+                resources=k8s.core.v1.ResourceRequirementsArgs(
+                    requests={"storage": "500Gi"}
+                ),
+            ),
+            opts=pulumi.ResourceOptions(parent=self),
+        )

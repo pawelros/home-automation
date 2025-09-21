@@ -64,8 +64,8 @@ arr_stack = ArrStack(
     mimir_url="http://mimir-nginx.mimir.svc.cluster.local"
 )
 
-# Export ARR Stack URLs
-pulumi.export("jellyfin_url", arr_stack.jellyfin_url)
+# Export ARR Stack URLs (Jellyfin moved to dedicated GPU machine)
+# pulumi.export("jellyfin_url", arr_stack.jellyfin_url)  # Now on dedicated GPU machine
 pulumi.export("prowlarr_url", arr_stack.prowlarr_url)
 pulumi.export("flaresolverr_internal_url", arr_stack.flaresolverr_url)
 pulumi.export("jellyseerr_url", arr_stack.jellyseerr_url)

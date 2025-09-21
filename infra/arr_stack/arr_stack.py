@@ -1,7 +1,7 @@
 import pulumi
 import pulumi_kubernetes as kubernetes
 from pulumi_kubernetes.helm.v3 import Release, ReleaseArgs, RepositoryOptsArgs
-from .jellyfin import Jellyfin
+# from .jellyfin import Jellyfin  # Moved to dedicated GPU machine
 from .prowlarr import Prowlarr
 from .flaresolverr import FlareSolverr
 from .jellyseerr import Jellyseerr
@@ -28,11 +28,11 @@ class ArrStack(pulumi.ComponentResource):
             opts=pulumi.ResourceOptions(parent=self),
         )
 
-        # Deploy Jellyfin
-        jellyfin = Jellyfin(
-            namespace=arr_stack_ns,
-            opts=pulumi.ResourceOptions(parent=self)
-        )
+        # Jellyfin moved to dedicated GPU machine
+        # jellyfin = Jellyfin(
+        #     namespace=arr_stack_ns,
+        #     opts=pulumi.ResourceOptions(parent=self)
+        # )
 
         # Deploy Prowlarr
         prowlarr = Prowlarr(
@@ -72,7 +72,7 @@ class ArrStack(pulumi.ComponentResource):
 
         # Store references
         self.namespace = arr_stack_ns
-        self.jellyfin = jellyfin
+        # self.jellyfin = jellyfin  # Moved to dedicated GPU machine
         self.prowlarr = prowlarr
         self.flaresolverr = flaresolverr
         self.jellyseerr = jellyseerr
@@ -81,7 +81,7 @@ class ArrStack(pulumi.ComponentResource):
         self.bazarr = bazarr
 
         # Export useful information
-        self.jellyfin_url = jellyfin.web_url
+        # self.jellyfin_url = jellyfin.web_url  # Moved to dedicated GPU machine
         self.prowlarr_url = prowlarr.web_url
         self.flaresolverr_url = flaresolverr.internal_url
         self.jellyseerr_url = jellyseerr.web_url
