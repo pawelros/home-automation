@@ -1,2 +1,6 @@
 config:
   kubernetes:context: deskmini
+  home-automation:tailscale-oauth-client-id:
+    secure: AAABAD+rc+ryZ3uovz0s/j3z2UnL0laAoK9BVV+2AnFGU1WUgHnV1LzkPOfxWGiIqQ==
+  home-automation:tailscale-oauth-client-secret:
+    secure: AAABAANm/2PcSr7CuNwZxLUXBAJ39ci58FYQMrIIRTeCBZT+Puu97N25WOdmBZzn/MSr50x7Oi1NlrU0jdkuIr3v4f5eqgfR7uOk2kWWxRbLWPlhaeoCC6Z36nu0MTwn

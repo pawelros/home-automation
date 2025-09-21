@@ -20,6 +20,7 @@ from monitoring.mimir.mimir import Mimir
 from monitoring.k8s_monitoring.k8s_monitoring import K8sMonitoring
 from minio.minio import MinIO
 from arr_stack.arr_stack import ArrStack
+from tailscale.tailscale import Tailscale
 
 
 config = pulumi.Config()
@@ -64,6 +65,9 @@ arr_stack = ArrStack(
     mimir_url="http://mimir-nginx.mimir.svc.cluster.local"
 )
 
+# Deploy Tailscale subnet router in its own namespace
+tailscale = Tailscale()
+
 # Export ARR Stack URLs (Jellyfin moved to dedicated GPU machine)
 # pulumi.export("jellyfin_url", arr_stack.jellyfin_url)  # Now on dedicated GPU machine
 pulumi.export("prowlarr_url", arr_stack.prowlarr_url)
@@ -72,3 +76,7 @@ pulumi.export("jellyseerr_url", arr_stack.jellyseerr_url)
 pulumi.export("sonarr_url", arr_stack.sonarr_url)
 pulumi.export("qbittorrent_url", arr_stack.qbittorrent_url)
 pulumi.export("bazarr_url", arr_stack.bazarr_url)
+
+# Export Tailscale information
+pulumi.export("tailscale_namespace", tailscale.namespace)
+pulumi.export("tailscale_connector", tailscale.connector_name)
