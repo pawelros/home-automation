@@ -123,6 +123,14 @@ class Pv(pulumi.ComponentResource):
                     server="192.168.1.127",
                     path="/mnt/SSD/media",
                 ),
+                mount_options=[
+                    "nfsvers=4.1",
+                    "rsize=1048576",
+                    "wsize=1048576",
+                    "hard",
+                    "intr",
+                    "timeo=600"
+                ],
             ),
             opts=pulumi.ResourceOptions(parent=self),
         )
@@ -142,6 +150,14 @@ class Pv(pulumi.ComponentResource):
                     server="192.168.1.127",
                     path="/mnt/SSD/downloads",
                 ),
+                mount_options=[
+                    "nfsvers=4.1",
+                    "rsize=1048576",
+                    "wsize=1048576",
+                    "hard",
+                    "intr",
+                    "timeo=600"
+                ],
             ),
             opts=pulumi.ResourceOptions(parent=self),
         )

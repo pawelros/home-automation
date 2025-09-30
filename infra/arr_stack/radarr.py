@@ -3,20 +3,20 @@ import pulumi_kubernetes as kubernetes
 from pulumi_kubernetes.helm.v3 import Release, ReleaseArgs, RepositoryOptsArgs
 
 
-class Sonarr(pulumi.ComponentResource):
+class Radarr(pulumi.ComponentResource):
     def __init__(self, namespace: kubernetes.core.v1.Namespace, opts=None):
         super().__init__(
-            "sonarr",
-            "sonarr",
+            "radarr",
+            "radarr",
             None,
             opts=opts,
         )
 
-        # Deploy Sonarr using k8s-home-lab-repo chart
+        # Deploy Radarr using k8s-home-lab-repo chart
         self.release = Release(
-            "sonarr",
+            "radarr",
             ReleaseArgs(
-                chart="sonarr",
+                chart="radarr",
                 # version="1.0.0",  # Use latest available version
                 repository_opts=RepositoryOptsArgs(
                     repo="https://k8s-home-lab.github.io/helm-charts"
@@ -24,27 +24,27 @@ class Sonarr(pulumi.ComponentResource):
                 namespace=namespace.metadata.name,
                 values={
                     # Override the release name to get predictable service names
-                    "fullnameOverride": "sonarr",
+                    "fullnameOverride": "radarr",
                     
                     # Image configuration
                     "image": {
-                        "repository": "lscr.io/linuxserver/sonarr",
-                        "tag": "version-4.0.15.2941"
+                        "repository": "lscr.io/linuxserver/radarr",
+                        "tag": "5.14.0"
                     },
                     
                     # Service configuration
                     "service": {
                         "main": {
                             "type": "LoadBalancer",
-                            "loadBalancerIP": "192.168.1.43",  # Static IP for Sonarr
+                            "loadBalancerIP": "192.168.1.46",  # Static IP for Radarr
                             "annotations": {
-                                "metallb.universe.tf/allow-shared-ip": "sonarr"
+                                "metallb.universe.tf/allow-shared-ip": "radarr"
                             },
                             "ports": {
                                 "http": {
                                     "enabled": True,
                                     "port": 80,
-                                    "targetPort": 8989,  # Sonarr default port
+                                    "targetPort": 7878,  # Radarr default port
                                     "protocol": "TCP"
                                 }
                             }
@@ -69,7 +69,7 @@ class Sonarr(pulumi.ComponentResource):
                         "media": {
                             "enabled": True,
                             "existingClaim": "arr-media-shared-ssd",  # Use migrated SSD PVC
-                            "mountPath": "/media"  # Mount entire shared media, Sonarr will use /media/tv
+                            "mountPath": "/media"  # Mount entire shared media, Radarr will use /media/movies
                         },
                         "downloads": {
                             "enabled": True,
@@ -132,6 +132,6 @@ class Sonarr(pulumi.ComponentResource):
         self.namespace = namespace
         
         # Export useful information
-        self.service_ip = pulumi.Output.concat("192.168.1.43")
-        self.web_url = pulumi.Output.concat("http://192.168.1.43")
-        self.api_url = pulumi.Output.concat("http://192.168.1.43/api/v3")
+        self.service_ip = pulumi.Output.concat("192.168.1.46")
+        self.web_url = pulumi.Output.concat("http://192.168.1.46")
+        self.api_url = pulumi.Output.concat("http://192.168.1.46/api/v3")

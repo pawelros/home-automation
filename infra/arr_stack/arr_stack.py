@@ -6,6 +6,8 @@ from .prowlarr import Prowlarr
 from .flaresolverr import FlareSolverr
 from .jellyseerr import Jellyseerr
 from .sonarr import Sonarr
+from .radarr import Radarr
+from .lidarr import Lidarr
 from .qbittorrent import QBittorrent
 from .bazarr import Bazarr
 
@@ -58,6 +60,18 @@ class ArrStack(pulumi.ComponentResource):
             opts=pulumi.ResourceOptions(parent=self)
         )
 
+        # Deploy Radarr
+        radarr = Radarr(
+            namespace=arr_stack_ns,
+            opts=pulumi.ResourceOptions(parent=self)
+        )
+
+        # Deploy Lidarr
+        lidarr = Lidarr(
+            namespace=arr_stack_ns,
+            opts=pulumi.ResourceOptions(parent=self)
+        )
+
         # Deploy qBittorrent
         qbittorrent = QBittorrent(
             namespace=arr_stack_ns,
@@ -77,6 +91,8 @@ class ArrStack(pulumi.ComponentResource):
         self.flaresolverr = flaresolverr
         self.jellyseerr = jellyseerr
         self.sonarr = sonarr
+        self.radarr = radarr
+        self.lidarr = lidarr
         self.qbittorrent = qbittorrent
         self.bazarr = bazarr
 
@@ -86,5 +102,7 @@ class ArrStack(pulumi.ComponentResource):
         self.flaresolverr_url = flaresolverr.internal_url
         self.jellyseerr_url = jellyseerr.web_url
         self.sonarr_url = sonarr.web_url
+        self.radarr_url = radarr.web_url
+        self.lidarr_url = lidarr.web_url
         self.qbittorrent_url = qbittorrent.web_url
         self.bazarr_url = bazarr.web_url

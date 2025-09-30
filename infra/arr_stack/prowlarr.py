@@ -29,7 +29,7 @@ class Prowlarr(pulumi.ComponentResource):
                     # Image configuration
                     "image": {
                         "repository": "lscr.io/linuxserver/prowlarr",
-                        "tag": "1.21.2"
+                        "tag": "version-2.0.5.5160"
                     },
                     
                     # Service configuration

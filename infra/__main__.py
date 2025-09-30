@@ -74,6 +74,8 @@ pulumi.export("prowlarr_url", arr_stack.prowlarr_url)
 pulumi.export("flaresolverr_internal_url", arr_stack.flaresolverr_url)
 pulumi.export("jellyseerr_url", arr_stack.jellyseerr_url)
 pulumi.export("sonarr_url", arr_stack.sonarr_url)
+pulumi.export("radarr_url", arr_stack.radarr_url)
+pulumi.export("lidarr_url", arr_stack.lidarr_url)
 pulumi.export("qbittorrent_url", arr_stack.qbittorrent_url)
 pulumi.export("bazarr_url", arr_stack.bazarr_url)
 
