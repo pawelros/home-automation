@@ -58,7 +58,7 @@ class Sonarr(pulumi.ComponentResource):
                         "PGID": "568"
                     },
                     
-                    # Persistence for configuration and media
+                    # Persistence for configuration and shared NFS storage
                     "persistence": {
                         "config": {
                             "enabled": True,
@@ -68,13 +68,8 @@ class Sonarr(pulumi.ComponentResource):
                         },
                         "media": {
                             "enabled": True,
-                            "existingClaim": "arr-media-shared-ssd",  # Use migrated SSD PVC
-                            "mountPath": "/media"  # Mount entire shared media, Sonarr will use /media/tv
-                        },
-                        "downloads": {
-                            "enabled": True,
-                            "existingClaim": "qbittorrent-downloads-ssd",  # Use migrated SSD PVC
-                            "mountPath": "/downloads"
+                            "existingClaim": "arr-shared-nfs",  # Use shared NFS PVC
+                            "mountPath": "/shared"  # Mount entire /mnt/SSD/arr_stack as /shared (contains media/ and downloads/)
                         }
                     },
                     
@@ -101,13 +96,29 @@ class Sonarr(pulumi.ComponentResource):
                         "readOnlyRootFilesystem": False
                     },
                     
-                    # Probes configuration (simplified to avoid conflicts)
+                    # Probes configuration
                     "probes": {
                         "liveness": {
-                            "enabled": False  # Disable to avoid chart conflicts
+                            "enabled": True,
+                            "httpGet": {
+                                "path": "/ping",
+                                "port": 8989
+                            },
+                            "initialDelaySeconds": 30,
+                            "timeoutSeconds": 5,
+                            "periodSeconds": 10,
+                            "failureThreshold": 3
                         },
                         "readiness": {
-                            "enabled": False  # Disable to avoid chart conflicts
+                            "enabled": True,
+                            "httpGet": {
+                                "path": "/ping",
+                                "port": 8989
+                            },
+                            "initialDelaySeconds": 5,
+                            "timeoutSeconds": 1,
+                            "periodSeconds": 5,
+                            "failureThreshold": 3
                         }
                     },
                     

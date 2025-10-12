@@ -59,12 +59,12 @@ class QBittorrent(pulumi.ComponentResource):
                     # Environment variables
                     "env": {
                         "TZ": "UTC",
-                        "PUID": "0",  # Run as root to handle NFS permissions
-                        "PGID": "0",  # Run as root group
+                        "PUID": "568",  # Match Sonarr/Radarr user for hardlinks
+                        "PGID": "568",  # Match Sonarr/Radarr group for hardlinks
                         "WEBUI_PORT": "8080"
                     },
                     
-                    # Persistence for configuration and downloads
+                    # Persistence for configuration and shared NFS storage
                     "persistence": {
                         "config": {
                             "enabled": True,
@@ -74,8 +74,8 @@ class QBittorrent(pulumi.ComponentResource):
                         },
                         "downloads": {
                             "enabled": True,
-                            "existingClaim": "qbittorrent-downloads-ssd",  # Use migrated SSD PVC
-                            "mountPath": "/downloads"
+                            "existingClaim": "arr-shared-nfs",  # Use shared NFS PVC
+                            "mountPath": "/shared"  # Mount entire /mnt/SSD/arr_stack as /shared
                         }
                     },
                     
@@ -91,10 +91,12 @@ class QBittorrent(pulumi.ComponentResource):
                         }
                     },
                     
-                    # Security context - run as root for NFS compatibility
+                    # Security context - force volume ownership with fsGroupChangePolicy
                     "securityContext": {
                         "runAsUser": 0,  # LinuxServer.io containers need root for s6-overlay
                         "runAsGroup": 0,
+                        "fsGroup": 568,  # Volume group ownership for PUID/PGID
+                        "fsGroupChangePolicy": "Always",  # Force ownership change on every mount
                         "runAsNonRoot": False,
                         "allowPrivilegeEscalation": False,
                         "readOnlyRootFilesystem": False

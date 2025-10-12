@@ -21,6 +21,7 @@ from monitoring.k8s_monitoring.k8s_monitoring import K8sMonitoring
 from minio.minio import MinIO
 from arr_stack.arr_stack import ArrStack
 from tailscale.tailscale import Tailscale
+from influxdb.influxdb import InfluxDB
 
 
 config = pulumi.Config()
@@ -59,6 +60,9 @@ k8s_monitoring = K8sMonitoring(
     mimir_url="http://mimir-nginx.mimir.svc.cluster.local"
 )
 
+# Deploy InfluxDB
+#influxdb = InfluxDB(ns)
+
 # Deploy ARR Stack with Jellyfin
 arr_stack = ArrStack(
     loki_url="http://loki-gateway.loki.svc.cluster.local", 
@@ -78,6 +82,10 @@ pulumi.export("radarr_url", arr_stack.radarr_url)
 pulumi.export("lidarr_url", arr_stack.lidarr_url)
 pulumi.export("qbittorrent_url", arr_stack.qbittorrent_url)
 pulumi.export("bazarr_url", arr_stack.bazarr_url)
+
+# Export InfluxDB information
+# pulumi.export("influxdb_external_url", influxdb.external_url)
+# pulumi.export("influxdb_internal_url", influxdb.internal_url)
 
 # Export Tailscale information
 pulumi.export("tailscale_namespace", tailscale.namespace)

@@ -27,7 +27,7 @@ class Loki(pulumi.ComponentResource):
                 namespace=ns.metadata.name,
                 create_namespace=False,
                 atomic=True,
-                timeout=180,
+                timeout=300,
                 repository_opts=RepositoryOptsArgs(
                     repo="https://grafana.github.io/helm-charts",
                 ),

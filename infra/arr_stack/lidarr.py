@@ -3,20 +3,20 @@ import pulumi_kubernetes as kubernetes
 from pulumi_kubernetes.helm.v3 import Release, ReleaseArgs, RepositoryOptsArgs
 
 
-class Bazarr(pulumi.ComponentResource):
+class Lidarr(pulumi.ComponentResource):
     def __init__(self, namespace: kubernetes.core.v1.Namespace, opts=None):
         super().__init__(
-            "bazarr",
-            "bazarr",
+            "lidarr",
+            "lidarr",
             None,
             opts=opts,
         )
 
-        # Deploy Bazarr using k8s-home-lab-repo chart
+        # Deploy Lidarr using k8s-home-lab-repo chart
         self.release = Release(
-            "bazarr",
+            "lidarr",
             ReleaseArgs(
-                chart="bazarr",
+                chart="lidarr",
                 # version="1.0.0",  # Use latest available version
                 repository_opts=RepositoryOptsArgs(
                     repo="https://k8s-home-lab.github.io/helm-charts"
@@ -24,32 +24,27 @@ class Bazarr(pulumi.ComponentResource):
                 namespace=namespace.metadata.name,
                 values={
                     # Override the release name to get predictable service names
-                    "fullnameOverride": "bazarr",
-                    
-                    # Global configuration to fix chart template issues
-                    "global": {
-                        "labels": {}
-                    },
+                    "fullnameOverride": "lidarr",
                     
                     # Image configuration
                     "image": {
-                        "repository": "lscr.io/linuxserver/bazarr",
-                        "tag": "1.4.3"
+                        "repository": "lscr.io/linuxserver/lidarr",
+                        "tag": "version-2.13.3.4711"
                     },
                     
                     # Service configuration
                     "service": {
                         "main": {
                             "type": "LoadBalancer",
-                            "loadBalancerIP": "192.168.1.45",  # Static IP for Bazarr
+                            "loadBalancerIP": "192.168.1.47",  # Actual IP from existing deployment
                             "annotations": {
-                                "metallb.universe.tf/allow-shared-ip": "bazarr"
+                                "metallb.universe.tf/allow-shared-ip": "lidarr"
                             },
                             "ports": {
                                 "http": {
                                     "enabled": True,
                                     "port": 80,
-                                    "targetPort": 6767,  # Bazarr default port
+                                    "targetPort": 8686,  # Lidarr default port
                                     "protocol": "TCP"
                                 }
                             }
@@ -63,30 +58,30 @@ class Bazarr(pulumi.ComponentResource):
                         "PGID": "568"
                     },
                     
-                    # Persistence for configuration and shared NFS media access
+                    # Persistence for configuration and shared NFS storage
                     "persistence": {
                         "config": {
                             "enabled": True,
                             "storageClass": "longhorn",
-                            "size": "5Gi",  # Config storage
+                            "size": "10Gi",  # Match existing PVC size
                             "accessMode": "ReadWriteOnce"
                         },
                         "media": {
                             "enabled": True,
                             "existingClaim": "arr-shared-nfs",  # Use shared NFS PVC
-                            "mountPath": "/shared"  # Mount entire /mnt/SSD/arr_stack as /shared for subtitle access
+                            "mountPath": "/shared"  # Mount entire /mnt/SSD/arr_stack as /shared (contains media/ and downloads/)
                         }
                     },
                     
-                    # Resource limits
+                    # Resource limits (match existing deployment)
                     "resources": {
                         "limits": {
-                            "cpu": "1000m",
-                            "memory": "1Gi"
+                            "cpu": "2",  # Match existing: "2" instead of "2000m"
+                            "memory": "2Gi"
                         },
                         "requests": {
-                            "cpu": "100m", 
-                            "memory": "256Mi"
+                            "cpu": "200m", 
+                            "memory": "512Mi"
                         }
                     },
                     
@@ -101,19 +96,29 @@ class Bazarr(pulumi.ComponentResource):
                         "readOnlyRootFilesystem": False
                     },
                     
-                    # Node affinity to ensure pod runs on k8s-node-1 where SSD is located
-                    "nodeSelector": {
-                        "kubernetes.io/hostname": "k8s-node-1"
-                    },
-                    
-                    # Probes configuration (simplified to avoid conflicts)
+                    # Probes configuration (match existing deployment)
                     "probes": {
+                        "startup": {
+                            "enabled": True,
+                            "tcpSocket": {
+                                "port": 8686
+                            },
+                            "failureThreshold": 30,
+                            "periodSeconds": 5,
+                            "successThreshold": 1,
+                            "timeoutSeconds": 1
+                        },
                         "liveness": {
                             "enabled": False  # Disable to avoid chart conflicts
                         },
                         "readiness": {
                             "enabled": False  # Disable to avoid chart conflicts
                         }
+                    },
+                    
+                    # Node affinity to ensure pod runs on k8s-node-1 where SSD is located
+                    "nodeSelector": {
+                        "kubernetes.io/hostname": "k8s-node-1"
                     },
                     
                     # Ingress configuration (disabled, using LoadBalancer)
@@ -132,7 +137,6 @@ class Bazarr(pulumi.ComponentResource):
         self.namespace = namespace
         
         # Export useful information
-        self.service_ip = pulumi.Output.concat("192.168.1.45")
-        self.web_url = pulumi.Output.concat("http://192.168.1.45")
-        self.api_url = pulumi.Output.concat("http://192.168.1.45/api")
-
+        self.service_ip = pulumi.Output.concat("192.168.1.47")
+        self.web_url = pulumi.Output.concat("http://192.168.1.47")
+        self.api_url = pulumi.Output.concat("http://192.168.1.47/api/v1")

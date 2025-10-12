@@ -36,7 +36,7 @@ class Jellyfin(pulumi.ComponentResource):
                         }
                     },
                     
-                    # Persistence for configuration, cache, and media
+                    # Persistence for configuration, cache, and shared NFS media
                     "persistence": {
                         "config": {
                             "enabled": True,
@@ -50,11 +50,10 @@ class Jellyfin(pulumi.ComponentResource):
                             "size": "20Gi",
                             "accessMode": "ReadWriteOnce"
                         },
-                        "data": {
+                        "media": {
                             "enabled": True,
-                            "existingClaim": "arr-media-shared-ssd",  # Use migrated SSD PVC
-                            "storageClass": "longhorn-ssd",
-                            "size": "110Gi"
+                            "existingClaim": "arr-shared-nfs",  # Use shared NFS PVC
+                            "mountPath": "/shared"  # Mount entire /mnt/SSD as /shared (contains media/)
                         }
                     },
                     

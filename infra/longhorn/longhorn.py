@@ -26,17 +26,12 @@ class Longhorn(pulumi.ComponentResource):
             "longhorn",
             name="longhorn",
             chart="longhorn",
+            version="1.10.0",
             namespace=ns.metadata.name,
             repository_opts={
                 "repo": "https://charts.longhorn.io",
             },
             values={
-                "defaultSettings": {
-                    "defaultDataPath": "/var/lib/longhorn",
-                },
-                "defaultSettings": {
-                    "defaultDataPath": "/var/lib/longhorn",
-                },
                 "defaultSettings": {
                     "defaultDataPath": "/var/lib/longhorn",
                 },

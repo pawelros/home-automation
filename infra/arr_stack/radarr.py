@@ -58,7 +58,7 @@ class Radarr(pulumi.ComponentResource):
                         "PGID": "568"
                     },
                     
-                    # Persistence for configuration and media
+                    # Persistence for configuration and shared NFS storage
                     "persistence": {
                         "config": {
                             "enabled": True,
@@ -68,13 +68,8 @@ class Radarr(pulumi.ComponentResource):
                         },
                         "media": {
                             "enabled": True,
-                            "existingClaim": "arr-media-shared-ssd",  # Use migrated SSD PVC
-                            "mountPath": "/media"  # Mount entire shared media, Radarr will use /media/movies
-                        },
-                        "downloads": {
-                            "enabled": True,
-                            "existingClaim": "qbittorrent-downloads-ssd",  # Use migrated SSD PVC
-                            "mountPath": "/downloads"
+                            "existingClaim": "arr-shared-nfs",  # Use shared NFS PVC
+                            "mountPath": "/shared"  # Mount entire /mnt/SSD as /shared (contains media/ and downloads/)
                         }
                     },
                     
