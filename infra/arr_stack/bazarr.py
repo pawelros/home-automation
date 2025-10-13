@@ -101,11 +101,6 @@ class Bazarr(pulumi.ComponentResource):
                         "readOnlyRootFilesystem": False
                     },
                     
-                    # Node affinity to ensure pod runs on k8s-node-1 where SSD is located
-                    "nodeSelector": {
-                        "kubernetes.io/hostname": "k8s-node-1"
-                    },
-                    
                     # Probes configuration (simplified to avoid conflicts)
                     "probes": {
                         "liveness": {

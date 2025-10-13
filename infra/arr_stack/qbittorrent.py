@@ -112,11 +112,6 @@ class QBittorrent(pulumi.ComponentResource):
                         }
                     },
                     
-                    # Node affinity to ensure pod runs on k8s-node-1 where SSD is located
-                    "nodeSelector": {
-                        "kubernetes.io/hostname": "k8s-node-1"
-                    },
-                    
                     # Ingress configuration (disabled, using LoadBalancer)
                     "ingress": {
                         "main": {
