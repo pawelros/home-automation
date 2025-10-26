@@ -74,9 +74,6 @@ class InfluxDB(pulumi.ComponentResource):
                             "enabled": True,
                             "bind-address": ":8086",
                             "auth-enabled": True
-                        },
-                        "data": {
-                            "dir": "/var/lib/influxdb"
                         }
                     },
                     "initContainers": {

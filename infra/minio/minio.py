@@ -24,7 +24,7 @@ class MinIO(pulumi.ComponentResource):
             "minio",
             ReleaseArgs(
                 chart="minio",
-                version="5.2.0",  # Pin to specific version to prevent auto-upgrades
+                version="5.4.0",
                 namespace=ns.metadata.name,
                 create_namespace=False,
                 atomic=True,
@@ -37,6 +37,9 @@ class MinIO(pulumi.ComponentResource):
                     "rootUser": "minio",
                     "rootPassword": "minio123",
                     "fullnameOverride": "minio",
+                    "image": {
+                        "tag": "RELEASE.2024-12-18T13-15-44Z"
+                    },
                     "persistence": {
                         "enabled": True,
                         "size": "10Gi",

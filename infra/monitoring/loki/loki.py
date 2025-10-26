@@ -24,7 +24,7 @@ class Loki(pulumi.ComponentResource):
             "loki",
             ReleaseArgs(
                 chart="loki",
-                version="6.16.0",  # Pin to specific version to prevent auto-upgrades
+                version="6.44.0",  # Pin to specific version to prevent auto-upgrades
                 namespace=ns.metadata.name,
                 create_namespace=False,
                 atomic=True,
