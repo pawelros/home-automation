@@ -42,7 +42,7 @@ class MinIO(pulumi.ComponentResource):
                     },
                     "persistence": {
                         "enabled": True,
-                        "size": "10Gi",
+                        "size": "50Gi",  # Increased from 10Gi
                         "storageClass": "longhorn",
                     },
                     "service": {

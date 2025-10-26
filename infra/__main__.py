@@ -23,12 +23,14 @@ from minio.minio import MinIO
 from arr_stack.arr_stack import ArrStack
 from tailscale.tailscale import Tailscale
 from influxdb.influxdb import InfluxDB
+from cloudnativepg.cloudnativepg import CloudNativePG
 
 
 config = pulumi.Config()
 
 metal_lb = MetalLb()
 longhorn = Longhorn()
+cloudnative_pg = CloudNativePG()
 
 # Create a namespace (user supplies the name of the namespace)
 ns = kubernetes.core.v1.Namespace(
@@ -70,6 +72,66 @@ alloy = Alloy(
 # Deploy InfluxDB
 influxdb = InfluxDB(ns)
 
+# Deploy PostgreSQL cluster for Home Assistant
+home_assistant_postgres = kubernetes.apiextensions.CustomResource(
+    "home-assistant-postgres",
+    api_version="postgresql.cnpg.io/v1",
+    kind="Cluster",
+    metadata=kubernetes.meta.v1.ObjectMetaArgs(
+        name="home-assistant-postgres",
+        namespace=ns.metadata.name,
+    ),
+    spec={
+        "instances": 1,
+        "storage": {
+            "size": "10Gi",
+            "storageClass": "longhorn-ssd",
+        },
+        "postgresql": {
+            "parameters": {
+                "max_connections": "100",
+                "shared_buffers": "256MB",
+            },
+        },
+        "bootstrap": {
+            "initdb": {
+                "database": "homeassistant",
+                "owner": "homeassistant",
+            },
+        },
+        "monitoring": {
+            "enablePodMonitor": True,
+        },
+    },
+    opts=pulumi.ResourceOptions(depends_on=[cloudnative_pg])
+)
+
+# Create LoadBalancer service for external access to PostgreSQL
+home_assistant_postgres_lb = kubernetes.core.v1.Service(
+    "home-assistant-postgres-lb",
+    metadata=kubernetes.meta.v1.ObjectMetaArgs(
+        name="home-assistant-postgres-lb",
+        namespace=ns.metadata.name,
+    ),
+    spec=kubernetes.core.v1.ServiceSpecArgs(
+        type="LoadBalancer",
+        ports=[
+            kubernetes.core.v1.ServicePortArgs(
+                name="postgres",
+                port=5432,
+                target_port=5432,
+                protocol="TCP",
+            ),
+        ],
+        selector={
+            "cnpg.io/cluster": "home-assistant-postgres",
+            "role": "primary",
+        },
+        load_balancer_ip="192.168.1.48",
+    ),
+    opts=pulumi.ResourceOptions(depends_on=[home_assistant_postgres])
+)
+
 # Deploy ARR Stack with Jellyfin
 arr_stack = ArrStack(
     loki_url="http://loki-gateway.loki.svc.cluster.local", 
@@ -97,3 +159,10 @@ pulumi.export("bazarr_url", arr_stack.bazarr_url)
 # Export Tailscale information
 pulumi.export("tailscale_namespace", tailscale.namespace)
 pulumi.export("tailscale_connector", tailscale.connector_name)
+
+# Export Home Assistant PostgreSQL connection information
+pulumi.export("home_assistant_postgres_host_internal", pulumi.Output.concat("home-assistant-postgres-rw.", ns.metadata.name, ".svc.cluster.local"))
+pulumi.export("home_assistant_postgres_host_external", "192.168.1.48")
+pulumi.export("home_assistant_postgres_port", "5432")
+pulumi.export("home_assistant_postgres_database", "homeassistant")
+pulumi.export("home_assistant_postgres_user", "homeassistant")
