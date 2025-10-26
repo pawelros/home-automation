@@ -18,6 +18,7 @@ from monitoring.loki.loki import Loki
 # from monitoring.prometheus.prometheus_operator import PrometheusOperator
 from monitoring.mimir.mimir import Mimir
 from monitoring.k8s_monitoring.k8s_monitoring import K8sMonitoring
+from monitoring.alloy.alloy import Alloy
 from minio.minio import MinIO
 from arr_stack.arr_stack import ArrStack
 from tailscale.tailscale import Tailscale
@@ -58,6 +59,12 @@ grafana = Grafana(ns)
 k8s_monitoring = K8sMonitoring(
     loki_url="http://loki-gateway.loki.svc.cluster.local",
     mimir_url="http://mimir-nginx.mimir.svc.cluster.local"
+)
+
+# Deploy Grafana Alloy for scraping Home Assistant metrics
+alloy = Alloy(
+    mimir_url="http://192.168.1.39",
+    loki_url="http://192.168.1.36"
 )
 
 # Deploy InfluxDB

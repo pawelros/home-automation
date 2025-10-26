@@ -1,0 +1,2 @@
+# Grafana Alloy module
+
