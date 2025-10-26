@@ -61,7 +61,7 @@ k8s_monitoring = K8sMonitoring(
 )
 
 # Deploy InfluxDB
-#influxdb = InfluxDB(ns)
+influxdb = InfluxDB(ns)
 
 # Deploy ARR Stack with Jellyfin
 arr_stack = ArrStack(

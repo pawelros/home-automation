@@ -48,6 +48,7 @@ class Istio(pulumi.ComponentResource):
             "kiali-operator",
             ReleaseArgs(
                 chart="kiali-operator",
+                version="1.89.0",  # Pin to specific version to prevent auto-upgrades
                 namespace="istio-system",
                 atomic=True,
                 timeout=120,

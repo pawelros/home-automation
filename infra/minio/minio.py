@@ -24,6 +24,7 @@ class MinIO(pulumi.ComponentResource):
             "minio",
             ReleaseArgs(
                 chart="minio",
+                version="5.2.0",  # Pin to specific version to prevent auto-upgrades
                 namespace=ns.metadata.name,
                 create_namespace=False,
                 atomic=True,

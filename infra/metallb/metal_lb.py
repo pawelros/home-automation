@@ -26,6 +26,7 @@ class MetalLb(pulumi.ComponentResource):
             "metallb",
             name="metallb",
             chart="metallb",
+            version="0.14.8",  # Pin to specific version to prevent auto-upgrades
             namespace=ns.metadata.name,
             repository_opts={
                 "repo": "https://metallb.github.io/metallb",

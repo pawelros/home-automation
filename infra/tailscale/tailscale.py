@@ -51,6 +51,7 @@ class Tailscale(pulumi.ComponentResource):
             "tailscale-operator",
             name="tailscale-operator",
             chart="tailscale-operator",
+            version="1.76.1",  # Pin to specific version to prevent auto-upgrades
             namespace=tailscale_ns.metadata["name"],
             repository_opts={
                 "repo": "https://pkgs.tailscale.com/helmcharts",

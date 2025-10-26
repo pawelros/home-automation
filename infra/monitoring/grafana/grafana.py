@@ -24,6 +24,7 @@ class Grafana(pulumi.ComponentResource):
             "grafana",
             ReleaseArgs(
                 chart="grafana",
+                version="8.5.2",  # Pin to specific version to prevent auto-upgrades
                 namespace=ns.metadata.name,
                 create_namespace=False,
                 atomic=True,
