@@ -33,6 +33,11 @@ class Grafana(pulumi.ComponentResource):
                     repo="https://grafana.github.io/helm-charts",
                 ),
                 values={
+                    "replicas": 1,
+                    # Use Recreate strategy to avoid PVC attachment issues during upgrades
+                    "deploymentStrategy": {
+                        "type": "Recreate",
+                    },
                     "persistence": {
                         "enabled": True,
                         "size": "2Gi",
@@ -56,6 +61,12 @@ class Grafana(pulumi.ComponentResource):
                                     "url": "http://mimir-nginx.mimir.svc.cluster.local/prometheus",
                                     "access": "proxy",
                                     "isDefault": True,
+                                    "jsonData": {
+                                        "httpMethod": "POST",
+                                        "manageAlerts": True,
+                                        "prometheusType": "Mimir",
+                                        "alertmanagerUid": "mimir-alertmanager",
+                                    },
                                 },
                                 {
                                     "name": "Loki",
@@ -67,6 +78,7 @@ class Grafana(pulumi.ComponentResource):
                                 {
                                     "name": "Mimir Alertmanager",
                                     "type": "alertmanager",
+                                    "uid": "mimir-alertmanager",
                                     "url": "http://mimir-nginx.mimir.svc.cluster.local",
                                     "access": "proxy",
                                     "isDefault": False,

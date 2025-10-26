@@ -70,7 +70,7 @@ class Mimir(pulumi.ComponentResource):
                                     "bucket_name": "mimir-alertmanager",
                                 },
                             },
-                            # Configure separate storage for ruler (for when we enable it later)
+                            # Configure separate storage for ruler
                             "ruler_storage": {
                                 "backend": "s3",
                                 "s3": {
@@ -81,6 +81,11 @@ class Mimir(pulumi.ComponentResource):
                                     "insecure": True,
                                     "bucket_name": "mimir-ruler",
                                 },
+                            },
+                            # Configure ruler to evaluate rules and send to alertmanager
+                            "ruler": {
+                                "enable_api": True,
+                                "alertmanager_url": "http://mimir-alertmanager.mimir.svc.cluster.local:8080/alertmanager",
                             },
                         },
                     },
@@ -223,7 +228,18 @@ class Mimir(pulumi.ComponentResource):
                         },
                     },
                     "ruler": {
-                        "enabled": False,  # Disable ruler for now
+                        "enabled": True,
+                        "replicas": 1,
+                        "resources": {
+                            "requests": {
+                                "cpu": "100m",
+                                "memory": "128Mi",
+                            },
+                            "limits": {
+                                "cpu": "500m",
+                                "memory": "512Mi",
+                            },
+                        },
                     },
                     "alertmanager": {
                         "enabled": True,
@@ -264,6 +280,12 @@ class Mimir(pulumi.ComponentResource):
                                 "grafana_dashboard": "1",
                             },
                             "namespace": "grafana",  # Deploy dashboards to Grafana namespace
+                        },
+                        # Enable Prometheus rules (recording rules and alerts) for mixin
+                        "prometheusRule": {
+                            "enabled": True,
+                            "mimirAlerts": True,
+                            "mimirRules": True,
                         },
                     },
                 },
