@@ -93,6 +93,16 @@ class MinIO(pulumi.ComponentResource):
                             "policy": "none",
                             "purge": False,
                         },
+                        {
+                            "name": "mimir-alertmanager",
+                            "policy": "none",
+                            "purge": False,
+                        },
+                        {
+                            "name": "mimir-ruler",
+                            "policy": "none",
+                            "purge": False,
+                        },
                     ],
                 },
             ),

@@ -28,7 +28,7 @@ class Mimir(pulumi.ComponentResource):
                 namespace=ns.metadata.name,
                 create_namespace=False,
                 atomic=True,
-                timeout=120,
+                timeout=300,
                 repository_opts=RepositoryOptsArgs(
                     repo="https://grafana.github.io/helm-charts",
                 ),
@@ -57,6 +57,30 @@ class Mimir(pulumi.ComponentResource):
                             },
                             "limits": {
                                 "compactor_blocks_retention_period": "1y",
+                            },
+                            # Configure separate storage for alertmanager
+                            "alertmanager_storage": {
+                                "backend": "s3",
+                                "s3": {
+                                    "endpoint": "minio.minio.svc.cluster.local:9000",
+                                    "region": "us-east-1",
+                                    "access_key_id": "minio",
+                                    "secret_access_key": "minio123",
+                                    "insecure": True,
+                                    "bucket_name": "mimir-alertmanager",
+                                },
+                            },
+                            # Configure separate storage for ruler (for when we enable it later)
+                            "ruler_storage": {
+                                "backend": "s3",
+                                "s3": {
+                                    "endpoint": "minio.minio.svc.cluster.local:9000",
+                                    "region": "us-east-1",
+                                    "access_key_id": "minio",
+                                    "secret_access_key": "minio123",
+                                    "insecure": True,
+                                    "bucket_name": "mimir-ruler",
+                                },
                             },
                         },
                     },
@@ -202,7 +226,45 @@ class Mimir(pulumi.ComponentResource):
                         "enabled": False,  # Disable ruler for now
                     },
                     "alertmanager": {
-                        "enabled": False,  # Disable alertmanager for now
+                        "enabled": True,
+                        "replicas": 1,
+                        "resources": {
+                            "requests": {
+                                "cpu": "50m",
+                                "memory": "128Mi",
+                            },
+                            "limits": {
+                                "cpu": "500m",
+                                "memory": "512Mi",
+                            },
+                        },
+                        "persistentVolume": {
+                            "enabled": True,
+                            "size": "1Gi",
+                            "storageClass": "longhorn",
+                        },
+                        "statefulSet": {
+                            "enabled": True,
+                        },
+                        "zoneAwareReplication": {
+                            "enabled": False,
+                        },
+                    },
+                    # Enable meta-monitoring for Mimir components
+                    "metaMonitoring": {
+                        "serviceMonitor": {
+                            "enabled": True,
+                        },
+                        "grafanaAgent": {
+                            "enabled": False,  # We're using Alloy for scraping
+                        },
+                        "dashboards": {
+                            "enabled": True,
+                            "labels": {
+                                "grafana_dashboard": "1",
+                            },
+                            "namespace": "grafana",  # Deploy dashboards to Grafana namespace
+                        },
                     },
                 },
             ),

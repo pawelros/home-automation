@@ -63,6 +63,17 @@ class Grafana(pulumi.ComponentResource):
                                     "url": "http://loki-gateway.loki.svc.cluster.local",
                                     "access": "proxy",
                                     "isDefault": False,
+                                },
+                                {
+                                    "name": "Mimir Alertmanager",
+                                    "type": "alertmanager",
+                                    "url": "http://mimir-nginx.mimir.svc.cluster.local",
+                                    "access": "proxy",
+                                    "isDefault": False,
+                                    "jsonData": {
+                                        "implementation": "mimir",
+                                        "handleGrafanaManagedAlerts": False,
+                                    },
                                 }
                             ],
                         }
@@ -98,6 +109,19 @@ class Grafana(pulumi.ComponentResource):
                                 "datasource": "Mimir",
                             },
                         }
+                    },
+                    # Enable Grafana dashboard sidecar to auto-discover dashboards from ConfigMaps
+                    "sidecar": {
+                        "dashboards": {
+                            "enabled": True,
+                            "label": "grafana_dashboard",
+                            "labelValue": "1",
+                            "folder": "/tmp/dashboards",
+                            "searchNamespace": "ALL",
+                            "provider": {
+                                "foldersFromFilesStructure": True,
+                            },
+                        },
                     },
                     "grafana.ini": {
                         "server": {

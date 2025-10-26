@@ -11,20 +11,6 @@ class InfluxDB(pulumi.ComponentResource):
         config = pulumi.Config()
         admin_password = config.require_secret("influxdb-admin-password")
         admin_token = config.require_secret("influxdb-admin-token")
-        
-        # Create Kubernetes Secret for InfluxDB credentials
-        auth_secret = kubernetes.core.v1.Secret(
-            "influxdb-auth",
-            metadata=kubernetes.meta.v1.ObjectMetaArgs(
-                name="influxdb-auth",
-                namespace=ns.metadata.name,
-            ),
-            string_data={
-                "admin-password": admin_password,
-                "admin-token": admin_token,
-            },
-            opts=pulumi.ResourceOptions(parent=self)
-        )
     
         self.influxdb = Chart(
             "influxdb",
@@ -60,7 +46,8 @@ class InfluxDB(pulumi.ComponentResource):
                         "organization": "home_assistant",
                         "bucket": "home_assistant",
                         "user": "admin",
-                        "existingSecret": auth_secret.metadata.name,
+                        "password": admin_password,
+                        "token": admin_token,
                     },
                     "resources": {
                         "requests": {
@@ -91,7 +78,7 @@ class InfluxDB(pulumi.ComponentResource):
                     },
                 }
             ),
-            opts=pulumi.ResourceOptions(parent=self, depends_on=[auth_secret])
+            opts=pulumi.ResourceOptions(parent=self)
         )
         
         # Store the service URL for external access

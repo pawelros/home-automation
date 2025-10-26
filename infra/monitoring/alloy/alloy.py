@@ -45,6 +45,29 @@ prometheus.scrape "home_assistant" {{
   bearer_token_file = "/etc/alloy/secrets/ha-token"
 }}
 
+// Discover Mimir ServiceMonitor endpoints
+discovery.kubernetes "mimir_services" {{
+  role = "endpoints"
+  
+  namespaces {{
+    names = ["mimir"]
+  }}
+  
+  selectors {{
+    role = "endpoints"
+    label = "prometheus.io/service-monitor=true"
+  }}
+}}
+
+// Scrape Mimir components for self-monitoring
+prometheus.scrape "mimir" {{
+  targets    = discovery.kubernetes.mimir_services.targets
+  forward_to = [prometheus.remote_write.mimir.receiver]
+  
+  scrape_interval = "30s"
+  scrape_timeout  = "15s"
+}}
+
 // Remote write to Mimir
 prometheus.remote_write "mimir" {{
   endpoint {{
