@@ -24,6 +24,7 @@ from arr_stack.arr_stack import ArrStack
 from tailscale.tailscale import Tailscale
 from influxdb.influxdb import InfluxDB
 from cloudnativepg.cloudnativepg import CloudNativePG
+from unifi.unifi_controller import UnifiController
 
 
 config = pulumi.Config()
@@ -140,6 +141,9 @@ arr_stack = ArrStack(
 
 # Deploy Tailscale subnet router in its own namespace
 tailscale = Tailscale()
+
+# Deploy UniFi Controller
+unifi_controller = UnifiController()
 
 # Export ARR Stack URLs (Jellyfin moved to dedicated GPU machine)
 # pulumi.export("jellyfin_url", arr_stack.jellyfin_url)  # Now on dedicated GPU machine
