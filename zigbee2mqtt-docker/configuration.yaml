@@ -1,0 +1,77 @@
+homeassistant:
+  enabled: true
+mqtt:
+  server: mqtt://localhost:1883
+  password: <MQTT_PASSWORD>
+  keepalive: 60
+  reject_unauthorized: true
+  version: 4
+  user: mqtt
+serial:
+  port: /dev/ttyUSB0
+frontend:
+  enabled: true
+  port: 80
+advanced:
+  log_level: info
+  last_seen: ISO_8601_local
+device_options: {}
+devices:
+  '0x00158d00052b7fc7':
+    friendly_name: czujnik_dymu_kuchnia
+  '0x00158d00057f8616':
+    friendly_name: motion_sensor_lazienka_dol
+    occupancy_timeout: 5
+    no_occupancy_since:
+      - undefined: 10
+  '0x00158d00056e39ed':
+    friendly_name: vibration_sensor_markiza
+  '0x54ef441000564156':
+    friendly_name: aqara_fp1_motion_sensor_lazienka_gora
+  '0x00158d00057f8a3f':
+    friendly_name: motion_sensor_serwerownia
+    occupancy_timeout: 5
+    no_occupancy_since:
+      - undefined: 10
+  '0x00158d0006c42236':
+    friendly_name: motion_sensor_schody_gora
+  '0x00158d0004776535':
+    friendly_name: flood_sensor_pralka
+  '0x00158d0006c39180':
+    friendly_name: motion_sensor_przedpokoj
+  '0x00158d00057f863c':
+    friendly_name: motion_sensor_biuro
+    occupancy_timeout: 5
+    no_occupancy_since: []
+  '0x00158d00024d68a4':
+    friendly_name: window_sensor_balkon
+  '0x00158d00057f7cb9':
+    friendly_name: motion_sensor_lazienka_gora
+    occupancy_timeout: 5
+    no_occupancy_since:
+      - undefined: 10
+  '0x54ef4410005123a9':
+    friendly_name: Aqara Switch E1 kuchnia
+  '0xa4c138b5b1c9dc2c':
+    friendly_name: stasiu_LYWSD03MMC_temperature_and_humidity
+    temperature_precision: 1
+    humidity_precision: 1
+  '0xa4c138921c01c4a6':
+    friendly_name: lazienka_gora_LYWSD03MMC_temperature_and_humidity
+  '0xa4c13803aee6fcb3':
+    friendly_name: lazienka_dol_mi_temp_hum_2
+  '0x048727fffe20780b':
+    friendly_name: danfoss_ally_stasiu
+  '0x142d41fffe4a7f35':
+    friendly_name: danfoss_ally_sypialnia
+  '0x54ef4410005894c5':
+    friendly_name: aqara_fp1_motion_sensor_lazienka_dol
+  '0x54ef4410007988e9':
+    friendly_name: motion_sensor_schody_dol
+  '0x00158d0008d92658':
+    friendly_name: motion_sensor_biuro2
+  '0x0000000000000000':
+    friendly_name: '0x0000000000000000'
+version: 4
+availability:
+  enabled: true

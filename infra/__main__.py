@@ -9,9 +9,9 @@ from cert_manager.cert_manager import CertManager
 # from mqtt.emqx import EmqxOperator
 # from mqtt.hivemq import HiveMqOperator
 from istio.istio import Istio
-from mqtt.mosquitto import Mosquitto
+#from mqtt.mosquitto import Mosquitto
 from kube_metrics_server.metrics_server import MetricsServer
-from zigbee2mqtt.zigbee2mqtt import Zigbee2Mqtt
+#from zigbee2mqtt.zigbee2mqtt import Zigbee2Mqtt
 from longhorn.longhorn import Longhorn
 from monitoring.grafana.grafana import Grafana
 from monitoring.loki.loki import Loki
@@ -49,9 +49,9 @@ istio = Istio()
 # certManager = CertManager()
 # emqx = EmqxOperator(certManager)
 # hivemq = HiveMqOperator()
-mosquitto = Mosquitto(ns)
+#mosquitto = Mosquitto(ns)
 metrics_server = MetricsServer()
-zigbee2mqtt = Zigbee2Mqtt(ns, pv)
+#zigbee2mqtt = Zigbee2Mqtt(ns, pv)
 minio = MinIO()
 # prometheus_operator = PrometheusOperator()  # Removed - not needed with K8s Monitoring
 mimir = Mimir(minio)
