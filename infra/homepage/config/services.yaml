@@ -1,0 +1,212 @@
+---
+# Infrastructure
+- Infrastructure:
+    - Proxmox:
+        href: https://192.168.1.180:8006
+        description: Virtualization platform hosting the Kubernetes cluster
+        icon: proxmox.png
+        widget:
+          type: proxmox
+          url: https://192.168.1.180:8006
+          username: ${PROXMOX_USERNAME}
+          password: ${PROXMOX_API_TOKEN}
+          allowInsecure: true
+    - TrueNAS:
+        href: https://192.168.1.127
+        siteMonitor: https://192.168.1.127
+        description: Storage server for TrueNAS
+        icon: truenas.png
+        widget:
+          type: truenas
+          url: https://192.168.1.127
+          enablePools: true
+          key: ${TRUENAS_API_KEY}
+          allowInsecure: true
+    - Pi-hole:
+        href: http://192.168.1.3/admin
+        description: Network-wide ad blocking and DNS server
+        icon: pi-hole.png
+        widget:
+          type: pihole
+          url: http://192.168.1.3
+          key: ${PIHOLE_API_KEY}
+    - Home Assistant:
+        href: http://192.168.1.2:8123
+        description: Home automation platform
+        icon: home-assistant.png
+        widget:
+          type: homeassistant
+          url: http://192.168.1.2:8123
+          key: ${HOMEASSISTANT_TOKEN}
+        siteMonitor: http://192.168.1.2:8123
+    - MinIO:
+        href: http://minio.minio.svc.cluster.local:9000
+        description: Object storage for Loki and Mimir
+        icon: minio.png
+        siteMonitor: http://minio.minio.svc.cluster.local:9000/minio/health/ready
+
+    - Longhorn:
+        href: http://192.168.1.34/#/dashboard
+        description: Distributed block storage for Kubernetes
+        icon: longhorn.png
+        siteMonitor: http://192.168.1.34/v1/nodes
+
+    - MetalLB:
+        description: Bare metal load balancer for Kubernetes
+        icon: metallb.png
+
+    - Istio:
+        description: Service mesh for Kubernetes
+        icon: istio.png
+
+    - Metrics Server:
+        description: Kubernetes metrics API
+        icon: kubernetes.png
+
+    - Raspberry Pi (Wall Display):
+        href: http://192.168.1.214
+        description: Powers Home Assistant wall display and hosts Zigbee2MQTT
+        icon: raspberry-pi.png
+        ping: 192.168.1.214
+
+    - Tailscale:
+        description: VPN subnet router for remote access
+        icon: tailscale.png
+        widget:
+            type: tailscale
+            deviceid: ${TAILSCALE_DEVICE_ID}
+            key: ${TAILSCALE_API_KEY}
+# Networking & Security
+- Networking & Security:
+    - UniFi Controller:
+        href: https://192.168.1.29:8443
+        description: Network controller for UniFi devices
+        icon: unifi.png
+        widget:
+          type: unifi
+          url: https://192.168.1.29:8443
+          username: ${UNIFI_USERNAME}
+          password: ${UNIFI_PASSWORD}
+# Databases
+- Databases:
+    - PostgreSQL (CloudNativePG):
+        href: postgresql://192.168.1.48:5432/homeassistant
+        description: PostgreSQL cluster for Home Assistant
+        icon: postgres.png
+        ping: tcp://192.168.1.48:5432
+
+    - InfluxDB:
+        href: http://influxdb.home-automation.svc.cluster.local:8086
+        description: Time series database
+        icon: influxdb.png
+        ping: http://influxdb.home-automation.svc.cluster.local:8086/ping
+# Monitoring & Observability
+- Monitoring & Observability:
+    - Grafana:
+        href: http://192.168.1.35
+        description: Metrics visualization and dashboards
+        icon: grafana.png
+        widget:
+          type: grafana
+          url: http://192.168.1.35
+          username: ${GRAFANA_USERNAME}
+          password: ${GRAFANA_PASSWORD}
+
+    - Loki:
+        href: http://loki-gateway.loki.svc.cluster.local
+        description: Log aggregation system
+        icon: loki.png
+        siteMonitor: http://loki-gateway.loki.svc.cluster.local/loki/api/v1/labels?start=1766737021615000000&end=1766740621615000000
+
+    - Mimir:
+        href: http://mimir-nginx.mimir.svc.cluster.local
+        description: Prometheus-compatible metrics backend
+        icon: mimir.png
+        siteMonitor: http://mimir-nginx.mimir.svc.cluster.local/prometheus/api/v1/status/buildinfo
+
+    - Alloy:
+        href: http://192.168.1.39
+        description: Metrics and logs collector
+        icon: grafana.png
+        siteMonitor: http://alloy.grafana-alloy.svc.cluster.local:12345/-/ready
+# Media Services
+- Media Services:
+    - Jellyfin:
+        href: http://192.168.1.179:8096
+        description: Media streaming server
+        icon: jellyfin.png
+        widget:
+          type: jellyfin
+          url: http://192.168.1.179:8096
+          key: ${JELLYFIN_API_KEY}
+    - Jellyseerr:
+        href: http://192.168.1.42
+        description: Media request management for Jellyfin
+        icon: jellyseerr.png
+        widget:
+          type: jellyseerr
+          url: http://192.168.1.42
+          key: ${JELLYSEERR_API_KEY}
+
+    - Bazarr:
+        href: http://192.168.1.45
+        description: Subtitle management for Sonarr and Radarr
+        icon: bazarr.png
+        widget:
+          type: bazarr
+          url: http://192.168.1.45
+          key: ${BAZARR_API_KEY}
+
+# Downloads & Indexers
+- Downloads & Indexers:
+    - Prowlarr:
+        href: http://192.168.1.41
+        description: Indexer manager for Sonarr, Radarr, Lidarr
+        icon: prowlarr.png
+        widget:
+          type: prowlarr
+          url: http://192.168.1.41
+          key: ${PROWLARR_API_KEY}
+
+    - Sonarr:
+        href: http://192.168.1.43
+        description: TV series management and automation
+        icon: sonarr.png
+        widget:
+          type: sonarr
+          url: http://192.168.1.43
+          key: ${SONARR_API_KEY}
+
+    - Radarr:
+        href: http://192.168.1.46
+        description: Movie management and automation
+        icon: radarr.png
+        widget:
+          type: radarr
+          url: http://192.168.1.46
+          key: ${RADARR_API_KEY}
+
+    - Lidarr:
+        href: http://192.168.1.47
+        description: Music collection manager
+        icon: lidarr.png
+        widget:
+          type: lidarr
+          url: http://192.168.1.47
+          key: ${LIDARR_API_KEY}
+
+    - qBittorrent:
+        href: http://192.168.1.44
+        description: BitTorrent client for downloads
+        icon: qbittorrent.png
+        widget:
+          type: qbittorrent
+          url: http://192.168.1.44
+          username: admin
+          password: ${QBITTORRENT_PASSWORD}
+
+    - FlareSolverr:
+        href: http://flaresolverr.arr-stack.svc.cluster.local:8191
+        description: Proxy server to bypass Cloudflare protection
+        icon: flaresolverr.png
+        ping: http://flaresolverr.arr-stack.svc.cluster.local:8191

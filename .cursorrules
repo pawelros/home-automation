@@ -1,0 +1,148 @@
+# Cursor AI Rules for Home Automation Project
+
+## Project Context
+This is a home automation infrastructure project using:
+- Pulumi for Infrastructure as Code (Python)
+- Kubernetes cluster running on Proxmox
+- Homepage dashboard for service discovery and monitoring
+- Various services: *arr stack, monitoring (Grafana, Loki, Mimir), UniFi, etc.
+
+## Critical Rules
+
+### 1. Homepage Dashboard Updates
+**IMPORTANT**: When adding, modifying, or removing ANY infrastructure service:
+- ✅ Always update `infra/homepage/config/services.yaml` to reflect the change
+- ✅ Add service with description, icon, URL, and widget configuration if available
+- ✅ If service needs API authentication, add secret placeholder like `${SERVICE_API_KEY}`
+- ✅ Update `infra/homepage/homepage.py` to include new secret in the `secrets` dictionary
+- ✅ Document the new secret in `infra/homepage/SECRETS.md`
+- ✅ Update IP address documentation in `HOMEPAGE_SUMMARY.md`
+
+Example workflow:
+1. Deploy new service (e.g., new monitoring tool)
+2. Add to homepage/config/services.yaml
+3. Add secret handling in homepage.py
+4. Document in SECRETS.md
+5. Run `pulumi up` to update Homepage
+
+### 2. Secrets Management
+- ❌ NEVER hardcode API keys, passwords, or tokens in YAML files
+- ✅ Always use Pulumi secrets: `pulumi config set --secret`
+- ✅ Use placeholder format: `${SECRET_NAME}` in configuration files
+- ✅ Document how to obtain each secret in SECRETS.md
+
+### 3. IP Address Management
+Current IP allocations (keep this updated):
+- 192.168.1.29 - UniFi Controller
+- 192.168.1.35 - Grafana
+- 192.168.1.39 - Alloy (Mimir endpoint)
+- 192.168.1.41 - Prowlarr
+- 192.168.1.42 - Jellyseerr
+- 192.168.1.43 - Sonarr
+- 192.168.1.44 - qBittorrent
+- 192.168.1.45 - Bazarr
+- 192.168.1.46 - Radarr
+- 192.168.1.47 - Lidarr
+- 192.168.1.48 - PostgreSQL (Home Assistant)
+- 192.168.1.50 - Homepage Dashboard
+- 192.168.1.180 - Proxmox
+- 192.168.1.214 - Raspberry Pi (Wall Display + Zigbee2MQTT)
+
+When adding new LoadBalancer services, check for available IPs and update this list.
+
+### 4. Code Organization
+- Infrastructure modules go in `infra/[service-name]/`
+- Each module should have its own Python file
+- Homepage configs go in `infra/homepage/config/`
+- Update `infra/__main__.py` when adding new infrastructure modules
+
+### 5. Documentation
+When adding new services, update:
+- `infra/homepage/config/services.yaml` - Service definition
+- `infra/homepage/SECRETS.md` - If secrets are needed
+- `HOMEPAGE_SUMMARY.md` - Service inventory and IP map
+- Service-specific README if complex
+
+### 6. Service Grouping in Homepage
+Organize services into these logical groups:
+- Media Services (Jellyseerr, Bazarr, etc.)
+- Downloads & Indexers (Prowlarr, Sonarr, Radarr, Lidarr, qBittorrent)
+- Monitoring & Observability (Grafana, Loki, Mimir, Alloy)
+- Infrastructure (Proxmox, Longhorn, MinIO, MetalLB, Istio, Metrics Server)
+- Networking & Security (UniFi, Tailscale, Raspberry Pi)
+- Databases (PostgreSQL, InfluxDB)
+
+### 7. Homepage Widget Integration
+If a service has a Homepage widget available:
+- Check https://gethomepage.dev/widgets/services/ for widget type
+- Add widget configuration with proper authentication
+- Test that the widget displays data correctly
+
+## Quick Commands
+
+### Deploy infrastructure changes:
+```bash
+cd infra
+pulumi preview  # Review changes
+pulumi up       # Apply changes
+```
+
+### Add a new secret:
+```bash
+cd infra
+pulumi config set --secret homepage:service_api_key "your-key"
+```
+
+### View all secrets:
+```bash
+cd infra
+pulumi config
+```
+
+### Check Homepage:
+```bash
+kubectl logs -n homepage deployment/homepage -f
+kubectl get pods -n homepage
+```
+
+## Common Tasks
+
+### Adding a New Service
+1. Create Pulumi module in `infra/[service-name]/`
+2. Add to `infra/__main__.py`
+3. **UPDATE HOMEPAGE**: Add to `infra/homepage/config/services.yaml`
+4. If needs secrets: Update `homepage.py` and `SECRETS.md`
+5. Deploy: `pulumi up`
+6. Access Homepage at http://192.168.1.50 to verify
+
+### Changing Service IP
+1. Update service deployment/Helm chart
+2. **UPDATE HOMEPAGE**: Change URL in `services.yaml`
+3. Update IP documentation in `.cursorrules` and `HOMEPAGE_SUMMARY.md`
+4. Deploy both service and homepage: `pulumi up`
+
+### Removing a Service
+1. Remove from infrastructure
+2. **UPDATE HOMEPAGE**: Remove from `services.yaml`
+3. Remove secrets if no longer needed
+4. Update documentation
+
+## Best Practices
+- Test changes with `pulumi preview` before applying
+- Keep Homepage in sync with actual infrastructure
+- Use descriptive service descriptions in Homepage
+- Group services logically
+- Document all IP addresses
+- Rotate secrets periodically
+- Keep documentation up to date
+
+## Troubleshooting Homepage
+- Logs: `kubectl logs -n homepage deployment/homepage`
+- Restart: `kubectl rollout restart deployment/homepage -n homepage`
+- Config: `kubectl get configmap homepage -n homepage -o yaml`
+- Access: http://192.168.1.50
+
+## Remember
+🎯 **Homepage is your single source of truth for the homelab**
+📝 Keep it updated with every infrastructure change!
+

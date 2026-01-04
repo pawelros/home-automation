@@ -11,3 +11,45 @@ config:
   home-automation:home-assistant-token:
     secure: AAABAKBpdSEA83R3T1ayrgdK38OftqNrhDFspKUUtamCb7+0h0T0TqYMAnlP2wgaZqihmKMDbND0UhREPe8C30B5my5RA9c33mX2ZdsGHSX/xVgHsDOscN+l717puWCazXVWgdTXS2INEWMOLzWQGBgG1srKMXgM9wMb6W2wFjr0j0IS471o00xV7Z6JZ61YXr21LJRNy77rifa7h/u78RTBYflncbzPpKEUPw2+n22aESCOJcZ/FI9TOa4qUWuMSLyk28lQ2KLL4VkZV7DUJPHuntKf6uo=
   home-automation:home-assistant-address: 192.168.1.2:8123
+  homepage:proxmox_api_token:
+    secure: AAABAMTHgDkY4o7au0RBEoT6VWH6tzINoJ+ezlvnjeUVk4Eky0c4Z313aGsmmKt9sqnfm9W0yU6Xqu+YB0VlZvy1alo=
+  homepage:proxmox_username:
+    secure: AAABAEDBUaEi1e+//QM5+FwTr/4s8YSNq8TvBW8Y7tbL14G0hYmfl6Djrlck1JBW+Q==
+  homepage:qbittorrent_username:
+    secure: AAABAEoqw7PY9czJesZA0pPmz1L0In6aDtZYVD9S6vdqt4AoeQ==
+  homepage:qbittorrent_password:
+    secure: AAABAGHvRVgw1dqs1MtBJLVWW9nyspd0WBMsI1vDH3iFvdMeHEJhbpK+ujV0rdpQ
+  homepage:jellyseerr_api_key:
+    secure: AAABAOm8QhMfME1OWIn8jVgqaclznT3DISPK5rGFl0FUYme1vIe/W7wmqS87jMWb83D61OD2eYY02OULIv6X0mEJL0jInbX0/HQnhfERk7VxdHmdSu2tkKsa09rRCrQjZed4PA==
+  homepage:radarr_api_key:
+    secure: AAABAG0IEHAUxaOkPk8MVNWugtsBKTp+1PZEvghh44z2KcgZ4VUZ4TWThXXZevr8u4PFyHi1ksXBtPLHZ4QIAw==
+  homepage:unifi_api_key:
+    secure: AAABAJxyH7WyRgIX4ewlfKE83bLE53t1aIQoJonAgFH9y4OvDYg0mBrBWOaFbVr61NLhppn9CDgvVZelp0+YJw==
+  homepage:unifi_username:
+    secure: AAABAD89ATZa5KiIVrvntJiOkiqsN5faMC5A70yR+jI5NC+1FytNUg==
+  homepage:lidarr_api_key:
+    secure: AAABANtIhNzl7/Sa8yNQjGe0Ng9uDxDs3ObETbMCcCVLa6x9oydmqdW+pwjhsXPoNl9mulNHV5mu1XDADqS1Fg==
+  homepage:sonarr_api_key:
+    secure: AAABAPyT/kpVr6CvWlerzjhPyYVKnG6ZfkRLHfLPb5eTEMXQUiKV3NoKEL1af5yp7WfdgrD1jNuG2Dqki1SQnA==
+  homepage:bazarr_api_key:
+    secure: AAABALIusuAmmKhfTP5mka18dozXJBP3qg/rsIixOD9MInqkjQENXLtyjgT9uMMuR9LkNc1MrnN1ZPa9aRDDWQ==
+  homepage:prowlarr_api_key:
+    secure: AAABADOkgA5QhMaI+v5raxw/kQnZ2md3pzICz9KYG6ZPnnAkkFUmD4MV2Kq4sAUBI4GDKImKn26VJFrlVSeSjA==
+  homepage:unifi_password:
+    secure: AAABAJohWPFO//E2iR708mjgrXMFmFUgBd5v547Ue1qyFHV6MRjd8g==
+  homepage:truenas_api_key:
+    secure: AAABALtZXmdm5tG/smpZRNOeFs3e/fi/tRYs4GpxghGsfD01iZnXCuUvY9EqnDc1NiXkZ1Oh9RK7+NXGa9qd838UK9q9NeT5kMsDMMFMWXg2bdjsElPeDNpSSaRboPI/Sbo=
+  homepage:tailscale_api_key:
+    secure: AAABAEfNsNtX91Rq0t9wfPIjp/WHaafERkc4sgbeEqOmB+oTbxfIzgyj12b7orpWCucm9rJbwzBShb+Cu0hpfR37dOCqy6FYLkXYWW5o/5cFfqJRarPHRiwEDcE=
+  homepage:tailscale_device_id:
+    secure: AAABADF/b6OQ6mVj+Kaero0ddQ+5LRk/1JUauTkGS0F9Ju7rrNd+mkGuwcHuMZS5JQ==
+  homepage:pihole_api_key:
+    secure: AAABAJkHl1EgF2hXGL+bBeMJHUwvzBCPbjHWxyDJXGVAsCbSktUwYARKebghhJOfGLcmqOFJKbgHtDBxa6PNUcOANEMVF+BvDWBNp3XJQLWVciS5/zB4oEpVp0Akfvz3
+  homepage:homeassistant_token:
+    secure: AAABABGJKl3mM8bhLWfxdaxL2PPaS8k4BqNLK2aeBgra+ki8n1rhD95eBf/tzOHB7E94WSjUdewuyyBvqGC7f1kIk2dJR5EUGOJzGj9GKQ13qjA74qOCCy2LJakRotJEqIt/KHjNQgwob3xc3nGx0g/u7YvjlKeZaQoqZo87+9+9b/gqbCNeCI+5bZzLKwdpassRvAHDB1TyFoV1KjayACmXSLEOSBVapWGiTJf7k5fin4SXksUrdHhM+Nv3L9VEy1uHLQrx+ShjjxiJ+Jddm1qexBCjLLs=
+  homepage:jellyfin_api_key:
+    secure: AAABAEc9nl+vYC0tJVOn/o/tOV0fqlQSZqQ227yRVOm7c5tXExCqY9zc6Yslo73KkZDnaDvVBZ/OBZjzV0PibQ==
+  homepage:grafana_username:
+    secure: AAABAEi1QSl0TPmo3F50F8JnINJWU7SSh7oRJwbf55T2pmJ8yQ==
+  homepage:grafana_password:
+    secure: AAABAMjcFoShQ6eRtnzJkH2xYbMv5ef5WqCRUmcpwXFLqmP1tZ7bPHoP/gpjKAij

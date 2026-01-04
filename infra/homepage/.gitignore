@@ -1,0 +1,13 @@
+# Never commit files with actual secrets
+config/services.local.yaml
+*.secret.yaml
+*.secret
+
+# Backup files that might contain secrets
+*.bak
+*~
+
+# IDE files
+.vscode/
+.idea/
+

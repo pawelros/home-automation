@@ -1,0 +1,23 @@
+---
+- Kubernetes:
+    - K8s Dashboard:
+        - abbr: K8s
+          href: https://kubernetes.io/docs
+    - Helm Charts:
+        - abbr: Helm
+          href: https://artifacthub.io
+    - Pulumi:
+        - abbr: PL
+          href: https://www.pulumi.com/docs/
+
+- Documentation:
+    - Home Assistant:
+        - abbr: HA
+          href: https://www.home-assistant.io/docs/
+    - Zigbee2MQTT:
+        - abbr: Z2M
+          href: https://www.zigbee2mqtt.io/
+    - MySensors:
+        - abbr: MS
+          href: https://www.mysensors.org/
+

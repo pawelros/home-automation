@@ -25,6 +25,7 @@ from tailscale.tailscale import Tailscale
 from influxdb.influxdb import InfluxDB
 from cloudnativepg.cloudnativepg import CloudNativePG
 from unifi.unifi_controller import UnifiController
+from homepage.homepage import Homepage
 
 
 config = pulumi.Config()
@@ -144,6 +145,9 @@ tailscale = Tailscale()
 
 # Deploy UniFi Controller
 unifi_controller = UnifiController()
+
+# Deploy Homepage dashboard
+homepage = Homepage()
 
 # Export ARR Stack URLs (Jellyfin moved to dedicated GPU machine)
 # pulumi.export("jellyfin_url", arr_stack.jellyfin_url)  # Now on dedicated GPU machine
