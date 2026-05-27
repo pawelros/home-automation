@@ -38,7 +38,8 @@ class Radarr(pulumi.ComponentResource):
                             "type": "LoadBalancer",
                             "loadBalancerIP": "192.168.1.46",  # Static IP for Radarr
                             "annotations": {
-                                "metallb.universe.tf/allow-shared-ip": "radarr"
+                                "metallb.universe.tf/allow-shared-ip": "radarr",
+                                "external-dns.alpha.kubernetes.io/hostname": "radarr.lab"
                             },
                             "ports": {
                                 "http": {

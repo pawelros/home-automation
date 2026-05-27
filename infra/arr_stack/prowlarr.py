@@ -38,7 +38,8 @@ class Prowlarr(pulumi.ComponentResource):
                             "type": "LoadBalancer",
                             "loadBalancerIP": "192.168.1.41",
                             "annotations": {
-                                "metallb.universe.tf/allow-shared-ip": "prowlarr"
+                                "metallb.universe.tf/allow-shared-ip": "prowlarr",
+                                "external-dns.alpha.kubernetes.io/hostname": "prowlarr.lab"
                             },
                             "ports": {
                                 "http": {

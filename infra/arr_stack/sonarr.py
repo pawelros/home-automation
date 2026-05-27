@@ -38,7 +38,8 @@ class Sonarr(pulumi.ComponentResource):
                             "type": "LoadBalancer",
                             "loadBalancerIP": "192.168.1.43",  # Static IP for Sonarr
                             "annotations": {
-                                "metallb.universe.tf/allow-shared-ip": "sonarr"
+                                "metallb.universe.tf/allow-shared-ip": "sonarr",
+                                "external-dns.alpha.kubernetes.io/hostname": "sonarr.lab"
                             },
                             "ports": {
                                 "http": {

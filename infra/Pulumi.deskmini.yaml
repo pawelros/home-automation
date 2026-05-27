@@ -53,3 +53,5 @@ config:
     secure: AAABAEi1QSl0TPmo3F50F8JnINJWU7SSh7oRJwbf55T2pmJ8yQ==
   homepage:grafana_password:
     secure: AAABAMjcFoShQ6eRtnzJkH2xYbMv5ef5WqCRUmcpwXFLqmP1tZ7bPHoP/gpjKAij
+  external-dns:pihole_password:
+    secure: AAABAPIsKsLPbx63UAdVikpH4pAUnpTY8EHQAgNjbHJ7hfX69n6Erg==

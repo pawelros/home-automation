@@ -43,7 +43,8 @@ class Bazarr(pulumi.ComponentResource):
                             "type": "LoadBalancer",
                             "loadBalancerIP": "192.168.1.45",  # Static IP for Bazarr
                             "annotations": {
-                                "metallb.universe.tf/allow-shared-ip": "bazarr"
+                                "metallb.universe.tf/allow-shared-ip": "bazarr",
+                                "external-dns.alpha.kubernetes.io/hostname": "bazarr.lab"
                             },
                             "ports": {
                                 "http": {

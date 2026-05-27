@@ -48,7 +48,8 @@ class Grafana(pulumi.ComponentResource):
                         "type": "LoadBalancer",
                         "port": 80,
                         "annotations": {
-                            "metallb.universe.tf/loadBalancerIPs": "192.168.1.35"
+                            "metallb.universe.tf/loadBalancerIPs": "192.168.1.35",
+                            "external-dns.alpha.kubernetes.io/hostname": "grafana.lab"
                         }
                     },
                     "datasources": {

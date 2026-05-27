@@ -26,6 +26,8 @@ from influxdb.influxdb import InfluxDB
 from cloudnativepg.cloudnativepg import CloudNativePG
 from unifi.unifi_controller import UnifiController
 from homepage.homepage import Homepage
+from external_dns.external_dns import ExternalDNS
+from mdns.mdns import MDNS
 
 
 config = pulumi.Config()
@@ -114,6 +116,9 @@ home_assistant_postgres_lb = kubernetes.core.v1.Service(
     metadata=kubernetes.meta.v1.ObjectMetaArgs(
         name="home-assistant-postgres-lb",
         namespace=ns.metadata.name,
+        annotations={
+            "external-dns.alpha.kubernetes.io/hostname": "postgres.lab"
+        },
     ),
     spec=kubernetes.core.v1.ServiceSpecArgs(
         type="LoadBalancer",
@@ -148,6 +153,12 @@ unifi_controller = UnifiController()
 
 # Deploy Homepage dashboard
 homepage = Homepage()
+
+# Deploy ExternalDNS to automatically update Pi-hole DNS records
+external_dns = ExternalDNS(pihole_url="http://192.168.1.3")
+
+# Deploy mDNS publisher to make services discoverable via mDNS (.local)
+mdns = MDNS()
 
 # Export ARR Stack URLs (Jellyfin moved to dedicated GPU machine)
 # pulumi.export("jellyfin_url", arr_stack.jellyfin_url)  # Now on dedicated GPU machine

@@ -238,7 +238,8 @@ class Homepage(pulumi.ComponentResource):
                     "app.kubernetes.io/name": "homepage",
                 },
                 annotations={
-                    "metallb.universe.tf/loadBalancerIPs": "192.168.1.50"
+                    "metallb.universe.tf/loadBalancerIPs": "192.168.1.50",
+                    "external-dns.alpha.kubernetes.io/hostname": "homepage.lab"
                 },
             ),
             spec=kubernetes.core.v1.ServiceSpecArgs(

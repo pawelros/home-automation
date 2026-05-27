@@ -137,7 +137,8 @@ class Jellyseerr(pulumi.ComponentResource):
                 name="jellyseerr",
                 namespace=namespace.metadata.name,
                 annotations={
-                    "metallb.universe.tf/allow-shared-ip": "jellyseerr"
+                    "metallb.universe.tf/allow-shared-ip": "jellyseerr",
+                    "external-dns.alpha.kubernetes.io/hostname": "jellyseerr.lab"
                 }
             ),
             spec=ServiceSpecArgs(

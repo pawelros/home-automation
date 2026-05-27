@@ -38,7 +38,8 @@ class Lidarr(pulumi.ComponentResource):
                             "type": "LoadBalancer",
                             "loadBalancerIP": "192.168.1.47",  # Actual IP from existing deployment
                             "annotations": {
-                                "metallb.universe.tf/allow-shared-ip": "lidarr"
+                                "metallb.universe.tf/allow-shared-ip": "lidarr",
+                                "external-dns.alpha.kubernetes.io/hostname": "lidarr.lab"
                             },
                             "ports": {
                                 "http": {

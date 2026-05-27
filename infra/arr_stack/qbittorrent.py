@@ -43,7 +43,8 @@ class QBittorrent(pulumi.ComponentResource):
                             "type": "LoadBalancer",
                             "loadBalancerIP": "192.168.1.44",  # Static IP for qBittorrent
                             "annotations": {
-                                "metallb.universe.tf/allow-shared-ip": "qbittorrent"
+                                "metallb.universe.tf/allow-shared-ip": "qbittorrent",
+                                "external-dns.alpha.kubernetes.io/hostname": "qbittorrent.lab"
                             },
                             "ports": {
                                 "http": {

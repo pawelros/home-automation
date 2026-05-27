@@ -330,7 +330,8 @@ db.createUser({
                 name="unifi-controller",
                 namespace=ns.metadata.name,
                 annotations={
-                    "metallb.universe.tf/loadBalancerIPs": "192.168.1.29"
+                    "metallb.universe.tf/loadBalancerIPs": "192.168.1.29",
+                    "external-dns.alpha.kubernetes.io/hostname": "unifi.lab"
                 },
             ),
             spec=kubernetes.core.v1.ServiceSpecArgs(

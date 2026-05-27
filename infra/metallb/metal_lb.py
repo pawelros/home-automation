@@ -49,7 +49,7 @@ class MetalLb(pulumi.ComponentResource):
                 namespace=ns.metadata.name,
             ),
             spec={
-                "addresses": ["192.168.1.29-192.168.1.255"],
+                "addresses": ["192.168.1.29-192.168.1.99"],
             },
             opts=pulumi.ResourceOptions(parent=metallb),
         )

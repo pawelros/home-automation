@@ -78,6 +78,43 @@ If a service has a Homepage widget available:
 - Add widget configuration with proper authentication
 - Test that the widget displays data correctly
 
+### 8. External-DNS Annotations
+**IMPORTANT**: When creating or modifying ANY LoadBalancer Service:
+- ✅ Always add `external-dns.alpha.kubernetes.io/hostname` annotation with a friendly hostname
+- ✅ Use the format: `{service-name}.lab` (e.g., `prowlarr.lab`, `grafana.lab`)
+- ✅ **Use `.lab` instead of `.local`** - `.local` is reserved for mDNS and causes conflicts with browsers/OS
+- ✅ For Helm chart deployments, add the annotation in the service configuration
+- ✅ For direct Service resources, add the annotation in metadata.annotations
+- ✅ This ensures automatic DNS record creation in Pi-hole via external-dns
+- ✅ **Use Pi-hole password** for external-dns authentication: `pulumi config set --secret external-dns:pihole_password "your-password"` (or `homepage:pihole_api_key` as fallback)
+
+### 9. Helm Chart Version Management
+**IMPORTANT**: When adding or updating ANY Helm chart:
+- ✅ **Always verify the latest version** of the Helm chart before pinning a version
+- ✅ Check the official Helm repository for the chart's latest stable version
+- ✅ Use `helm search repo <chart-name>` or check the repository's index.yaml
+- ✅ Pin to a specific version to prevent unexpected upgrades (e.g., `version: "1.20.0"`)
+- ✅ Document why a specific version was chosen if not using the latest
+- ✅ When updating existing charts, verify compatibility and changelog before upgrading
+
+Example for Helm chart:
+```yaml
+service:
+  main:
+    type: "LoadBalancer"
+    annotations:
+      "external-dns.alpha.kubernetes.io/hostname": "service-name.lab"
+```
+
+Example for direct Service resource:
+```python
+metadata=kubernetes.meta.v1.ObjectMetaArgs(
+    annotations={
+        "external-dns.alpha.kubernetes.io/hostname": "service-name.lab"
+    }
+)
+```
+
 ## Quick Commands
 
 ### Deploy infrastructure changes:
@@ -110,10 +147,12 @@ kubectl get pods -n homepage
 ### Adding a New Service
 1. Create Pulumi module in `infra/[service-name]/`
 2. Add to `infra/__main__.py`
-3. **UPDATE HOMEPAGE**: Add to `infra/homepage/config/services.yaml`
-4. If needs secrets: Update `homepage.py` and `SECRETS.md`
-5. Deploy: `pulumi up`
-6. Access Homepage at http://192.168.1.50 to verify
+3. **ADD EXTERNAL-DNS ANNOTATION**: Add `external-dns.alpha.kubernetes.io/hostname` annotation to LoadBalancer service
+4. **UPDATE HOMEPAGE**: Add to `infra/homepage/config/services.yaml`
+5. If needs secrets: Update `homepage.py` and `SECRETS.md`
+6. Deploy: `pulumi up`
+7. Access Homepage at http://192.168.1.50 to verify
+8. Verify DNS record in Pi-hole (should be accessible via `{service-name}.lab`)
 
 ### Changing Service IP
 1. Update service deployment/Helm chart
