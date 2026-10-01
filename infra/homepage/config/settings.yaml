@@ -17,9 +17,6 @@ layout:
   Infrastructure:
     style: row
     columns: 3
-  Networking & Security:
-    style: row
-    columns: 2
   Databases:
     style: row
     columns: 2

@@ -4,7 +4,7 @@ from pulumi_kubernetes.helm.v3 import Release, ReleaseArgs, RepositoryOptsArgs
 
 
 class Mimir(pulumi.ComponentResource):
-    def __init__(self, minio=None, opts=None):
+    def __init__(self, object_storage, opts=None):
         super().__init__(
             "mimir",
             "mimir",
@@ -35,7 +35,7 @@ class Mimir(pulumi.ComponentResource):
                 values={
                     "fullnameOverride": "mimir",
                     
-                    # Disable internal MinIO since we use external MinIO
+                    # Disable bundled object storage; RustFS is deployed separately
                     "minio": {
                         "enabled": False,
                     },
@@ -46,26 +46,26 @@ class Mimir(pulumi.ComponentResource):
                                 "storage": {
                                     "backend": "s3",
                                     "s3": {
-                                        "endpoint": "minio.minio.svc.cluster.local:9000",
+                                        "endpoint": object_storage.endpoint,
                                         "region": "us-east-1",
-                                        "access_key_id": "minio",
-                                        "secret_access_key": "minio123",
+                                        "access_key_id": object_storage.access_key,
+                                        "secret_access_key": object_storage.secret_key,
                                         "insecure": True,
                                         "bucket_name": "mimir-blocks",
                                     },
                                 },
                             },
                             "limits": {
-                                "compactor_blocks_retention_period": "1y",
+                                "compactor_blocks_retention_period": "336h",
                             },
                             # Configure separate storage for alertmanager
                             "alertmanager_storage": {
                                 "backend": "s3",
                                 "s3": {
-                                    "endpoint": "minio.minio.svc.cluster.local:9000",
+                                    "endpoint": object_storage.endpoint,
                                     "region": "us-east-1",
-                                    "access_key_id": "minio",
-                                    "secret_access_key": "minio123",
+                                    "access_key_id": object_storage.access_key,
+                                    "secret_access_key": object_storage.secret_key,
                                     "insecure": True,
                                     "bucket_name": "mimir-alertmanager",
                                 },
@@ -74,10 +74,10 @@ class Mimir(pulumi.ComponentResource):
                             "ruler_storage": {
                                 "backend": "s3",
                                 "s3": {
-                                    "endpoint": "minio.minio.svc.cluster.local:9000",
+                                    "endpoint": object_storage.endpoint,
                                     "region": "us-east-1",
-                                    "access_key_id": "minio",
-                                    "secret_access_key": "minio123",
+                                    "access_key_id": object_storage.access_key,
+                                    "secret_access_key": object_storage.secret_key,
                                     "insecure": True,
                                     "bucket_name": "mimir-ruler",
                                 },
@@ -99,7 +99,7 @@ class Mimir(pulumi.ComponentResource):
                             },
                             {
                                 "name": "MIMIR_COMMON_STORAGE_S3_ENDPOINT",
-                                "value": "minio.minio.svc.cluster.local:9000",
+                                "value": object_storage.endpoint,
                             },
                             {
                                 "name": "MIMIR_COMMON_STORAGE_S3_REGION",
@@ -107,11 +107,11 @@ class Mimir(pulumi.ComponentResource):
                             },
                             {
                                 "name": "MIMIR_COMMON_STORAGE_S3_ACCESS_KEY_ID",
-                                "value": "minio",
+                                "value": object_storage.access_key,
                             },
                             {
                                 "name": "MIMIR_COMMON_STORAGE_S3_SECRET_ACCESS_KEY",
-                                "value": "minio123",
+                                "value": object_storage.secret_key,
                             },
                             {
                                 "name": "MIMIR_COMMON_STORAGE_S3_BUCKET_NAME",
@@ -125,6 +125,7 @@ class Mimir(pulumi.ComponentResource):
                     },
                     "compactor": {
                         "replicas": 1,
+                        "persistentVolume": {"enabled": True, "size": "2Gi", "storageClass": "longhorn-monitoring"},
                         "resources": {
                             "requests": {
                                 "cpu": "100m",
@@ -151,6 +152,7 @@ class Mimir(pulumi.ComponentResource):
                     },
                     "ingester": {
                         "replicas": 3,
+                        "persistentVolume": {"enabled": True, "size": "4Gi", "storageClass": "longhorn-monitoring"},
                         "resources": {
                             "requests": {
                                 "cpu": "200m",
@@ -193,6 +195,7 @@ class Mimir(pulumi.ComponentResource):
                     },
                     "store_gateway": {
                         "replicas": 1,
+                        "persistentVolume": {"enabled": True, "size": "2Gi", "storageClass": "longhorn-monitoring"},
                         "resources": {
                             "requests": {
                                 "cpu": "100m",
@@ -257,7 +260,7 @@ class Mimir(pulumi.ComponentResource):
                         "persistentVolume": {
                             "enabled": True,
                             "size": "1Gi",
-                            "storageClass": "longhorn",
+                            "storageClass": "longhorn-monitoring",
                         },
                         "statefulSet": {
                             "enabled": True,
@@ -290,7 +293,7 @@ class Mimir(pulumi.ComponentResource):
                     },
                 },
             ),
-            opts=pulumi.ResourceOptions(parent=self, depends_on=[ns] + ([minio] if minio else [])),
+            opts=pulumi.ResourceOptions(parent=self, depends_on=[ns, object_storage.ready]),
         )
 
         # Export Mimir info

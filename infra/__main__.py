@@ -19,12 +19,10 @@ from monitoring.loki.loki import Loki
 from monitoring.mimir.mimir import Mimir
 from monitoring.k8s_monitoring.k8s_monitoring import K8sMonitoring
 from monitoring.alloy.alloy import Alloy
-from minio.minio import MinIO
+from rustfs.rustfs import RustFS
 from arr_stack.arr_stack import ArrStack
-from tailscale.tailscale import Tailscale
 from influxdb.influxdb import InfluxDB
 from cloudnativepg.cloudnativepg import CloudNativePG
-from unifi.unifi_controller import UnifiController
 from homepage.homepage import Homepage
 from external_dns.external_dns import ExternalDNS
 from mdns.mdns import MDNS
@@ -55,10 +53,10 @@ istio = Istio()
 #mosquitto = Mosquitto(ns)
 metrics_server = MetricsServer()
 #zigbee2mqtt = Zigbee2Mqtt(ns, pv)
-minio = MinIO()
+object_storage = RustFS(longhorn)
 # prometheus_operator = PrometheusOperator()  # Removed - not needed with K8s Monitoring
-mimir = Mimir(minio)
-loki = Loki(minio)
+mimir = Mimir(object_storage)
+loki = Loki(object_storage)
 grafana = Grafana(ns)
 
 # Configure Kubernetes Monitoring to send logs to Loki and metrics to Mimir
@@ -145,12 +143,6 @@ arr_stack = ArrStack(
     mimir_url="http://mimir-nginx.mimir.svc.cluster.local"
 )
 
-# Deploy Tailscale subnet router in its own namespace
-tailscale = Tailscale()
-
-# Deploy UniFi Controller
-unifi_controller = UnifiController()
-
 # Deploy Homepage dashboard
 homepage = Homepage()
 
@@ -174,10 +166,6 @@ pulumi.export("bazarr_url", arr_stack.bazarr_url)
 # Export InfluxDB information
 # pulumi.export("influxdb_external_url", influxdb.external_url)
 # pulumi.export("influxdb_internal_url", influxdb.internal_url)
-
-# Export Tailscale information
-pulumi.export("tailscale_namespace", tailscale.namespace)
-pulumi.export("tailscale_connector", tailscale.connector_name)
 
 # Export Home Assistant PostgreSQL connection information
 pulumi.export("home_assistant_postgres_host_internal", pulumi.Output.concat("home-assistant-postgres-rw.", ns.metadata.name, ".svc.cluster.local"))

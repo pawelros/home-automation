@@ -35,15 +35,11 @@ class Homepage(pulumi.ComponentResource):
             'QBITTORRENT_PASSWORD': get_secret_or_empty('qbittorrent_password'),
             'GRAFANA_USERNAME': get_secret_or_empty('grafana_username'),
             'GRAFANA_PASSWORD': get_secret_or_empty('grafana_password'),
-            'UNIFI_USERNAME': get_secret_or_empty('unifi_username'),
-            'UNIFI_PASSWORD': get_secret_or_empty('unifi_password'),
             'PROXMOX_USERNAME': get_secret_or_empty('proxmox_username'),
             'PROXMOX_API_TOKEN': get_secret_or_empty('proxmox_api_token'),
             'TRUENAS_API_KEY': get_secret_or_empty('truenas_api_key'),
             'PIHOLE_API_KEY': get_secret_or_empty('pihole_api_key'),
             'HOMEASSISTANT_TOKEN': get_secret_or_empty('homeassistant_token'),
-            'TAILSCALE_DEVICE_ID': get_secret_or_empty('tailscale_device_id'),
-            'TAILSCALE_API_KEY': get_secret_or_empty('tailscale_api_key'),
         }
         
         # Get the directory where this file is located
@@ -402,4 +398,3 @@ class Homepage(pulumi.ComponentResource):
         # Export Homepage info
         pulumi.export("homepage_namespace", ns.metadata.name)
         pulumi.export("homepage_url", self.url)
-

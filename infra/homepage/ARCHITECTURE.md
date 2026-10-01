@@ -114,8 +114,8 @@
 ┌─────────────────────┐                          ┌────────────────────────┐
 │ Infrastructure      │                          │  Networking            │
 │                     │                          │                        │
-│ • Longhorn (int.)   │                          │ • UniFi         :49    │
-│ • MinIO (int.)      │                          │ • Tailscale            │
+│ • Longhorn (int.)   │                          │                        │
+│ • RustFS (int.)      │                          │ • Gateway VPN          │
 │ • MetalLB           │                          └────────────────────────┘
 │ • Istio             │
 │ • Metrics Server    │                          ┌────────────────────────┐
@@ -398,10 +398,9 @@ Homepage Dashboard
        │
        ├─── Infrastructure (via HTTP/Ping)
        │    ├─── Longhorn API
-       │    └─── MinIO health endpoints
+       │    └─── RustFS health endpoints
        │
        └─── Networking (via HTTP APIs)
-            ├─── UniFi Controller API
             └─── Service health checks
 ```
 

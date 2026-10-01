@@ -17,14 +17,17 @@ class QBittorrent(pulumi.ComponentResource):
             "qbittorrent",
             ReleaseArgs(
                 chart="qbittorrent",
-                # version="1.0.0",  # Use latest available version
+                version="14.1.0",  # Keep the deployed chart version
                 repository_opts=RepositoryOptsArgs(
                     repo="https://k8s-home-lab.github.io/helm-charts"
                 ),
                 namespace=namespace.metadata.name,
+                reset_values=True,
                 values={
                     # Override the release name to get predictable service names
                     "fullnameOverride": "qbittorrent",
+                    # Explicitly clear the temporary preference for node 1.
+                    "affinity": {},
                     
                     # Global configuration to fix chart template issues
                     "global": {

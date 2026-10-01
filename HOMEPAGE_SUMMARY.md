@@ -51,7 +51,7 @@ Once deployed, visit this URL to see your complete homelab dashboard.
 │ 🔧 INFRASTRUCTURE                                                │
 ├─────────────────────────────────────────────────────────────────┤
 │ • Longhorn             → longhorn-frontend.longhorn-system.svc   │
-│ • MinIO                → minio.minio.svc.cluster.local:9000      │
+│ • RustFS                → rustfs-svc.rustfs.svc.cluster.local:9000      │
 │ • MetalLB              → Load Balancer (192.168.1.x pool)        │
 │ • Istio                → Service Mesh                            │
 │ • Metrics Server       → Kubernetes Metrics API                  │
@@ -60,8 +60,6 @@ Once deployed, visit this URL to see your complete homelab dashboard.
 ┌─────────────────────────────────────────────────────────────────┐
 │ 🌐 NETWORKING & SECURITY                                         │
 ├─────────────────────────────────────────────────────────────────┤
-│ • UniFi Controller     → https://192.168.1.49                    │
-│ • Tailscale            → VPN Subnet Router                       │
 │ • Raspberry Pi         → http://192.168.1.214 (Wall Display +    │
 │                          Zigbee2MQTT)                            │
 └─────────────────────────────────────────────────────────────────┘
@@ -92,7 +90,6 @@ Once deployed, visit this URL to see your complete homelab dashboard.
 | Radarr | Downloads | 192.168.1.46 | 80 | Movie automation |
 | Lidarr | Downloads | 192.168.1.47 | 80 | Music automation |
 | PostgreSQL | Database | 192.168.1.48 | 5432 | Home Assistant DB |
-| UniFi | Networking | 192.168.1.49 | 443 | Network controller |
 | Raspberry Pi | Edge Device | 192.168.1.214 | 80 | Wall display + Zigbee2MQTT |
 
 ## 🎨 Dashboard Features
@@ -108,20 +105,18 @@ Homepage includes native integrations for all your *arr services:
 - **Bazarr**: Missing subtitles count
 - **Jellyseerr**: Pending requests
 - **Grafana**: Dashboard and alert counts
-- **UniFi**: Connected devices and network stats
 - **Longhorn**: Storage volume statistics
 - **Kubernetes**: Cluster resource usage and node status
 
 ### Dashboard Layout
 
-Services are organized into 6 logical groups:
+Services are organized into 5 logical groups:
 
 1. **Media Services** (Row layout, 3 columns)
 2. **Downloads & Indexers** (Row layout, 3 columns)
 3. **Monitoring & Observability** (Row layout, 3 columns)
 4. **Infrastructure** (Row layout, 3 columns)
-5. **Networking & Security** (Row layout, 2 columns)
-6. **Databases** (Row layout, 2 columns)
+5. **Databases** (Row layout, 2 columns)
 
 ### Visual Design
 
@@ -220,7 +215,6 @@ To enable service widgets, you'll need API keys from:
 5. **Bazarr** - Settings → General → Security → API Key
 6. **Jellyseerr** - Settings → General → API Key
 7. **qBittorrent** - Web UI username and password
-8. **UniFi Controller** - Admin username and API key (works with MFA!)
 
 ### Quick Configuration Command
 
@@ -236,9 +230,7 @@ kubectl create secret generic homepage-secrets \
   --from-literal=HOMEPAGE_VAR_BAZARR_API_KEY='your-key' \
   --from-literal=HOMEPAGE_VAR_JELLYSEERR_API_KEY='your-key' \
   --from-literal=HOMEPAGE_VAR_QBITTORRENT_USERNAME='admin' \
-  --from-literal=HOMEPAGE_VAR_QBITTORRENT_PASSWORD='your-password' \
-  --from-literal=HOMEPAGE_VAR_UNIFI_USERNAME='admin' \
-  --from-literal=HOMEPAGE_VAR_UNIFI_API_KEY='your-unifi-api-key'
+  --from-literal=HOMEPAGE_VAR_QBITTORRENT_PASSWORD='your-password'
 ```
 
 Then update the ConfigMap to use actual values instead of placeholders.

@@ -17,7 +17,7 @@ class Lidarr(pulumi.ComponentResource):
             "lidarr",
             ReleaseArgs(
                 chart="lidarr",
-                # version="1.0.0",  # Use latest available version
+                version="15.1.1",  # Keep the deployed chart version
                 repository_opts=RepositoryOptsArgs(
                     repo="https://k8s-home-lab.github.io/helm-charts"
                 ),

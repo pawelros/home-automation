@@ -60,11 +60,6 @@ pulumi up
    For qBittorrent:
    - Use your web UI username and password
 
-   For UniFi Controller:
-   - Use your UniFi admin username and API key
-   - API key is required if you have MFA enabled
-   - Create API key in UniFi: Settings → Admins → Your User → API Access
-
    For Jellyseerr:
    - Open Jellyseerr → Settings → General
    - Copy the API Key
@@ -82,8 +77,6 @@ pulumi up
    HOMEPAGE_VAR_JELLYSEERR_API_KEY=your_jellyseerr_api_key
    HOMEPAGE_VAR_QBITTORRENT_USERNAME=admin
    HOMEPAGE_VAR_QBITTORRENT_PASSWORD=your_password
-   HOMEPAGE_VAR_UNIFI_USERNAME=your_unifi_user
-   HOMEPAGE_VAR_UNIFI_PASSWORD=your_unifi_password
    ```
 
 3. **Create Kubernetes Secret**
@@ -194,16 +187,12 @@ All services are organized into these logical groups:
 
 4. **Infrastructure** (5 services)
    - Longhorn - Distributed storage
-   - MinIO - Object storage
+   - RustFS - Object storage
    - MetalLB - Load balancer
    - Istio - Service mesh
    - Metrics Server - K8s metrics
 
-5. **Networking & Security** (2 services)
-   - UniFi Controller - Network management
-   - Tailscale - VPN subnet router
-
-6. **Databases** (2 services)
+5. **Databases** (2 services)
    - PostgreSQL (CloudNativePG) - Home Assistant database
    - InfluxDB - Time series database
 
@@ -387,7 +376,7 @@ kubectl apply -f homepage-backup.yaml
 1. **Configure API Keys**: Enable service widgets for live statistics
 2. **Customize Appearance**: Adjust theme, colors, and layout to your preference
 3. **Add Missing Services**: If you have services not yet listed, add them
-4. **Set Up External Access**: Consider exposing Homepage via Istio ingress or Tailscale
+4. **Set Up External Access**: Use UniFi Teleport for remote access to Homepage
 5. **Mobile Access**: Homepage is mobile-responsive and works great on phones/tablets
 6. **Pin to Browser**: Add Homepage as a home page or pinned tab for quick access
 

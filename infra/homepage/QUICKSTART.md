@@ -121,7 +121,7 @@ This means the IP/hostname you're using isn't allowed. The deployment includes:
 - `homepage` and cluster DNS names
 - `localhost`
 
-If you need to add more (e.g., custom domain, Tailscale hostname):
+If you need to add more (e.g., custom domain):
 
 1. Edit `homepage.py` and add to `HOMEPAGE_ALLOWED_HOSTS`
 2. Run `pulumi up`

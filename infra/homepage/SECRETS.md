@@ -28,8 +28,6 @@ pulumi config set --secret homepage:radarr_api_key "your-radarr-api-key"
 pulumi config set --secret homepage:lidarr_api_key "your-lidarr-api-key"
 pulumi config set --secret homepage:qbittorrent_username "your-username"
 pulumi config set --secret homepage:qbittorrent_password "your-password"
-pulumi config set --secret homepage:unifi_username "your-unifi-username"
-pulumi config set --secret homepage:unifi_api_key "your-unifi-api-key"
 pulumi config set --secret homepage:proxmox_username "root@pam"
 pulumi config set --secret homepage:proxmox_api_token "your-proxmox-api-token"
 ```
@@ -51,22 +49,6 @@ pulumi config set --secret homepage:proxmox_api_token "your-proxmox-api-token"
 #### qBittorrent
 
 - Use your qBittorrent web UI username and password
-
-#### UniFi Controller
-
-**Important**: UniFi API key is recommended, especially if you have MFA enabled.
-
-To create a UniFi API key:
-
-1. Log into your UniFi Controller (https://192.168.1.49)
-2. Go to **Settings** → **Admins** (or **System** → **Admins**)
-3. Click on your admin user
-4. Scroll down to **API Access**
-5. Click **Create New API Key** or **Generate API Token**
-6. Copy the API key (you won't be able to see it again!)
-7. For username, use your UniFi admin username
-
-**Note**: The API key works even with MFA enabled, unlike username/password authentication.
 
 #### Proxmox
 
@@ -103,8 +85,6 @@ pulumi config
 # homepage:qbittorrent_username      [secret]
 # homepage:radarr_api_key            [secret]
 # homepage:sonarr_api_key            [secret]
-# homepage:unifi_api_key             [secret]
-# homepage:unifi_username            [secret]
 ```
 
 ## Deployment
@@ -260,9 +240,6 @@ pulumi config set --secret homepage:lidarr_api_key "pqr678..."
 pulumi config set --secret homepage:qbittorrent_username "admin"
 pulumi config set --secret homepage:qbittorrent_password "securepassword"
 
-# UniFi (use API key for MFA compatibility)
-pulumi config set --secret homepage:unifi_username "admin"
-pulumi config set --secret homepage:unifi_api_key "your-unifi-api-key"
 
 # Verify
 echo "Configured secrets:"

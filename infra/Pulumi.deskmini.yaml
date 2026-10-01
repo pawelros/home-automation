@@ -1,9 +1,5 @@
 config:
   kubernetes:context: deskmini
-  home-automation:tailscale-oauth-client-id:
-    secure: AAABAD+rc+ryZ3uovz0s/j3z2UnL0laAoK9BVV+2AnFGU1WUgHnV1LzkPOfxWGiIqQ==
-  home-automation:tailscale-oauth-client-secret:
-    secure: AAABAANm/2PcSr7CuNwZxLUXBAJ39ci58FYQMrIIRTeCBZT+Puu97N25WOdmBZzn/MSr50x7Oi1NlrU0jdkuIr3v4f5eqgfR7uOk2kWWxRbLWPlhaeoCC6Z36nu0MTwn
   home-automation:influxdb-admin-token:
     secure: AAABAJwpPXW77RcoaHzlGYSIfXEhrXkegbFUE2nAoZQKs8H2IY4ZtURkBaHApAIlYpvh/pbgXRFjE/S/fnnbz1X/4dZ54pY8M2ocUyYx4+0JF4FWlK1fd0MWvIqLMbP1x0ecvuVVagrRN4X9WKe7nmReVQpy1jzA
   home-automation:influxdb-admin-password:
@@ -23,10 +19,6 @@ config:
     secure: AAABAOm8QhMfME1OWIn8jVgqaclznT3DISPK5rGFl0FUYme1vIe/W7wmqS87jMWb83D61OD2eYY02OULIv6X0mEJL0jInbX0/HQnhfERk7VxdHmdSu2tkKsa09rRCrQjZed4PA==
   homepage:radarr_api_key:
     secure: AAABAG0IEHAUxaOkPk8MVNWugtsBKTp+1PZEvghh44z2KcgZ4VUZ4TWThXXZevr8u4PFyHi1ksXBtPLHZ4QIAw==
-  homepage:unifi_api_key:
-    secure: AAABAJxyH7WyRgIX4ewlfKE83bLE53t1aIQoJonAgFH9y4OvDYg0mBrBWOaFbVr61NLhppn9CDgvVZelp0+YJw==
-  homepage:unifi_username:
-    secure: AAABAD89ATZa5KiIVrvntJiOkiqsN5faMC5A70yR+jI5NC+1FytNUg==
   homepage:lidarr_api_key:
     secure: AAABANtIhNzl7/Sa8yNQjGe0Ng9uDxDs3ObETbMCcCVLa6x9oydmqdW+pwjhsXPoNl9mulNHV5mu1XDADqS1Fg==
   homepage:sonarr_api_key:
@@ -35,14 +27,8 @@ config:
     secure: AAABALIusuAmmKhfTP5mka18dozXJBP3qg/rsIixOD9MInqkjQENXLtyjgT9uMMuR9LkNc1MrnN1ZPa9aRDDWQ==
   homepage:prowlarr_api_key:
     secure: AAABADOkgA5QhMaI+v5raxw/kQnZ2md3pzICz9KYG6ZPnnAkkFUmD4MV2Kq4sAUBI4GDKImKn26VJFrlVSeSjA==
-  homepage:unifi_password:
-    secure: AAABAJohWPFO//E2iR708mjgrXMFmFUgBd5v547Ue1qyFHV6MRjd8g==
   homepage:truenas_api_key:
     secure: AAABALtZXmdm5tG/smpZRNOeFs3e/fi/tRYs4GpxghGsfD01iZnXCuUvY9EqnDc1NiXkZ1Oh9RK7+NXGa9qd838UK9q9NeT5kMsDMMFMWXg2bdjsElPeDNpSSaRboPI/Sbo=
-  homepage:tailscale_api_key:
-    secure: AAABAEfNsNtX91Rq0t9wfPIjp/WHaafERkc4sgbeEqOmB+oTbxfIzgyj12b7orpWCucm9rJbwzBShb+Cu0hpfR37dOCqy6FYLkXYWW5o/5cFfqJRarPHRiwEDcE=
-  homepage:tailscale_device_id:
-    secure: AAABADF/b6OQ6mVj+Kaero0ddQ+5LRk/1JUauTkGS0F9Ju7rrNd+mkGuwcHuMZS5JQ==
   homepage:pihole_api_key:
     secure: AAABAJkHl1EgF2hXGL+bBeMJHUwvzBCPbjHWxyDJXGVAsCbSktUwYARKebghhJOfGLcmqOFJKbgHtDBxa6PNUcOANEMVF+BvDWBNp3XJQLWVciS5/zB4oEpVp0Akfvz3
   homepage:homeassistant_token:
@@ -55,3 +41,5 @@ config:
     secure: AAABAMjcFoShQ6eRtnzJkH2xYbMv5ef5WqCRUmcpwXFLqmP1tZ7bPHoP/gpjKAij
   external-dns:pihole_password:
     secure: AAABAPIsKsLPbx63UAdVikpH4pAUnpTY8EHQAgNjbHJ7hfX69n6Erg==
+  home-automation:object-storage-secret-key:
+    secure: AAABABAKznfPXa359574cqLTQDy677bnDyl1fdtYndIedB9Dfu8jGRONM9eqSpXO2So298JUTe2Hwn1HBZJyAW2uruOwU9AZ/3I5FM1ReWku1U78PVfYl/sFlD15UXKe

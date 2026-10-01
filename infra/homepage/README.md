@@ -42,8 +42,7 @@ All your homelab services are organized into logical groups:
 - **Media Services**: Jellyseerr, Bazarr
 - **Downloads & Indexers**: Prowlarr, Sonarr, Radarr, Lidarr, qBittorrent, FlareSolverr
 - **Monitoring & Observability**: Grafana, Loki, Mimir, Alloy
-- **Infrastructure**: Longhorn, MinIO, MetalLB, Istio, Metrics Server
-- **Networking & Security**: UniFi Controller, Tailscale
+- **Infrastructure**: Longhorn, RustFS, MetalLB, Istio, Metrics Server
 - **Databases**: PostgreSQL (CloudNativePG), InfluxDB
 
 ### Service Widgets
@@ -70,8 +69,6 @@ pulumi config set --secret homepage:bazarr_api_key "your-bazarr-api-key"
 pulumi config set --secret homepage:jellyseerr_api_key "your-jellyseerr-api-key"
 pulumi config set --secret homepage:qbittorrent_username "admin"
 pulumi config set --secret homepage:qbittorrent_password "your-password"
-pulumi config set --secret homepage:unifi_username "admin"
-pulumi config set --secret homepage:unifi_api_key "your-unifi-api-key"
 
 # Deploy
 pulumi up
@@ -109,9 +106,6 @@ Most *arr applications (Sonarr, Radarr, Lidarr, Prowlarr, Bazarr):
 qBittorrent:
 - Use the web UI credentials you set up
 
-UniFi Controller:
-- Use your UniFi admin credentials
-
 Jellyseerr:
 1. Open Jellyseerr
 2. Go to Settings → General
@@ -131,7 +125,6 @@ Jellyseerr:
 | Radarr | 192.168.1.46 | 80 | HTTP |
 | Lidarr | 192.168.1.47 | 80 | HTTP |
 | Home Assistant PostgreSQL | 192.168.1.48 | 5432 | TCP |
-| UniFi Controller | 192.168.1.49 | 443 | HTTPS |
 
 ### Customization
 
@@ -207,7 +200,6 @@ When properly configured with API keys, Homepage can display:
 - **Jellyseerr**: Pending requests
 - **Grafana**: Dashboard and alert counts
 - **Longhorn**: Volume and storage statistics
-- **UniFi**: Connected devices and network statistics
 
 ## Troubleshooting
 

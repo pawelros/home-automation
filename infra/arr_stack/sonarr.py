@@ -17,7 +17,7 @@ class Sonarr(pulumi.ComponentResource):
             "sonarr",
             ReleaseArgs(
                 chart="sonarr",
-                # version="1.0.0",  # Use latest available version
+                version="17.1.1",  # Keep the deployed chart version
                 repository_opts=RepositoryOptsArgs(
                     repo="https://k8s-home-lab.github.io/helm-charts"
                 ),

@@ -17,7 +17,7 @@ class Prowlarr(pulumi.ComponentResource):
             "prowlarr",
             ReleaseArgs(
                 chart="prowlarr",
-                # version="1.0.0",  # Use latest available version
+                version="5.1.2",  # Keep the deployed chart version
                 repository_opts=RepositoryOptsArgs(
                     repo="https://k8s-home-lab.github.io/helm-charts"
                 ),

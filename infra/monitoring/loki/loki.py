@@ -4,7 +4,7 @@ from pulumi_kubernetes.helm.v3 import Release, ReleaseArgs, RepositoryOptsArgs
 
 
 class Loki(pulumi.ComponentResource):
-    def __init__(self, minio=None, opts=None):
+    def __init__(self, object_storage, opts=None):
         super().__init__(
             "loki",
             "loki",
@@ -38,8 +38,8 @@ class Loki(pulumi.ComponentResource):
                     "backend": {
                         "replicas": 2,
                         "persistence": {
-                            "size": "10Gi",
-                            "storageClass": "longhorn",
+                            "size": "2Gi",
+                            "storageClass": "longhorn-monitoring",
                         },
                         "resources": {
                             "requests": {
@@ -68,8 +68,8 @@ class Loki(pulumi.ComponentResource):
                     "write": {
                         "replicas": 2,
                         "persistence": {
-                            "size": "10Gi",
-                            "storageClass": "longhorn",
+                            "size": "2Gi",
+                            "storageClass": "longhorn-monitoring",
                         },
                         "resources": {
                             "requests": {
@@ -91,10 +91,10 @@ class Loki(pulumi.ComponentResource):
                                 "admin": "loki-admin",
                             },
                             "s3": {
-                                "endpoint": "http://minio.minio.svc.cluster.local:9000",
+                                "endpoint": "http://" + object_storage.endpoint,
                                 "region": "us-east-1",
-                                "accessKeyId": "minio",
-                                "secretAccessKey": "minio123",
+                                "accessKeyId": object_storage.access_key,
+                                "secretAccessKey": object_storage.secret_key,
                                 "s3ForcePathStyle": True,
                                 "insecure": True,
                             },
@@ -103,9 +103,8 @@ class Loki(pulumi.ComponentResource):
                         "commonConfig": {
                             "replication_factor": 1,
                         },
-                        "limitsConfig": {
-                            "retention_period": "1y",
-                            "enforce_metric_name": False,
+                        "limits_config": {
+                            "retention_period": "168h",
                             "reject_old_samples": True,
                             "reject_old_samples_max_age": "168h",  # 7 days
                             "max_cache_freshness_per_query": "10m",
@@ -114,6 +113,7 @@ class Loki(pulumi.ComponentResource):
                         "compactor": {
                             "retention_enabled": True,
                             "delete_request_store": "s3",
+                            "working_directory": "/var/loki/compactor",
                         },
                         "schemaConfig": {
                             "configs": [
@@ -129,13 +129,10 @@ class Loki(pulumi.ComponentResource):
                                 }
                             ]
                         },
-                        "storageConfig": {
+                        "storage_config": {
                             "tsdb_shipper": {
                                 "active_index_directory": "/var/loki/tsdb-index",
                                 "cache_location": "/var/loki/tsdb-cache",
-                            },
-                            "delete_store": {
-                                "store": "s3",
                             },
                         },
                     },
@@ -197,7 +194,7 @@ class Loki(pulumi.ComponentResource):
                     },
                 },
             ),
-            opts=pulumi.ResourceOptions(parent=self, depends_on=[ns] + ([minio] if minio else [])),
+            opts=pulumi.ResourceOptions(parent=self, depends_on=[ns, object_storage.ready]),
         )
 
         # Export Loki gateway URL

@@ -5,7 +5,7 @@ This is a home automation infrastructure project using:
 - Pulumi for Infrastructure as Code (Python)
 - Kubernetes cluster running on Proxmox
 - Homepage dashboard for service discovery and monitoring
-- Various services: *arr stack, monitoring (Grafana, Loki, Mimir), UniFi, etc.
+- Various services: *arr stack, monitoring (Grafana, Loki, Mimir), etc.
 
 ## Critical Rules
 
@@ -33,7 +33,6 @@ Example workflow:
 
 ### 3. IP Address Management
 Current IP allocations (keep this updated):
-- 192.168.1.29 - UniFi Controller
 - 192.168.1.35 - Grafana
 - 192.168.1.39 - Alloy (Mimir endpoint)
 - 192.168.1.41 - Prowlarr
@@ -68,8 +67,7 @@ Organize services into these logical groups:
 - Media Services (Jellyseerr, Bazarr, etc.)
 - Downloads & Indexers (Prowlarr, Sonarr, Radarr, Lidarr, qBittorrent)
 - Monitoring & Observability (Grafana, Loki, Mimir, Alloy)
-- Infrastructure (Proxmox, Longhorn, MinIO, MetalLB, Istio, Metrics Server)
-- Networking & Security (UniFi, Tailscale, Raspberry Pi)
+- Infrastructure (Proxmox, Longhorn, RustFS, MetalLB, Istio, Metrics Server)
 - Databases (PostgreSQL, InfluxDB)
 
 ### 7. Homepage Widget Integration

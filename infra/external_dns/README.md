@@ -77,7 +77,6 @@ All LoadBalancer services automatically get DNS records created. The following s
 - `jellyseerr.lab` → 192.168.1.42
 - `grafana.lab` → 192.168.1.35
 - `homepage.lab` → 192.168.1.50
-- `unifi.lab` → 192.168.1.29
 - `postgres.lab` → 192.168.1.48
 
 ## Custom Hostnames

@@ -17,7 +17,7 @@ class FlareSolverr(pulumi.ComponentResource):
             "flaresolverr",
             ReleaseArgs(
                 chart="flaresolverr",
-                # version="1.0.0",  # Use latest available version
+                version="6.0.3",  # Keep the deployed chart version
                 repository_opts=RepositoryOptsArgs(
                     repo="https://k8s-home-lab.github.io/helm-charts"
                 ),
