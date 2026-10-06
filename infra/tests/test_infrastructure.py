@@ -72,6 +72,11 @@ class InfrastructureTests(unittest.TestCase):
         self.assertNotIn("tailscale", services)
         self.assertNotIn("${", services)
 
+    def test_home_assistant_postgres_storage_has_expanded_capacity(self):
+        cluster = self.resource("kubernetes:postgresql.cnpg.io/v1:Cluster", "home-assistant-postgres")
+        self.assertEqual(cluster.inputs["spec"]["storage"]["size"], "40Gi")
+        self.assertEqual(cluster.inputs["spec"]["storage"]["storageClass"], "longhorn-ssd")
+
     def test_qbittorrent_can_schedule_on_either_worker(self):
         release = self.resource("kubernetes:helm.sh/v3:Release", "qbittorrent")
         values = release.inputs["values"]

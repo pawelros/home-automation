@@ -86,7 +86,7 @@ home_assistant_postgres = kubernetes.apiextensions.CustomResource(
     spec={
         "instances": 1,
         "storage": {
-            "size": "10Gi",
+            "size": "40Gi",
             "storageClass": "longhorn-ssd",
         },
         "postgresql": {
