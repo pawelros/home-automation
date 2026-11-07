@@ -26,6 +26,7 @@ from cloudnativepg.cloudnativepg import CloudNativePG
 from homepage.homepage import Homepage
 from external_dns.external_dns import ExternalDNS
 from mdns.mdns import MDNS
+from knowledge.knowledge import Knowledge
 
 
 config = pulumi.Config()
@@ -33,6 +34,10 @@ config = pulumi.Config()
 metal_lb = MetalLb()
 longhorn = Longhorn()
 cloudnative_pg = CloudNativePG()
+
+if pulumi.Config("knowledge").get_bool("enabled"):
+    knowledge = Knowledge(longhorn)
+    pulumi.export("knowledge_url", knowledge.url)
 
 # Create a namespace (user supplies the name of the namespace)
 ns = kubernetes.core.v1.Namespace(

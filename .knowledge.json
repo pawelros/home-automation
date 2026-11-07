@@ -1,0 +1,6 @@
+{
+  "tenant": "personal",
+  "projects": ["home-automation"],
+  "environments": ["deskmini"],
+  "memory_project": "shared"
+}

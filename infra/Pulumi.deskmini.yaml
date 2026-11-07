@@ -43,3 +43,8 @@ config:
     secure: AAABAPIsKsLPbx63UAdVikpH4pAUnpTY8EHQAgNjbHJ7hfX69n6Erg==
   home-automation:object-storage-secret-key:
     secure: AAABABAKznfPXa359574cqLTQDy677bnDyl1fdtYndIedB9Dfu8jGRONM9eqSpXO2So298JUTe2Hwn1HBZJyAW2uruOwU9AZ/3I5FM1ReWku1U78PVfYl/sFlD15UXKe
+  knowledge:token:
+    secure: AAABANAPgRGzc/2zPaF+sVlU3T649UJywH+jRxXp7pde9+F5nnuooWt4UfjE+V7A1S67gtHA50a6HCfmnsod1jAEd7zbz2cMEGI+UqQN9W4k5hkJyDS4g7uGLO9tWc50
+  knowledge:hostname: knowledge.lab
+  knowledge:enabled: "true"
+  knowledge:address: 192.168.1.29
