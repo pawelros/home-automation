@@ -1,0 +1,662 @@
+# One comfort setpoint remains on climate.ogrzewanie.
+# The package is enabled only after telemetry and emergency-stop checks pass.
+input_boolean:
+  ogrzewanie_automatyka:
+    name: Ogrzewanie automatyka
+    icon: mdi:home-thermometer
+  ogrzewanie_alarm:
+    name: Ogrzewanie blokada alarmowa
+    icon: mdi:alert-octagon
+
+input_text:
+  ogrzewanie_przyczyna_alarmu:
+    name: Ogrzewanie przyczyna alarmu
+    max: 255
+
+input_number:
+  ogrzewanie_wyprzedzenie:
+    name: Ogrzewanie dogrzewanie przed 19
+    min: 0
+    max: 240
+    step: 15
+    initial: 120
+    unit_of_measurement: min
+  ogrzewanie_zasilanie_max:
+    name: Ogrzewanie maksymalne zasilanie
+    min: 44
+    max: 60
+    step: 1
+    initial: 55
+    unit_of_measurement: °C
+  ogrzewanie_limit_przegrzania:
+    name: Ogrzewanie margines awaryjny
+    min: 0.3
+    max: 1.5
+    step: 0.1
+    initial: 0.7
+    unit_of_measurement: °C
+  ogrzewanie_korekta_sypialni:
+    name: Ogrzewanie korekta regulacji sypialni
+    min: 0
+    max: 1
+    step: 0.1
+    initial: 0.5
+    unit_of_measurement: °C
+
+mqtt:
+  sensor:
+    - name: Ogrzewanie Ally sypialnia kontakt
+      unique_id: heating_ally_bedroom_contact
+      state_topic: zigbee2mqtt/danfoss_ally_sypialnia
+      value_template: "{{ value_json.last_seen }}"
+      device_class: timestamp
+      expire_after: 1800
+      json_attributes_topic: zigbee2mqtt/danfoss_ally_sypialnia
+      json_attributes_template: >-
+        {{ dict(local_temperature=value_json.get('local_temperature'),
+                occupied_heating_setpoint=value_json.get('occupied_heating_setpoint'),
+                pi_heating_demand=value_json.get('pi_heating_demand'),
+                external_measured_room_sensor=value_json.get('external_measured_room_sensor')) | to_json }}
+      availability_topic: zigbee2mqtt/danfoss_ally_sypialnia/availability
+      availability_template: "{{ value_json.state }}"
+    - name: Ogrzewanie Ally Stasiu kontakt
+      unique_id: heating_ally_child_contact
+      state_topic: zigbee2mqtt/danfoss_ally_stasiu
+      value_template: "{{ value_json.last_seen }}"
+      device_class: timestamp
+      expire_after: 1800
+      json_attributes_topic: zigbee2mqtt/danfoss_ally_stasiu
+      json_attributes_template: >-
+        {{ dict(local_temperature=value_json.get('local_temperature'),
+                occupied_heating_setpoint=value_json.get('occupied_heating_setpoint'),
+                pi_heating_demand=value_json.get('pi_heating_demand'),
+                external_measured_room_sensor=value_json.get('external_measured_room_sensor')) | to_json }}
+      availability_topic: zigbee2mqtt/danfoss_ally_stasiu/availability
+      availability_template: "{{ value_json.state }}"
+    - name: Ogrzewanie Stasiu czujnik kontakt
+      unique_id: heating_child_temperature_contact
+      state_topic: zigbee2mqtt/stasiu_LYWSD03MMC_temperature_and_humidity
+      value_template: "{{ value_json.last_seen }}"
+      device_class: timestamp
+    - name: Ogrzewanie eBUS kontakt
+      unique_id: heating_ebus_contact
+      state_topic: ebusd/global/uptime
+      value_template: "{{ now().isoformat() }}"
+      device_class: timestamp
+      expire_after: 120
+    - name: Ogrzewanie eBUS zadana
+      unique_id: heating_ebus_requested_readback
+      state_topic: ebusd/bai/FlowTempDesired
+      value_template: "{{ (value_json.values() | list | first).value }}"
+      unit_of_measurement: °C
+      device_class: temperature
+      expire_after: 180
+  binary_sensor:
+    - name: Ogrzewanie Zigbee dostepne
+      unique_id: heating_zigbee_available
+      state_topic: zigbee2mqtt/bridge/state
+      value_template: "{{ value_json.state if value_json is mapping else value }}"
+      payload_on: online
+      payload_off: offline
+      device_class: connectivity
+    - name: Ogrzewanie eBUS sygnal
+      unique_id: heating_ebus_signal
+      state_topic: ebusd/global/signal
+      payload_on: "true"
+      payload_off: "false"
+      availability_topic: ebusd/global/running
+      payload_available: "true"
+      payload_not_available: "false"
+      device_class: connectivity
+
+template:
+  - sensor:
+      - name: Ogrzewanie sypialnia zrodlo
+        unique_id: heating_bedroom_source
+        state: >-
+          {% set room = states('sensor.sypialnia_lywsdcgq_temperature') %}
+          {% set age = as_timestamp(now()) - as_timestamp(states.sensor.sypialnia_lywsdcgq_temperature.last_reported | default(none), 0) %}
+          {% set head = state_attr('sensor.ogrzewanie_ally_sypialnia_kontakt', 'local_temperature') %}
+          {% set head_age = as_timestamp(now()) - as_timestamp(states('sensor.ogrzewanie_ally_sypialnia_kontakt'), 0) %}
+          {% if is_number(room) and 5 <= room | float(0) <= 35 and -60 <= age < 1800 %}pokojowy
+          {% elif is_number(head) and 5 <= head | float(0) <= 35 and -60 <= head_age < 1200 %}glowica
+          {% else %}brak{% endif %}
+      - name: Ogrzewanie Stasiu zrodlo
+        unique_id: heating_child_source
+        state: >-
+          {% set room = states('sensor.stasiu_lywsd03mmc_temperature_and_humidity_temperature') %}
+          {% set initial_report = as_timestamp(states.sensor.stasiu_lywsd03mmc_temperature_and_humidity_temperature.last_reported | default(none), 0) %}
+          {% set stamp = as_timestamp(states('sensor.ogrzewanie_stasiu_czujnik_kontakt'), initial_report) %}
+          {% set age = as_timestamp(now()) - stamp %}
+          {% set head = state_attr('sensor.ogrzewanie_ally_stasiu_kontakt', 'local_temperature') %}
+          {% set head_age = as_timestamp(now()) - as_timestamp(states('sensor.ogrzewanie_ally_stasiu_kontakt'), 0) %}
+          {% if is_number(room) and 5 <= room | float(0) <= 35 and -60 <= age < 1800 %}pokojowy
+          {% elif is_number(head) and 5 <= head | float(0) <= 35 and -60 <= head_age < 1200 %}glowica
+          {% else %}brak{% endif %}
+      - name: Ogrzewanie sypialnia pomiar
+        unique_id: heating_bedroom_effective_temperature
+        unit_of_measurement: °C
+        device_class: temperature
+        availability: "{{ states('sensor.ogrzewanie_sypialnia_zrodlo') in ['pokojowy', 'glowica'] }}"
+        state: >-
+          {% if is_state('sensor.ogrzewanie_sypialnia_zrodlo', 'pokojowy') %}
+            {{ states('sensor.sypialnia_lywsdcgq_temperature') }}
+          {% else %}{{ state_attr('sensor.ogrzewanie_ally_sypialnia_kontakt', 'local_temperature') }}{% endif %}
+      - name: Ogrzewanie Stasiu pomiar
+        unique_id: heating_child_effective_temperature
+        unit_of_measurement: °C
+        device_class: temperature
+        availability: "{{ states('sensor.ogrzewanie_stasiu_zrodlo') in ['pokojowy', 'glowica'] }}"
+        state: >-
+          {% if is_state('sensor.ogrzewanie_stasiu_zrodlo', 'pokojowy') %}
+            {{ states('sensor.stasiu_lywsd03mmc_temperature_and_humidity_temperature') }}
+          {% else %}{{ state_attr('sensor.ogrzewanie_ally_stasiu_kontakt', 'local_temperature') }}{% endif %}
+      - name: Ogrzewanie priorytet
+        unique_id: heating_priority
+        state: >-
+          {% set minute = now().hour * 60 + now().minute %}
+          {% set lead = states('input_number.ogrzewanie_wyprzedzenie') | int(120) %}
+          {% if minute < 360 or minute >= 1140 %}noc
+          {% elif minute >= 1140 - lead %}dogrzewanie
+          {% else %}dzien{% endif %}
+      - name: Ogrzewanie cel pokoi
+        unique_id: heating_rooms_target
+        unit_of_measurement: °C
+        device_class: temperature
+        state: >-
+          {% set t = state_attr('climate.ogrzewanie', 'temperature') | float(21.5) %}
+          {% set setback = 2 if is_state('sensor.ogrzewanie_priorytet', 'dzien') else 0 %}
+          {{ ([5, t - setback] | max * 2) | round(0) / 2 }}
+      - name: Ogrzewanie problem
+        unique_id: heating_problem
+        state: >-
+          {% set problems = namespace(items=[]) %}
+          {% set t = state_attr('climate.ogrzewanie', 'temperature') %}
+          {% if not is_number(t) or not 5 <= t | float(0) <= 35 %}
+            {% set problems.items = problems.items + ['brak poprawnej nastawy termostatu'] %}
+          {% endif %}
+          {% for entity, label in [
+            ('sensor.ogrzewanie_sypialnia_pomiar', 'pomiar sypialnia'),
+            ('sensor.ogrzewanie_stasiu_pomiar', 'pomiar Stasiu')] %}
+            {% set value = states(entity) %}
+            {% if not is_number(value) or not 5 <= value | float(0) <= 35 %}
+              {% set problems.items = problems.items + [label ~ ': niepoprawny pomiar'] %}
+            {% endif %}
+          {% endfor %}
+          {% for entity, label, maximum_age in [
+            ('sensor.ogrzewanie_ally_sypialnia_kontakt', 'Ally sypialnia', 1200),
+            ('sensor.ogrzewanie_ally_stasiu_kontakt', 'Ally Stasiu', 1200)] %}
+            {% set age = as_timestamp(now()) - as_timestamp(states(entity), 0) %}
+            {% if age > maximum_age or age < -60 %}
+              {% set problems.items = problems.items + [label ~ ': brak kontaktu'] %}
+            {% endif %}
+          {% endfor %}
+          {% if not is_state('binary_sensor.ogrzewanie_zigbee_dostepne', 'on') %}
+            {% set problems.items = problems.items + ['Zigbee niedostepne'] %}
+          {% endif %}
+          {% if not is_state('sensor.ogrzewanie_priorytet', 'noc') %}
+            {% set room = states('sensor.salon_lywsdcgq_temperature') %}
+            {% set age = as_timestamp(now()) - as_timestamp(states.sensor.salon_lywsdcgq_temperature.last_reported, 0) %}
+            {% if not is_number(room) or not 5 <= room | float(0) <= 35 or age > 1800 %}
+              {% set problems.items = problems.items + ['czujnik salon: brak poprawnego swiezego pomiaru'] %}
+            {% endif %}
+          {% endif %}
+          {{ (problems.items | join('; '))[:250] if problems.items else 'OK' }}
+      # eBUS optimizes water temperature; relay-based room control is independent.
+      - name: Ogrzewanie eBUS status
+        unique_id: heating_ebus_status
+        state: >-
+          {% if not is_state('binary_sensor.ogrzewanie_ebus_dostepne', 'on') %}
+            Brak komunikacji z kotlem
+          {% elif is_state('climate.ogrzewanie', 'heat') and
+                  (states('sensor.ogrzewanie_ebus_zadana') | float(0) -
+                   states('sensor.ogrzewanie_zasilanie_obliczone') | float(0)) | abs > 1 %}
+            Kociol nie potwierdza nastawy
+          {% else %}OK{% endif %}
+      - name: Ogrzewanie temperatura
+        unique_id: ogrzewanie_temperatura
+        unit_of_measurement: °C
+        device_class: temperature
+        availability: >-
+          {{ not is_state('input_boolean.ogrzewanie_automatyka', 'on') or
+             (is_state('sensor.ogrzewanie_problem', 'OK') and
+              not is_state('input_boolean.ogrzewanie_alarm', 'on')) }}
+        state: >-
+          {% if not is_state('input_boolean.ogrzewanie_automatyka', 'on') %}
+            {% if now().hour >= 19 or now().hour < 6 %}
+              {{ ((states('sensor.sypialnia_lywsdcgq_temperature') | float(21.5) +
+                   states('sensor.stasiu_lywsd03mmc_temperature_and_humidity_temperature') | float(21.5)) / 2) | round(2) }}
+            {% else %}{{ states('sensor.salon_lywsdcgq_temperature') }}{% endif %}
+          {% else %}
+            {% set t = state_attr('climate.ogrzewanie', 'temperature') | float(21.5) %}
+            {% set upper = states('sensor.ogrzewanie_cel_pokoi') | float(t) %}
+            {% set bedroom = states('sensor.ogrzewanie_sypialnia_pomiar') | float(t) %}
+            {% set child = states('sensor.ogrzewanie_stasiu_pomiar') | float(t) %}
+            {% if is_state('binary_sensor.ogrzewanie_przegrzanie', 'on') %}
+              {{ [bedroom, child] | max }}
+            {% else %}
+              {% set errors = [upper - bedroom, upper - child] %}
+              {% if not is_state('sensor.ogrzewanie_priorytet', 'noc') %}
+                {% set errors = errors + [t - states('sensor.salon_lywsdcgq_temperature') | float(t)] %}
+              {% endif %}
+              {{ (t - errors | max) | round(2) }}
+            {% endif %}
+          {% endif %}
+      - name: Ogrzewanie zasilanie obliczone
+        unique_id: heating_flow_calculated
+        unit_of_measurement: °C
+        device_class: temperature
+        state: >-
+          {% set t = state_attr('climate.ogrzewanie', 'temperature') | float(21.5) %}
+          {% set weather = state_attr('weather.dom', 'temperature') %}
+          {% set weather_age = as_timestamp(now()) - as_timestamp(states.weather.dom.last_reported, 0) %}
+          {% set outside = weather | float(5) if is_number(weather) and weather_age < 7200 else 5 %}
+          {% set deficit = [0, t - states('sensor.ogrzewanie_temperatura') | float(t)] | max %}
+          {% set correction = [8, deficit * 4] | min %}
+          {% set flow = 45 - outside * 0.5 + (t - 21) * 1.5 + correction %}
+          {% set fallback = is_state('sensor.ogrzewanie_sypialnia_zrodlo', 'glowica') or is_state('sensor.ogrzewanie_stasiu_zrodlo', 'glowica') %}
+          {% set ceiling = 44 if fallback else states('input_number.ogrzewanie_zasilanie_max') | float(55) %}
+          {{ ([40, [flow, ceiling, 60] | min] | max) | round(0) }}
+    binary_sensor:
+      - name: Ogrzewanie eBUS dostepne
+        unique_id: heating_ebus_available
+        device_class: connectivity
+        state: >-
+          {% set age = as_timestamp(now()) - as_timestamp(states('sensor.ogrzewanie_ebus_kontakt'), 0) %}
+          {% set readback = states('sensor.ogrzewanie_ebus_zadana') %}
+          {{ is_state('binary_sensor.ogrzewanie_ebus_sygnal', 'on') and
+             -60 <= age < 120 and is_number(readback) }}
+      - name: Ogrzewanie przegrzanie
+        unique_id: heating_overtemperature
+        device_class: problem
+        state: >-
+          {% set t = state_attr('climate.ogrzewanie', 'temperature') | float(21.5) %}
+          {% set margin = states('input_number.ogrzewanie_limit_przegrzania') | float(0.7) %}
+          {% set cooling = this is defined and this.state == 'on' %}
+          {% set release = [0.2, margin - 0.3] | max %}
+          {% set limit = t + (release if cooling else margin) %}
+          {{ states('sensor.ogrzewanie_sypialnia_pomiar') | float(0) >= limit or
+             states('sensor.ogrzewanie_stasiu_pomiar') | float(0) >= limit }}
+      - name: Ogrzewanie trwala awaria
+        unique_id: heating_persistent_fault
+        device_class: problem
+        delay_on: "00:01:00"
+        state: "{{ not is_state('sensor.ogrzewanie_problem', 'OK') }}"
+      - name: Ogrzewanie gotowe
+        unique_id: heating_ready
+        state: >-
+          {{ is_state('sensor.ogrzewanie_problem', 'OK') and
+             is_state('binary_sensor.ogrzewanie_przegrzanie', 'off') and
+             is_state('input_boolean.ogrzewanie_alarm', 'off') }}
+
+script:
+  ogrzewanie_kasuj_alarm:
+    alias: Ogrzewanie kasuj alarm
+    mode: single
+    sequence:
+      - condition: state
+        entity_id: sensor.ogrzewanie_problem
+        state: OK
+      - action: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.ogrzewanie_alarm
+      - action: persistent_notification.dismiss
+        data:
+          notification_id: heating_safety
+
+automation:
+  - id: heating_emergency_stop
+    alias: Ogrzewanie zabezpieczenie
+    mode: single
+    max_exceeded: silent
+    triggers:
+      - trigger: state
+        entity_id:
+          - binary_sensor.ogrzewanie_trwala_awaria
+          - input_boolean.ogrzewanie_alarm
+          - input_boolean.ogrzewanie_automatyka
+          - climate.ogrzewanie
+          - switch.piec_gazowy_ogrzewanie
+      - trigger: time_pattern
+        seconds: /15
+      - trigger: homeassistant
+        event: start
+    conditions:
+      - condition: state
+        entity_id: input_boolean.ogrzewanie_automatyka
+        state: "on"
+      - condition: template
+        value_template: >-
+          {{ is_state('binary_sensor.ogrzewanie_trwala_awaria', 'on') or
+             is_state('input_boolean.ogrzewanie_alarm', 'on') }}
+    actions:
+      - action: switch.turn_off
+        target:
+          entity_id: switch.piec_gazowy_ogrzewanie
+      - action: climate.set_hvac_mode
+        target:
+          entity_id: climate.ogrzewanie
+        data:
+          hvac_mode: "off"
+      - if:
+          - condition: state
+            entity_id: input_boolean.ogrzewanie_alarm
+            state: "off"
+        then:
+          - action: input_text.set_value
+            target:
+              entity_id: input_text.ogrzewanie_przyczyna_alarmu
+            data:
+              value: "{{ states('sensor.ogrzewanie_problem') }}"
+          - action: input_boolean.turn_on
+            target:
+              entity_id: input_boolean.ogrzewanie_alarm
+          - action: persistent_notification.create
+            data:
+              notification_id: heating_safety
+              title: "Ogrzewanie wylaczone — zabezpieczenie"
+              message: >-
+                {{ states('sensor.ogrzewanie_problem') }}.
+                Sypialnia: {{ states('sensor.ogrzewanie_sypialnia_pomiar') }}°C,
+                Stasiu: {{ states('sensor.ogrzewanie_stasiu_pomiar') }}°C.
+                Limit: {{ (state_attr('climate.ogrzewanie', 'temperature') | float(21.5) +
+                states('input_number.ogrzewanie_limit_przegrzania') | float(0.7)) | round(1) }}°C.
+                Sprawdz czujniki i glowice, skasuj alarm, a nastepnie wlacz termostat.
+          - action: logbook.log
+            data:
+              name: Ogrzewanie
+              entity_id: climate.ogrzewanie
+              message: "Blokada awaryjna: {{ states('sensor.ogrzewanie_problem') }}"
+
+  - id: heating_immediate_inhibit
+    alias: Ogrzewanie natychmiastowe wstrzymanie CO
+    mode: single
+    max_exceeded: silent
+    triggers:
+      - trigger: state
+        entity_id:
+          - sensor.ogrzewanie_problem
+          - binary_sensor.ogrzewanie_przegrzanie
+          - input_boolean.ogrzewanie_alarm
+          - input_boolean.ogrzewanie_automatyka
+          - switch.piec_gazowy_ogrzewanie
+      - trigger: time_pattern
+        seconds: /15
+      - trigger: homeassistant
+        event: start
+    conditions:
+      - condition: state
+        entity_id: input_boolean.ogrzewanie_automatyka
+        state: "on"
+      - condition: template
+        value_template: >-
+          {{ not is_state('sensor.ogrzewanie_problem', 'OK') or
+             not is_state('binary_sensor.ogrzewanie_przegrzanie', 'off') or
+             is_state('input_boolean.ogrzewanie_alarm', 'on') }}
+    actions:
+      - action: switch.turn_off
+        target:
+          entity_id: switch.piec_gazowy_ogrzewanie
+
+  - id: heating_rooms_control
+    alias: Ogrzewanie glowice i pomiary
+    mode: queued
+    max: 2
+    triggers:
+      - trigger: time_pattern
+        minutes: /5
+      - trigger: state
+        entity_id: sensor.ogrzewanie_cel_pokoi
+      - trigger: state
+        entity_id:
+          - sensor.ogrzewanie_sypialnia_zrodlo
+          - sensor.ogrzewanie_stasiu_zrodlo
+          - input_boolean.ogrzewanie_automatyka
+      - trigger: homeassistant
+        event: start
+    conditions:
+      - condition: state
+        entity_id: input_boolean.ogrzewanie_automatyka
+        state: "on"
+      - condition: state
+        entity_id: sensor.ogrzewanie_problem
+        state: OK
+    actions:
+      - variables:
+          target: "{{ states('sensor.ogrzewanie_cel_pokoi') | float }}"
+          bedroom: "{{ states('sensor.ogrzewanie_sypialnia_pomiar') | float }}"
+          child: "{{ states('sensor.ogrzewanie_stasiu_pomiar') | float }}"
+          bedroom_external: "{{ is_state('sensor.ogrzewanie_sypialnia_zrodlo', 'pokojowy') }}"
+          child_external: "{{ is_state('sensor.ogrzewanie_stasiu_zrodlo', 'pokojowy') }}"
+          # Z2M 2.6.2 exposes the Danfoss offset in 0.1 K units (-25..25).
+          bedroom_offset: >-
+            {% set deficit = target - bedroom %}
+            {% set maximum = states('input_number.ogrzewanie_korekta_sypialni') | float(0.5) %}
+            {{ (([0, [maximum, deficit * 2] | min] | max * 10) | round(0) | int) if bedroom_external and child_external else 0 }}
+      - action: mqtt.publish
+        data:
+          topic: zigbee2mqtt/danfoss_ally_sypialnia/set
+          retain: false
+          payload: >-
+            {{ dict(occupied_heating_setpoint=target,
+                    external_measured_room_sensor=((bedroom * 100) | round(0) | int) if bedroom_external else -8000,
+                    radiator_covered=bedroom_external, programming_operation_mode='setpoint',
+                    regulation_setpoint_offset=bedroom_offset) | to_json }}
+      - action: mqtt.publish
+        data:
+          topic: zigbee2mqtt/danfoss_ally_stasiu/set
+          retain: false
+          payload: >-
+            {{ dict(occupied_heating_setpoint=target,
+                    external_measured_room_sensor=((child * 100) | round(0) | int) if child_external else -8000,
+                    radiator_covered=child_external, programming_operation_mode='setpoint',
+                    regulation_setpoint_offset=0) | to_json }}
+
+  - id: heating_flow_control
+    alias: Ogrzewanie pogodowa temperatura wody
+    mode: single
+    max_exceeded: silent
+    triggers:
+      - trigger: time_pattern
+        minutes: /1
+      - trigger: state
+        entity_id: climate.ogrzewanie
+        to:
+      - trigger: state
+        entity_id:
+          - input_boolean.ogrzewanie_automatyka
+          - binary_sensor.ogrzewanie_ebus_dostepne
+        to: "on"
+    conditions:
+      - condition: state
+        entity_id: input_boolean.ogrzewanie_automatyka
+        state: "on"
+      - condition: state
+        entity_id: binary_sensor.ogrzewanie_gotowe
+        state: "on"
+      - condition: state
+        entity_id: climate.ogrzewanie
+        state: heat
+      - condition: state
+        entity_id: binary_sensor.ogrzewanie_ebus_dostepne
+        state: "on"
+    actions:
+      - variables:
+          flow: "{{ states('sensor.ogrzewanie_zasilanie_obliczone') | float(44) | round(0) | int }}"
+      - condition: template
+        value_template: "{{ 40 <= flow <= 60 }}"
+      - action: mqtt.publish
+        data:
+          topic: ebusd/bai/SetMode/set
+          payload: "auto;{{ flow }};-;-;0;0;0;0;0;0"
+          retain: false
+          qos: 0
+      - delay: "00:00:02"
+      - action: mqtt.publish
+        data:
+          topic: ebusd/bai/FlowTempDesired/get
+          payload: ""
+          retain: false
+      # Missing or mismatched confirmation is reported separately. The room
+      # thermostat and boiler's own water-temperature limits remain in control.
+
+  - id: heating_ebus_warning
+    alias: Ogrzewanie ostrzezenie eBUS
+    mode: restart
+    triggers:
+      - trigger: state
+        entity_id: sensor.ogrzewanie_ebus_status
+        for: "00:00:30"
+      - trigger: state
+        entity_id: input_boolean.ogrzewanie_automatyka
+      - trigger: homeassistant
+        event: start
+      - trigger: time_pattern
+        minutes: /5
+    actions:
+      - if:
+          - condition: state
+            entity_id: input_boolean.ogrzewanie_automatyka
+            state: "on"
+          - condition: template
+            value_template: "{{ not is_state('sensor.ogrzewanie_ebus_status', 'OK') }}"
+        then:
+          - action: persistent_notification.create
+            data:
+              notification_id: heating_ebus_warning
+              title: Ogrzewanie — regulacja eBUS niedostepna
+              message: >-
+                {{ states('sensor.ogrzewanie_ebus_status') }}.
+                Termostat nadal steruje ogrzewaniem przez przekaznik.
+                Automatyczna regulacja temperatury wody jest niedostepna lub
+                niepotwierdzona; obowiazuje nastawa i ograniczenia kotla.
+                Zabezpieczenia pomiarow pokojowych i przegrzania pozostaja aktywne.
+        else:
+          - action: persistent_notification.dismiss
+            data:
+              notification_id: heating_ebus_warning
+
+  - id: heating_mobile_alarm
+    alias: Ogrzewanie alarm na telefon
+    mode: queued
+    max: 2
+    triggers:
+      - trigger: state
+        entity_id: input_boolean.ogrzewanie_alarm
+        to: "on"
+      - trigger: time_pattern
+        minutes: /30
+      - trigger: homeassistant
+        event: start
+    conditions:
+      - condition: state
+        entity_id: input_boolean.ogrzewanie_automatyka
+        state: "on"
+      - condition: state
+        entity_id: input_boolean.ogrzewanie_alarm
+        state: "on"
+    actions:
+      - repeat:
+          for_each:
+            - notify.mobile_app_galaxy_s20fe
+          sequence:
+            - action: "{{ repeat.item }}"
+              continue_on_error: true
+              data:
+                title: "Ogrzewanie CO — blokada awaryjna"
+                message: >-
+                  CO wylaczone. {{ states('input_text.ogrzewanie_przyczyna_alarmu') }}.
+                  Sypialnia {{ states('sensor.ogrzewanie_sypialnia_pomiar') }}°C,
+                  Stasiu {{ states('sensor.ogrzewanie_stasiu_pomiar') }}°C.
+                  Otworz ogrzewanie w HA, sprawdz usterke i skasuj blokade.
+                data:
+                  tag: heating_safety
+                  channel: Ogrzewanie
+                  importance: high
+                  priority: high
+                  ttl: 0
+                  clickAction: /lovelace/ogrzewanie
+                  url: /lovelace/ogrzewanie
+
+  - id: heating_contact_poll
+    alias: Ogrzewanie kontrola kontaktu glowic
+    mode: single
+    triggers:
+      - trigger: time_pattern
+        minutes: /5
+      - trigger: homeassistant
+        event: start
+      - trigger: state
+        entity_id: input_boolean.ogrzewanie_automatyka
+        to: "on"
+    conditions:
+      - condition: state
+        entity_id: input_boolean.ogrzewanie_automatyka
+        state: "on"
+    actions:
+      - action: mqtt.publish
+        data:
+          topic: zigbee2mqtt/danfoss_ally_sypialnia/get
+          payload: '{"local_temperature":""}'
+          retain: false
+      - action: mqtt.publish
+        data:
+          topic: zigbee2mqtt/danfoss_ally_stasiu/get
+          payload: '{"local_temperature":""}'
+          retain: false
+
+  - id: heating_flow_readback_poll
+    alias: Ogrzewanie odczyt temperatury kotla
+    mode: single
+    triggers:
+      - trigger: time_pattern
+        minutes: /1
+    conditions:
+      - condition: state
+        entity_id: input_boolean.ogrzewanie_automatyka
+        state: "on"
+    actions:
+      - action: mqtt.publish
+        data:
+          topic: ebusd/bai/FlowTempDesired/get
+          payload: ""
+          retain: false
+
+  - id: heating_sensor_fallback_notification
+    alias: Ogrzewanie informacja o pomiarze awaryjnym
+    mode: restart
+    triggers:
+      - trigger: state
+        entity_id:
+          - sensor.ogrzewanie_sypialnia_zrodlo
+          - sensor.ogrzewanie_stasiu_zrodlo
+          - input_boolean.ogrzewanie_automatyka
+    conditions:
+      - condition: state
+        entity_id: input_boolean.ogrzewanie_automatyka
+        state: "on"
+    actions:
+      - if:
+          - condition: template
+            value_template: >-
+              {{ is_state('sensor.ogrzewanie_sypialnia_zrodlo', 'glowica') or
+                 is_state('sensor.ogrzewanie_stasiu_zrodlo', 'glowica') }}
+        then:
+          - action: persistent_notification.create
+            data:
+              notification_id: heating_sensor_fallback
+              title: Ogrzewanie korzysta z czujnika w glowicy
+              message: >-
+                Zrodlo pomiaru — sypialnia: {{ states('sensor.ogrzewanie_sypialnia_zrodlo') }},
+                Stasiu: {{ states('sensor.ogrzewanie_stasiu_zrodlo') }}.
+                {% if is_state('binary_sensor.ogrzewanie_ebus_dostepne', 'on') and
+                      is_state('sensor.ogrzewanie_ebus_status', 'OK') %}
+                  Regulacja eBUS ogranicza zadana temperature wody do 44°C.
+                {% else %}
+                  Limit 44°C przez eBUS nie jest potwierdzony; obowiazuje nastawa kotla.
+                {% endif %}
+                Korekta sypialni wylaczona.
+        else:
+          - action: persistent_notification.dismiss
+            data:
+              notification_id: heating_sensor_fallback
